@@ -7,265 +7,59 @@
   <title>Bean Galaga — Defender of Josh</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
-  <script src="beangalaga.js" defer></script>
+  <script src="galaga-core.js?v=4" defer></script>
+  <script src="galaga-stage.js?v=4" defer></script>
+  <script src="galaga-capture.js?v=4" defer></script>
+  <script src="galaga-combat.js?v=4" defer></script>
+  <script src="beangalaga.js?v=4" defer></script>
   <style>
-    body.bean-galaga-page {
-      min-height: 100vh;
-      overflow-x: hidden;
-      background: #05070b;
-    }
-
-    .galaga-shell {
-      width: min(1120px, calc(100% - 24px));
-      margin: 26px auto 56px;
-    }
-
-    .galaga-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 16px;
-    }
-
-    .galaga-heading h1 {
-      margin: 4px 0 0;
-      font-size: clamp(2rem, 6vw, 4.7rem);
-      line-height: .9;
-      letter-spacing: -.055em;
-      text-transform: uppercase;
-    }
-
-    .galaga-heading > p {
-      max-width: 470px;
-      margin: 0;
-      opacity: .72;
-    }
-
-    .arcade-frame {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      max-height: 78vh;
-      overflow: hidden;
-      isolation: isolate;
-      background: #000;
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.03);
-      touch-action: none;
-    }
-
-    .arcade-frame::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 8;
-      pointer-events: none;
-      opacity: .12;
-      background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,.17) 4px);
-      mix-blend-mode: soft-light;
-    }
-
-    #beanGalaga {
-      display: block;
-      width: 100%;
-      height: 100%;
-      image-rendering: pixelated;
-      background: #000;
-    }
-
-    .game-hud {
-      position: absolute;
-      inset: 0 0 auto;
-      z-index: 5;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: start;
-      gap: 10px;
-      padding: 10px 14px;
-      pointer-events: none;
-      font: 700 13px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .08em;
-      color: #f7f8ff;
-      text-shadow: 0 2px 5px #000;
-    }
-
-    .game-hud > div:nth-child(2) { text-align: center; }
-    .game-hud > div:last-child { text-align: right; }
-    .game-hud span { display: block; margin-top: 2px; font-size: 1rem; }
-
-    .game-lives {
-      position: absolute;
-      left: 14px;
-      bottom: 12px;
-      z-index: 5;
-      pointer-events: none;
-      font: 700 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .08em;
-      color: #f7f8ff;
-      text-shadow: 0 2px 5px #000;
-    }
-
-    .game-center {
-      position: absolute;
-      inset: 0;
-      z-index: 6;
-      display: grid;
-      place-items: center;
-      padding: 28px;
-      pointer-events: none;
-      background: rgba(0,0,0,.18);
-    }
-
-    .game-center[hidden] { display: none; }
-
-    .game-center__card {
-      width: min(560px, 88%);
-      padding: 22px 24px;
-      text-align: center;
-      background: rgba(2,4,10,.86);
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: 0 18px 50px rgba(0,0,0,.45);
-      backdrop-filter: blur(7px);
-    }
-
-    .game-center__card small {
-      display: block;
-      margin-bottom: 8px;
-      font: 700 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .12em;
-      opacity: .65;
-    }
-
-    .game-center__card h2 {
-      margin: 0;
-      font-size: clamp(2rem, 6vw, 4rem);
-      line-height: .95;
-      text-transform: uppercase;
-    }
-
-    .game-center__card p {
-      margin: 13px auto 0;
-      max-width: 470px;
-      opacity: .76;
-    }
-
-    .mobile-controls {
-      display: none;
-      grid-template-columns: 1fr 1fr 1.3fr;
-      gap: 8px;
-      margin-top: 10px;
-      touch-action: none;
-      user-select: none;
-    }
-
-    .mobile-controls button {
-      min-height: 58px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      font: 800 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .08em;
-    }
-
-    .game-notes {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .game-notes article {
-      padding: 16px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.09);
-    }
-
-    .game-notes small {
-      font: 700 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .11em;
-      opacity: .55;
-    }
-
-    .game-notes h2 {
-      margin: 5px 0 7px;
-      font-size: 1.05rem;
-      text-transform: uppercase;
-    }
-
-    .game-notes p {
-      margin: 0;
-      font-size: .88rem;
-      opacity: .7;
-    }
-
-    @media (max-width: 760px) {
-      .galaga-shell { width: min(100% - 12px, 1120px); margin-top: 12px; }
-      .galaga-heading { display: block; }
-      .galaga-heading > p { margin-top: 12px; }
-      .arcade-frame { max-height: none; }
-      .mobile-controls { display: grid; }
-      .game-notes { grid-template-columns: 1fr; }
-      .game-hud { font-size: 10px; padding: 7px 8px; }
-      .game-hud span { font-size: .8rem; }
-      .game-lives { left: 8px; bottom: 7px; font-size: 10px; }
-    }
+    body.bean-galaga-page { min-height:100vh; overflow-x:hidden; background:#05070b; }
+    .galaga-shell { width:min(1120px,calc(100% - 24px)); margin:26px auto 56px; }
+    .galaga-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:16px; }
+    .galaga-heading h1 { margin:4px 0 0; font-size:clamp(2rem,6vw,4.7rem); line-height:.9; letter-spacing:-.055em; text-transform:uppercase; }
+    .galaga-heading > p { max-width:470px; margin:0; opacity:.72; }
+    .arcade-frame { position:relative; width:100%; aspect-ratio:4/3; max-height:78vh; overflow:hidden; isolation:isolate; background:#000; border:1px solid rgba(255,255,255,.16); box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.03); touch-action:none; }
+    .arcade-frame::after { content:""; position:absolute; inset:0; z-index:8; pointer-events:none; opacity:.12; background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.17) 4px); mix-blend-mode:soft-light; }
+    #beanGalaga { display:block; width:100%; height:100%; image-rendering:pixelated; background:#000; }
+    .game-hud { position:absolute; inset:0 0 auto; z-index:5; display:grid; grid-template-columns:1fr auto 1fr; align-items:start; gap:10px; padding:10px 14px; pointer-events:none; font:700 13px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.08em; color:#f7f8ff; text-shadow:0 2px 5px #000; }
+    .game-hud > div:nth-child(2) { text-align:center; }
+    .game-hud > div:last-child { text-align:right; }
+    .game-hud span { display:block; margin-top:2px; font-size:1rem; }
+    .game-lives { position:absolute; left:14px; bottom:12px; z-index:5; pointer-events:none; font:700 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.08em; color:#f7f8ff; text-shadow:0 2px 5px #000; }
+    .game-center { position:absolute; inset:0; z-index:6; display:grid; place-items:center; padding:28px; pointer-events:none; background:rgba(0,0,0,.18); }
+    .game-center[hidden] { display:none; }
+    .game-center__card { width:min(560px,88%); padding:22px 24px; text-align:center; background:rgba(2,4,10,.86); border:1px solid rgba(255,255,255,.18); box-shadow:0 18px 50px rgba(0,0,0,.45); backdrop-filter:blur(7px); }
+    .game-center__card small { display:block; margin-bottom:8px; font:700 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.12em; opacity:.65; }
+    .game-center__card h2 { margin:0; font-size:clamp(2rem,6vw,4rem); line-height:.95; text-transform:uppercase; }
+    .game-center__card p { margin:13px auto 0; max-width:470px; opacity:.76; }
+    .mobile-controls { display:none; grid-template-columns:1fr 1fr 1.3fr; gap:8px; margin-top:10px; touch-action:none; user-select:none; }
+    .mobile-controls button { min-height:58px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.07); color:#fff; font:800 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.08em; }
+    .game-notes { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
+    .game-notes article { padding:16px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); }
+    .game-notes small { font:700 10px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.11em; opacity:.55; }
+    .game-notes h2 { margin:5px 0 7px; font-size:1.05rem; text-transform:uppercase; }
+    .game-notes p { margin:0; font-size:.88rem; opacity:.7; }
+    @media (max-width:760px) { .galaga-shell{width:min(100% - 12px,1120px);margin-top:12px}.galaga-heading{display:block}.galaga-heading>p{margin-top:12px}.arcade-frame{max-height:none}.mobile-controls{display:grid}.game-notes{grid-template-columns:1fr}.game-hud{font-size:10px;padding:7px 8px}.game-hud span{font-size:.8rem}.game-lives{left:8px;bottom:7px;font-size:10px} }
   </style>
 </head>
 <body class="bean-galaga-page">
   <div data-nav-slot></div>
-
   <main class="galaga-shell">
     <header class="galaga-heading">
-      <div>
-        <p class="eyebrow">Interactive Research // Simulation BG-81</p>
-        <h1>Bean Galaga</h1>
-      </div>
-      <p>This version is built around Galaga's actual combat rhythm: staged squadron entries, a breathing formation, peel-off dive attacks, escort runs, tractor-beam capture, Dual Bean rescue, and non-combat challenging stages.</p>
+      <div><p class="eyebrow">Interactive Research // Simulation BG-81</p><h1>Bean Galaga</h1></div>
+      <p>This build models the classic arcade rule set: the 40-ship formation, recurring entrance patterns, discrete bombing runs, Boss escorts, tractor-beam capture and rescue, Dual Bean, Challenging Stages, transform trios, arcade scoring, and bonus fighters.</p>
     </header>
-
     <section class="arcade-frame" aria-label="Bean Galaga game">
       <canvas id="beanGalaga" width="960" height="720" tabindex="0"></canvas>
-
-      <div class="game-hud" aria-hidden="true">
-        <div>HIGH<span id="gameHigh">000000</span></div>
-        <div>STAGE<span id="gameStage">1</span></div>
-        <div>SCORE<span id="gameScore">000000</span></div>
-      </div>
-
+      <div class="game-hud" aria-hidden="true"><div>HIGH<span id="gameHigh">000000</span></div><div>STAGE<span id="gameStage">1</span></div><div>SCORE<span id="gameScore">000000</span></div></div>
       <div class="game-lives" id="gameLives">BEAN × 3</div>
-
-      <div class="game-center" id="gameCenter">
-        <div class="game-center__card">
-          <small>INSTITUTE DEFENSE SIMULATION</small>
-          <h2 id="gameCenterTitle">Bean Galaga</h2>
-          <p id="gameCenterText">Arrow keys / A-D to move. Space to fire. P or Escape pauses.</p>
-        </div>
-      </div>
+      <div class="game-center" id="gameCenter"><div class="game-center__card"><small>INSTITUTE DEFENSE SIMULATION</small><h2 id="gameCenterTitle">Bean Galaga</h2><p id="gameCenterText">Arrow keys / A-D to move. Space to fire. P or Escape pauses.</p></div></div>
     </section>
-
-    <div class="mobile-controls" aria-label="Touch controls">
-      <button type="button" data-control="left">◀ MOVE</button>
-      <button type="button" data-control="right">MOVE ▶</button>
-      <button type="button" data-control="fire">FIRE</button>
-    </div>
-
+    <div class="mobile-controls" aria-label="Touch controls"><button type="button" data-control="left">◀ MOVE</button><button type="button" data-control="right">MOVE ▶</button><button type="button" data-control="fire">FIRE</button></div>
     <section class="game-notes">
-      <article>
-        <small>FIRE CONTROL</small>
-        <h2>Two-shot discipline</h2>
-        <p>Single Bean can only keep two missiles on screen. Dual Bean fires parallel missiles with a four-projectile cap.</p>
-      </article>
-      <article>
-        <small>ENEMY FLIGHT MODEL</small>
-        <h2>Formation → dive → return</h2>
-        <p>Enemies arrive in scripted squadrons, settle into formation, peel off on curved attacks, then rejoin from above if they survive.</p>
-      </article>
-      <article>
-        <small>PROJECTILE MODEL</small>
-        <h2>Ballistic after launch</h2>
-        <p>Diving enemies fire along their current attack tangent with a small aim correction. Once launched, every enemy projectile follows that fixed vector—no homing.</p>
-      </article>
+      <article><small>FIRE CONTROL</small><h2>Two-shot discipline</h2><p>Single Bean can only keep two missiles on screen. Dual Bean fires parallel missiles with a four-projectile cap.</p></article>
+      <article><small>ATTACK CONTROL</small><h2>One bombing run at a time</h2><p>Enemies attack in scheduled groups instead of firing independently. Early stages allow one active run and only two enemy shots on screen.</p></article>
+      <article><small>CLASSIC SYSTEMS</small><h2>Capture, rescue, transforms</h2><p>Bosses take two hits, captured Bean must be rescued from a diving carrier, Dual Bean loses one half when struck, and post-Stage-3 transform trios award bonuses.</p></article>
     </section>
   </main>
 </body>
