@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="Bean Galaga: Defender of Josh — a playable arcade defense simulation from the Institute of Dunbar Studies." />
+  <meta name="description" content="Bean Galaga: Defender of Josh — a Galaga-inspired arcade defense simulation from the Institute of Dunbar Studies." />
   <title>Bean Galaga — Defender of Josh</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
+  <script src="beangalaga.js" defer></script>
   <style>
     body.bean-galaga-page {
-      background: #05070b;
       min-height: 100vh;
       overflow-x: hidden;
+      background: #05070b;
     }
 
     .galaga-shell {
@@ -21,22 +22,22 @@
 
     .galaga-heading {
       display: flex;
+      align-items: end;
       justify-content: space-between;
       gap: 24px;
-      align-items: end;
-      margin: 0 0 16px;
+      margin-bottom: 16px;
     }
 
     .galaga-heading h1 {
       margin: 4px 0 0;
-      font-size: clamp(2rem, 6vw, 4.8rem);
+      font-size: clamp(2rem, 6vw, 4.7rem);
       line-height: .9;
-      letter-spacing: -.05em;
+      letter-spacing: -.055em;
       text-transform: uppercase;
     }
 
-    .galaga-heading p {
-      max-width: 460px;
+    .galaga-heading > p {
+      max-width: 470px;
       margin: 0;
       opacity: .72;
     }
@@ -44,12 +45,13 @@
     .arcade-frame {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 4 / 3;
+      max-height: 78vh;
       overflow: hidden;
+      isolation: isolate;
       background: #000;
       border: 1px solid rgba(255,255,255,.16);
       box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.03);
-      isolation: isolate;
       touch-action: none;
     }
 
@@ -57,10 +59,10 @@
       content: "";
       position: absolute;
       inset: 0;
-      pointer-events: none;
       z-index: 8;
-      opacity: .13;
-      background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,.18) 4px);
+      pointer-events: none;
+      opacity: .12;
+      background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,.17) 4px);
       mix-blend-mode: soft-light;
     }
 
@@ -68,148 +70,145 @@
       display: block;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 50% 100%, #111c38 0, #050816 42%, #000 78%);
       image-rendering: pixelated;
+      background: #000;
     }
 
     .game-hud {
       position: absolute;
-      z-index: 4;
       inset: 0 0 auto;
+      z-index: 5;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      gap: 12px;
-      padding: 14px 16px;
+      align-items: start;
+      gap: 10px;
+      padding: 10px 14px;
       pointer-events: none;
-      color: #fff;
-      font: 700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font: 700 13px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       letter-spacing: .08em;
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px #000;
+      color: #f7f8ff;
+      text-shadow: 0 2px 5px #000;
     }
 
     .game-hud > div:nth-child(2) { text-align: center; }
-    .game-hud > div:nth-child(3) { text-align: right; }
-    .game-hud strong { display: block; margin-top: 4px; font-size: 18px; letter-spacing: .04em; }
+    .game-hud > div:last-child { text-align: right; }
+    .game-hud span { display: block; margin-top: 2px; font-size: 1rem; }
 
-    .game-overlay {
+    .game-lives {
       position: absolute;
-      z-index: 6;
+      left: 14px;
+      bottom: 12px;
+      z-index: 5;
+      pointer-events: none;
+      font: 700 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .08em;
+      color: #f7f8ff;
+      text-shadow: 0 2px 5px #000;
+    }
+
+    .game-center {
+      position: absolute;
       inset: 0;
+      z-index: 6;
       display: grid;
       place-items: center;
-      padding: 24px;
-      background: rgba(0,0,0,.32);
-      text-align: center;
-    }
-
-    .game-overlay[hidden] { display: none; }
-
-    .mission-card {
-      width: min(600px, 92%);
-      padding: clamp(22px, 5vw, 44px);
-      border: 1px solid rgba(255,255,255,.2);
-      background: rgba(5,8,16,.9);
-      box-shadow: 0 20px 70px rgba(0,0,0,.55);
-      backdrop-filter: blur(8px);
-    }
-
-    .mission-card .eyebrow { margin-bottom: 10px; }
-    .mission-card h2 { margin: 0 0 12px; font-size: clamp(2rem, 7vw, 4.5rem); line-height: .9; text-transform: uppercase; }
-    .mission-card p { margin: 10px auto; max-width: 520px; opacity: .8; }
-
-    .mission-card button,
-    .touch-button {
-      border: 1px solid rgba(255,255,255,.35);
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      font: 800 13px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .mission-card button {
-      min-width: 180px;
-      margin-top: 14px;
-      padding: 14px 20px;
-    }
-
-    .mission-card button:hover { background: #fff; color: #080808; }
-
-    .power-readout {
-      position: absolute;
-      z-index: 4;
-      left: 16px;
-      bottom: 14px;
+      padding: 28px;
       pointer-events: none;
-      color: #fff;
-      font: 700 11px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px #000;
+      background: rgba(0,0,0,.18);
     }
 
-    .power-readout span { opacity: .6; }
+    .game-center[hidden] { display: none; }
 
-    .touch-controls {
-      display: none;
-      grid-template-columns: 1fr 1fr 1.35fr;
-      gap: 8px;
-      margin-top: 8px;
-      user-select: none;
-      -webkit-user-select: none;
+    .game-center__card {
+      width: min(560px, 88%);
+      padding: 22px 24px;
+      text-align: center;
+      background: rgba(2,4,10,.86);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 18px 50px rgba(0,0,0,.45);
+      backdrop-filter: blur(7px);
     }
 
-    .touch-button {
-      min-height: 62px;
-      border-color: rgba(255,255,255,.18);
-      background: #0b0f17;
-      touch-action: manipulation;
-    }
-
-    .touch-button:active,
-    .touch-button.is-held { background: #fff; color: #06080c; }
-
-    .game-brief {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      margin-top: 1px;
-      background: rgba(255,255,255,.12);
-    }
-
-    .game-brief article {
-      min-height: 130px;
-      padding: 20px;
-      background: #0b0d12;
-    }
-
-    .game-brief small {
+    .game-center__card small {
       display: block;
       margin-bottom: 8px;
-      opacity: .55;
-      font: 700 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font: 700 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .12em;
+      opacity: .65;
+    }
+
+    .game-center__card h2 {
+      margin: 0;
+      font-size: clamp(2rem, 6vw, 4rem);
+      line-height: .95;
+      text-transform: uppercase;
+    }
+
+    .game-center__card p {
+      margin: 13px auto 0;
+      max-width: 470px;
+      opacity: .76;
+    }
+
+    .mobile-controls {
+      display: none;
+      grid-template-columns: 1fr 1fr 1.3fr;
+      gap: 8px;
+      margin-top: 10px;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .mobile-controls button {
+      min-height: 58px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.07);
+      color: #fff;
+      font: 800 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       letter-spacing: .08em;
     }
 
-    .game-brief h3 { margin: 0 0 7px; font-size: 1rem; text-transform: uppercase; }
-    .game-brief p { margin: 0; opacity: .68; font-size: .9rem; }
+    .game-notes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
 
-    .return-line { margin-top: 16px; }
-    .return-line a { opacity: .7; }
-    .return-line a:hover { opacity: 1; }
+    .game-notes article {
+      padding: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .game-notes small {
+      font: 700 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .11em;
+      opacity: .55;
+    }
+
+    .game-notes h2 {
+      margin: 5px 0 7px;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+    }
+
+    .game-notes p {
+      margin: 0;
+      font-size: .88rem;
+      opacity: .7;
+    }
 
     @media (max-width: 760px) {
-      .galaga-shell { width: 100%; margin-top: 10px; }
-      .galaga-heading { padding: 0 14px; align-items: start; flex-direction: column; }
-      .arcade-frame { border-left: 0; border-right: 0; aspect-ratio: 4 / 5; }
-      .touch-controls { display: grid; padding: 0 8px; }
-      .game-brief { grid-template-columns: 1fr; margin-top: 12px; }
-      .return-line { padding: 0 14px; }
-      .game-hud { padding: 10px; font-size: 9px; }
-      .game-hud strong { font-size: 14px; }
-      .power-readout { left: 10px; bottom: 10px; font-size: 9px; }
+      .galaga-shell { width: min(100% - 12px, 1120px); margin-top: 12px; }
+      .galaga-heading { display: block; }
+      .galaga-heading > p { margin-top: 12px; }
+      .arcade-frame { max-height: none; }
+      .mobile-controls { display: grid; }
+      .game-notes { grid-template-columns: 1fr; }
+      .game-hud { font-size: 10px; padding: 7px 8px; }
+      .game-hud span { font-size: .8rem; }
+      .game-lives { left: 8px; bottom: 7px; font-size: 10px; }
     }
   </style>
 </head>
@@ -219,801 +218,55 @@
   <main class="galaga-shell">
     <header class="galaga-heading">
       <div>
-        <p class="eyebrow">Bean Research Lab // Combat Simulation 02</p>
+        <p class="eyebrow">Interactive Research // Simulation BG-81</p>
         <h1>Bean Galaga</h1>
       </div>
-      <p>Bean has been cleared for orbital defense duty. Protect Josh, preserve the gains, and prevent hostile gym entities from reaching the lower atmosphere.</p>
+      <p>This version is built around Galaga's actual combat rhythm: staged squadron entries, a breathing formation, peel-off dive attacks, escort runs, tractor-beam capture, Dual Bean rescue, and non-combat challenging stages.</p>
     </header>
 
-    <section class="arcade-frame" id="arcadeFrame" aria-label="Bean Galaga game">
-      <canvas id="beanGalaga" width="960" height="600"></canvas>
+    <section class="arcade-frame" aria-label="Bean Galaga game">
+      <canvas id="beanGalaga" width="960" height="720" tabindex="0"></canvas>
 
       <div class="game-hud" aria-hidden="true">
-        <div>Score<strong id="score">000000</strong></div>
-        <div>Wave<strong id="wave">01</strong></div>
-        <div>High Score<strong id="highScore">000000</strong></div>
+        <div>HIGH<span id="gameHigh">000000</span></div>
+        <div>STAGE<span id="gameStage">1</span></div>
+        <div>SCORE<span id="gameScore">000000</span></div>
       </div>
 
-      <div class="power-readout" id="powerReadout"><span>BEAN SYSTEM:</span> READY</div>
+      <div class="game-lives" id="gameLives">BEAN × 3</div>
 
-      <div class="game-overlay" id="overlay">
-        <div class="mission-card">
-          <p class="eyebrow" id="overlayEyebrow">Institute defense protocol</p>
-          <h2 id="overlayTitle">Defend Josh.</h2>
-          <p id="overlayCopy">Move with A/D or the arrow keys. Fire with Space. Survive the formation, stop dive attacks, and collect sanctioned performance-enhancing pickups.</p>
-          <button id="startButton" type="button">Begin Mission</button>
+      <div class="game-center" id="gameCenter">
+        <div class="game-center__card">
+          <small>INSTITUTE DEFENSE SIMULATION</small>
+          <h2 id="gameCenterTitle">Bean Galaga</h2>
+          <p id="gameCenterText">Arrow keys / A-D to move. Space to fire. P or Escape pauses.</p>
         </div>
       </div>
     </section>
 
-    <div class="touch-controls" aria-label="Touch controls">
-      <button class="touch-button" id="leftButton" type="button">◀ Move</button>
-      <button class="touch-button" id="rightButton" type="button">Move ▶</button>
-      <button class="touch-button" id="fireButton" type="button">Fire</button>
+    <div class="mobile-controls" aria-label="Touch controls">
+      <button type="button" data-control="left">◀ MOVE</button>
+      <button type="button" data-control="right">MOVE ▶</button>
+      <button type="button" data-control="fire">FIRE</button>
     </div>
 
-    <section class="game-brief">
-      <article><small>POWERUP // CREATINE</small><h3>Triple Fire</h3><p>Temporarily widens Bean's firing pattern. Institute nutritionists decline further comment.</p></article>
-      <article><small>POWERUP // BICEP BARRIER</small><h3>Josh Shield</h3><p>Absorbs one impact through mechanisms the research team refuses to explain.</p></article>
-      <article><small>CONTROL // DESKTOP</small><h3>A / D + Space</h3><p>Arrow keys also move. Press P or Escape to pause the combat simulation.</p></article>
+    <section class="game-notes">
+      <article>
+        <small>FIRE CONTROL</small>
+        <h2>Two-shot discipline</h2>
+        <p>Single Bean can only keep two missiles on screen. Dual Bean fires parallel missiles with a four-projectile cap.</p>
+      </article>
+      <article>
+        <small>ENEMY FLIGHT MODEL</small>
+        <h2>Formation → dive → return</h2>
+        <p>Enemies arrive in scripted squadrons, settle into formation, peel off on curved attacks, then rejoin from above if they survive.</p>
+      </article>
+      <article>
+        <small>PROJECTILE MODEL</small>
+        <h2>Ballistic after launch</h2>
+        <p>Diving enemies fire along their current attack tangent with a small aim correction. Once launched, every enemy projectile follows that fixed vector—no homing.</p>
+      </article>
     </section>
-
-    <p class="return-line"><a href="index.html">← Return to the Institute</a></p>
   </main>
-
-  <script>
-  (() => {
-    'use strict';
-
-    const canvas = document.getElementById('beanGalaga');
-    const ctx = canvas.getContext('2d');
-    const frame = document.getElementById('arcadeFrame');
-    const scoreEl = document.getElementById('score');
-    const waveEl = document.getElementById('wave');
-    const highScoreEl = document.getElementById('highScore');
-    const powerEl = document.getElementById('powerReadout');
-    const overlay = document.getElementById('overlay');
-    const overlayEyebrow = document.getElementById('overlayEyebrow');
-    const overlayTitle = document.getElementById('overlayTitle');
-    const overlayCopy = document.getElementById('overlayCopy');
-    const startButton = document.getElementById('startButton');
-
-    const W = canvas.width;
-    const H = canvas.height;
-    const TAU = Math.PI * 2;
-
-    const input = { left: false, right: false, fire: false };
-    const stars = [];
-    const bullets = [];
-    const enemyBullets = [];
-    const enemies = [];
-    const particles = [];
-    const powerups = [];
-
-    const state = {
-      mode: 'title',
-      score: 0,
-      highScore: Number(localStorage.getItem('bean_galaga_high_score') || 0),
-      wave: 1,
-      lives: 3,
-      shield: 0,
-      tripleUntil: 0,
-      nextDive: 0,
-      waveClearAt: 0,
-      lastTime: 0,
-      elapsed: 0,
-      muted: false
-    };
-
-    const player = {
-      x: W / 2,
-      y: H - 62,
-      w: 54,
-      h: 42,
-      speed: 430,
-      cooldown: 0,
-      invulnerable: 0
-    };
-
-    const remoteAssetBase = 'https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/';
-    const assetBase = location.hostname.includes('github.io') ? remoteAssetBase : 'img/';
-    const assets = loadAssets({
-      player: 'player_ship.png',
-      fighter: 'enemy_fighter.png',
-      interceptor: 'enemy_interceptor.png',
-      boss: 'enemy_boss.png'
-    });
-
-    function loadAssets(map) {
-      const out = {};
-      Object.entries(map).forEach(([key, file]) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = assetBase + file;
-        out[key] = img;
-      });
-      return out;
-    }
-
-    function imageReady(img) {
-      return img && img.complete && img.naturalWidth > 0;
-    }
-
-    function formatScore(n) {
-      return Math.max(0, Math.floor(n)).toString().padStart(6, '0');
-    }
-
-    function updateHud() {
-      scoreEl.textContent = formatScore(state.score);
-      waveEl.textContent = String(state.wave).padStart(2, '0');
-      highScoreEl.textContent = formatScore(state.highScore);
-      const triple = performance.now() < state.tripleUntil;
-      powerEl.innerHTML = state.shield
-        ? '<span>BEAN SYSTEM:</span> BICEP BARRIER ACTIVE'
-        : triple
-          ? '<span>BEAN SYSTEM:</span> CREATINE OVERDRIVE'
-          : `<span>BEAN SYSTEM:</span> ${'●'.repeat(state.lives)}${'○'.repeat(Math.max(0, 3 - state.lives))}`;
-    }
-
-    function initStars() {
-      stars.length = 0;
-      for (let i = 0; i < 150; i++) {
-        stars.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          speed: 16 + Math.random() * 54,
-          size: Math.random() < .85 ? 1 : 2,
-          alpha: .25 + Math.random() * .65
-        });
-      }
-    }
-
-    function resetGame() {
-      state.score = 0;
-      state.wave = 1;
-      state.lives = 3;
-      state.shield = 0;
-      state.tripleUntil = 0;
-      state.elapsed = 0;
-      player.x = W / 2;
-      player.cooldown = 0;
-      player.invulnerable = 0;
-      bullets.length = 0;
-      enemyBullets.length = 0;
-      particles.length = 0;
-      powerups.length = 0;
-      spawnWave();
-      state.mode = 'playing';
-      overlay.hidden = true;
-      updateHud();
-    }
-
-    function spawnWave() {
-      enemies.length = 0;
-      enemyBullets.length = 0;
-      bullets.length = 0;
-      const rows = Math.min(5, 3 + Math.floor((state.wave - 1) / 2));
-      const cols = 9;
-      const spacingX = 76;
-      const spacingY = 50;
-      const originX = W / 2 - ((cols - 1) * spacingX) / 2;
-      const originY = 95;
-      const now = performance.now();
-
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          let type = 'fighter';
-          let hp = 1;
-          let points = 80;
-          if (row === 0 && col % 2 === 0) {
-            type = 'interceptor';
-            points = 130;
-          }
-          if (row === 0 && col === Math.floor(cols / 2) && state.wave >= 2) {
-            type = 'boss';
-            hp = 2 + Math.floor(state.wave / 4);
-            points = 350;
-          }
-
-          const baseX = originX + col * spacingX;
-          const baseY = originY + row * spacingY;
-          enemies.push({
-            type, hp, maxHp: hp, points,
-            x: baseX,
-            y: -120 - row * 45 - col * 8,
-            baseX,
-            baseY,
-            w: type === 'boss' ? 58 : 42,
-            h: type === 'boss' ? 44 : 34,
-            phase: Math.random() * TAU,
-            state: 'entry',
-            diveT: 0,
-            diveX: baseX,
-            fireAt: now + 1400 + Math.random() * 3000,
-            alive: true
-          });
-        }
-      }
-
-      state.nextDive = now + Math.max(1300, 3200 - state.wave * 120);
-      state.waveClearAt = 0;
-      updateHud();
-    }
-
-    function startNextWave() {
-      state.wave += 1;
-      spawnWave();
-      state.mode = 'playing';
-    }
-
-    function firePlayer() {
-      if (player.cooldown > 0 || state.mode !== 'playing') return;
-      const triple = performance.now() < state.tripleUntil;
-      const angles = triple ? [-.18, 0, .18] : [0];
-      angles.forEach(angle => {
-        bullets.push({
-          x: player.x,
-          y: player.y - 20,
-          vx: Math.sin(angle) * 190,
-          vy: -650 * Math.cos(angle),
-          r: 3,
-          alive: true
-        });
-      });
-      player.cooldown = triple ? .13 : .19;
-      burst(player.x, player.y - 23, '#d7ecff', 3, 70);
-      beep(520, .035, 'square', .02);
-    }
-
-    function fireEnemy(enemy) {
-      const dx = player.x - enemy.x;
-      const dy = player.y - enemy.y;
-      const length = Math.max(1, Math.hypot(dx, dy));
-      const speed = 210 + Math.min(180, state.wave * 10);
-      enemyBullets.push({
-        x: enemy.x,
-        y: enemy.y + enemy.h / 2,
-        vx: dx / length * speed,
-        vy: dy / length * speed,
-        r: 5,
-        alive: true
-      });
-    }
-
-    function triggerDive(now) {
-      const formation = enemies.filter(e => e.alive && e.state === 'formation');
-      if (!formation.length) return;
-      const count = state.wave >= 4 && Math.random() < .35 ? 2 : 1;
-      for (let i = 0; i < count; i++) {
-        const options = formation.filter(e => e.state === 'formation');
-        if (!options.length) break;
-        const enemy = options[Math.floor(Math.random() * options.length)];
-        enemy.state = 'dive';
-        enemy.diveT = 0;
-        enemy.diveX = enemy.x;
-      }
-      state.nextDive = now + Math.max(800, 2500 - state.wave * 90) + Math.random() * 900;
-    }
-
-    function update(dt, now) {
-      state.elapsed += dt;
-      updateStars(dt);
-      updateParticles(dt);
-
-      if (state.mode !== 'playing') return;
-
-      player.cooldown = Math.max(0, player.cooldown - dt);
-      player.invulnerable = Math.max(0, player.invulnerable - dt);
-
-      let axis = 0;
-      if (input.left) axis -= 1;
-      if (input.right) axis += 1;
-      player.x += axis * player.speed * dt;
-      player.x = clamp(player.x, 32, W - 32);
-      if (input.fire) firePlayer();
-
-      for (const bullet of bullets) {
-        if (!bullet.alive) continue;
-        bullet.x += bullet.vx * dt;
-        bullet.y += bullet.vy * dt;
-        if (bullet.y < -20 || bullet.x < -20 || bullet.x > W + 20) bullet.alive = false;
-      }
-
-      for (const bullet of enemyBullets) {
-        if (!bullet.alive) continue;
-        bullet.x += bullet.vx * dt;
-        bullet.y += bullet.vy * dt;
-        if (bullet.y > H + 30 || bullet.x < -30 || bullet.x > W + 30) bullet.alive = false;
-        if (bullet.alive && player.invulnerable <= 0 && circleRect(bullet, playerRect())) {
-          bullet.alive = false;
-          hitPlayer();
-        }
-      }
-
-      let living = 0;
-      for (const enemy of enemies) {
-        if (!enemy.alive) continue;
-        living++;
-
-        if (enemy.state === 'entry') {
-          enemy.y += (enemy.baseY - enemy.y) * Math.min(1, dt * 3.2);
-          enemy.x += (enemy.baseX - enemy.x) * Math.min(1, dt * 3.2);
-          if (Math.abs(enemy.y - enemy.baseY) < 2) {
-            enemy.y = enemy.baseY;
-            enemy.state = 'formation';
-          }
-        } else if (enemy.state === 'formation') {
-          enemy.x = enemy.baseX + Math.sin(state.elapsed * 1.5 + enemy.phase) * 12;
-          enemy.y = enemy.baseY + Math.cos(state.elapsed * 1.1 + enemy.phase) * 5;
-          if (now >= enemy.fireAt && Math.random() < .03 + state.wave * .0015) {
-            fireEnemy(enemy);
-            enemy.fireAt = now + 1700 + Math.random() * 2600;
-          }
-        } else if (enemy.state === 'dive') {
-          enemy.diveT += dt;
-          const speed = 155 + state.wave * 8;
-          enemy.y += speed * dt;
-          enemy.x = enemy.diveX + Math.sin(enemy.diveT * 3.6 + enemy.phase) * (70 + enemy.diveT * 24);
-          if (Math.random() < dt * (.28 + state.wave * .02)) fireEnemy(enemy);
-          if (enemy.y > H + 50) {
-            enemy.y = -40;
-            enemy.x = enemy.baseX;
-            enemy.state = 'return';
-          }
-        } else if (enemy.state === 'return') {
-          enemy.y += 250 * dt;
-          enemy.x += (enemy.baseX - enemy.x) * Math.min(1, dt * 4);
-          if (enemy.y >= enemy.baseY) {
-            enemy.y = enemy.baseY;
-            enemy.state = 'formation';
-          }
-        }
-
-        const rect = enemyRect(enemy);
-        if (player.invulnerable <= 0 && enemy.state === 'dive' && rectsOverlap(rect, playerRect())) {
-          enemy.alive = false;
-          burst(enemy.x, enemy.y, '#ffcd75', 22, 220);
-          hitPlayer();
-          continue;
-        }
-
-        for (const bullet of bullets) {
-          if (!bullet.alive || !enemy.alive) continue;
-          if (circleRect(bullet, rect)) {
-            bullet.alive = false;
-            enemy.hp -= 1;
-            burst(bullet.x, bullet.y, enemy.type === 'boss' ? '#ffd479' : '#9ed5ff', enemy.hp <= 0 ? 18 : 6, enemy.hp <= 0 ? 210 : 100);
-            if (enemy.hp <= 0) destroyEnemy(enemy);
-          }
-        }
-      }
-
-      if (now >= state.nextDive) triggerDive(now);
-
-      for (const p of powerups) {
-        if (!p.alive) continue;
-        p.y += 105 * dt;
-        p.phase += dt * 5;
-        if (p.y > H + 20) p.alive = false;
-        if (p.alive && rectsOverlap({ x: p.x - 12, y: p.y - 12, w: 24, h: 24 }, playerRect())) {
-          p.alive = false;
-          collectPowerup(p.type);
-        }
-      }
-
-      if (living === 0 && !state.waveClearAt) {
-        state.waveClearAt = now + 1700;
-        state.mode = 'waveClear';
-        showOverlay('FORMATION ELIMINATED', `Wave ${state.wave} contained. Bean is reloading institutional ammunition.`, 'Containment successful', 'Continue');
-      }
-
-      cleanArrays();
-      updateHud();
-    }
-
-    function destroyEnemy(enemy) {
-      enemy.alive = false;
-      state.score += enemy.points * (enemy.state === 'dive' ? 2 : 1);
-      if (enemy.type === 'boss') state.score += 200;
-      state.highScore = Math.max(state.highScore, state.score);
-      localStorage.setItem('bean_galaga_high_score', state.highScore);
-      beep(enemy.type === 'boss' ? 150 : 230, .08, 'sawtooth', .035);
-
-      const dropChance = enemy.type === 'boss' ? .75 : .055;
-      if (Math.random() < dropChance) {
-        powerups.push({
-          x: enemy.x,
-          y: enemy.y,
-          phase: 0,
-          type: Math.random() < .58 ? 'creatine' : 'shield',
-          alive: true
-        });
-      }
-    }
-
-    function collectPowerup(type) {
-      if (type === 'creatine') {
-        state.tripleUntil = performance.now() + 9000;
-        state.score += 100;
-        burst(player.x, player.y, '#7ecbff', 28, 180);
-        beep(740, .14, 'triangle', .04);
-      } else {
-        state.shield = 1;
-        state.score += 150;
-        burst(player.x, player.y, '#ffd370', 28, 180);
-        beep(620, .18, 'sine', .04);
-      }
-    }
-
-    function hitPlayer() {
-      if (player.invulnerable > 0) return;
-      if (state.shield > 0) {
-        state.shield = 0;
-        player.invulnerable = 1.1;
-        burst(player.x, player.y, '#ffd370', 26, 240);
-        beep(110, .12, 'square', .035);
-        return;
-      }
-
-      state.lives -= 1;
-      player.invulnerable = 2;
-      burst(player.x, player.y, '#ff806d', 38, 300);
-      beep(85, .22, 'sawtooth', .05);
-
-      if (state.lives <= 0) {
-        state.mode = 'gameOver';
-        state.highScore = Math.max(state.highScore, state.score);
-        localStorage.setItem('bean_galaga_high_score', state.highScore);
-        showOverlay('BEAN DOWN', `Final score: ${formatScore(state.score)}. Josh remains disappointed but physically unharmed.`, 'Mission terminated', 'Redeploy Bean');
-      }
-    }
-
-    function playerRect() {
-      return { x: player.x - player.w * .34, y: player.y - player.h * .34, w: player.w * .68, h: player.h * .68 };
-    }
-
-    function enemyRect(e) {
-      return { x: e.x - e.w * .38, y: e.y - e.h * .38, w: e.w * .76, h: e.h * .76 };
-    }
-
-    function circleRect(c, r) {
-      const closestX = clamp(c.x, r.x, r.x + r.w);
-      const closestY = clamp(c.y, r.y, r.y + r.h);
-      const dx = c.x - closestX;
-      const dy = c.y - closestY;
-      return dx * dx + dy * dy < c.r * c.r;
-    }
-
-    function rectsOverlap(a, b) {
-      return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-    }
-
-    function clamp(v, min, max) {
-      return Math.max(min, Math.min(max, v));
-    }
-
-    function cleanArrays() {
-      removeDead(bullets);
-      removeDead(enemyBullets);
-      removeDead(powerups);
-    }
-
-    function removeDead(arr) {
-      for (let i = arr.length - 1; i >= 0; i--) if (!arr[i].alive) arr.splice(i, 1);
-    }
-
-    function burst(x, y, color, count = 12, speed = 160) {
-      for (let i = 0; i < count; i++) {
-        const angle = Math.random() * TAU;
-        const velocity = speed * (.25 + Math.random() * .75);
-        particles.push({
-          x, y,
-          vx: Math.cos(angle) * velocity,
-          vy: Math.sin(angle) * velocity,
-          life: .3 + Math.random() * .55,
-          age: 0,
-          size: 1 + Math.random() * 3,
-          color
-        });
-      }
-    }
-
-    function updateParticles(dt) {
-      for (const p of particles) {
-        p.age += dt;
-        p.x += p.vx * dt;
-        p.y += p.vy * dt;
-        p.vx *= Math.pow(.08, dt);
-        p.vy *= Math.pow(.08, dt);
-      }
-      for (let i = particles.length - 1; i >= 0; i--) if (particles[i].age >= particles[i].life) particles.splice(i, 1);
-    }
-
-    function updateStars(dt) {
-      for (const s of stars) {
-        s.y += s.speed * dt;
-        if (s.y > H + 2) {
-          s.y = -2;
-          s.x = Math.random() * W;
-        }
-      }
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      drawBackground();
-      drawStars();
-      drawPowerups();
-      drawBullets();
-      drawEnemies();
-      drawPlayer();
-      drawParticles();
-    }
-
-    function drawBackground() {
-      const g = ctx.createRadialGradient(W / 2, H + 20, 20, W / 2, H, H * 1.15);
-      g.addColorStop(0, '#14224b');
-      g.addColorStop(.42, '#071124');
-      g.addColorStop(1, '#010205');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-
-      ctx.save();
-      ctx.globalAlpha = .11;
-      ctx.fillStyle = '#7ea7ff';
-      for (let y = 80; y < H; y += 95) ctx.fillRect(0, y, W, 1);
-      ctx.restore();
-    }
-
-    function drawStars() {
-      ctx.save();
-      for (const s of stars) {
-        ctx.globalAlpha = s.alpha;
-        ctx.fillStyle = '#d9e7ff';
-        ctx.fillRect(s.x, s.y, s.size, s.size);
-      }
-      ctx.restore();
-    }
-
-    function drawPlayer() {
-      if (state.mode === 'title') return;
-      ctx.save();
-      if (player.invulnerable > 0 && Math.floor(performance.now() / 90) % 2 === 0) ctx.globalAlpha = .35;
-      if (imageReady(assets.player)) {
-        ctx.drawImage(assets.player, player.x - player.w / 2, player.y - player.h / 2, player.w, player.h);
-      } else {
-        ctx.translate(player.x, player.y);
-        ctx.fillStyle = '#e8f3ff';
-        ctx.beginPath();
-        ctx.moveTo(0, -24);
-        ctx.lineTo(25, 19);
-        ctx.lineTo(7, 12);
-        ctx.lineTo(0, 21);
-        ctx.lineTo(-7, 12);
-        ctx.lineTo(-25, 19);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = '#64b8ff';
-        ctx.fillRect(-3, -10, 6, 21);
-      }
-      ctx.restore();
-
-      if (state.shield) {
-        ctx.save();
-        ctx.strokeStyle = 'rgba(255,211,112,.85)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(player.x, player.y, 38 + Math.sin(state.elapsed * 7) * 3, 0, TAU);
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-
-    function drawEnemies() {
-      for (const e of enemies) {
-        if (!e.alive) continue;
-        const img = assets[e.type];
-        ctx.save();
-        ctx.translate(e.x, e.y);
-        const tilt = e.state === 'dive' ? Math.sin(e.diveT * 4) * .35 : Math.sin(state.elapsed * 2 + e.phase) * .06;
-        ctx.rotate(tilt);
-        if (imageReady(img)) {
-          ctx.drawImage(img, -e.w / 2, -e.h / 2, e.w, e.h);
-        } else {
-          ctx.fillStyle = e.type === 'boss' ? '#ffd06b' : e.type === 'interceptor' ? '#ff8f70' : '#8cc5ff';
-          ctx.beginPath();
-          ctx.moveTo(0, e.h / 2);
-          ctx.lineTo(-e.w / 2, -e.h / 3);
-          ctx.lineTo(-e.w / 5, -e.h / 2);
-          ctx.lineTo(0, -e.h / 4);
-          ctx.lineTo(e.w / 5, -e.h / 2);
-          ctx.lineTo(e.w / 2, -e.h / 3);
-          ctx.closePath();
-          ctx.fill();
-        }
-        if (e.maxHp > 1 && e.hp < e.maxHp) {
-          ctx.fillStyle = 'rgba(0,0,0,.7)';
-          ctx.fillRect(-24, -e.h / 2 - 9, 48, 4);
-          ctx.fillStyle = '#ffd273';
-          ctx.fillRect(-24, -e.h / 2 - 9, 48 * (e.hp / e.maxHp), 4);
-        }
-        ctx.restore();
-      }
-    }
-
-    function drawBullets() {
-      ctx.save();
-      ctx.shadowBlur = 12;
-      for (const b of bullets) {
-        ctx.shadowColor = '#79c6ff';
-        ctx.fillStyle = '#eaf8ff';
-        ctx.fillRect(b.x - 2, b.y - 8, 4, 16);
-      }
-      for (const b of enemyBullets) {
-        ctx.shadowColor = '#ff785f';
-        ctx.fillStyle = '#ffb073';
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, TAU);
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-
-    function drawPowerups() {
-      for (const p of powerups) {
-        if (!p.alive) continue;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(Math.sin(p.phase) * .2);
-        ctx.shadowBlur = 16;
-        ctx.shadowColor = p.type === 'creatine' ? '#6cbcff' : '#ffd26c';
-        ctx.fillStyle = p.type === 'creatine' ? '#6cbcff' : '#ffd26c';
-        ctx.beginPath();
-        ctx.arc(0, 0, 12, 0, TAU);
-        ctx.fill();
-        ctx.fillStyle = '#06101d';
-        ctx.font = '900 12px ui-monospace, monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(p.type === 'creatine' ? 'C' : 'B', 0, 1);
-        ctx.restore();
-      }
-    }
-
-    function drawParticles() {
-      ctx.save();
-      for (const p of particles) {
-        ctx.globalAlpha = Math.max(0, 1 - p.age / p.life);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-      }
-      ctx.restore();
-    }
-
-    function showOverlay(title, copy, eyebrow, buttonText) {
-      overlayTitle.textContent = title;
-      overlayCopy.textContent = copy;
-      overlayEyebrow.textContent = eyebrow;
-      startButton.textContent = buttonText;
-      overlay.hidden = false;
-    }
-
-    function togglePause() {
-      if (state.mode === 'playing') {
-        state.mode = 'paused';
-        showOverlay('SIMULATION PAUSED', 'Bean is holding position. Josh remains under observation.', 'Administrative interruption', 'Resume');
-      } else if (state.mode === 'paused') {
-        state.mode = 'playing';
-        overlay.hidden = true;
-      }
-    }
-
-    function handlePrimaryAction() {
-      if (state.mode === 'title' || state.mode === 'gameOver') {
-        resetGame();
-      } else if (state.mode === 'waveClear') {
-        startNextWave();
-        overlay.hidden = true;
-      } else if (state.mode === 'paused') {
-        togglePause();
-      }
-      ensureAudio();
-    }
-
-    let audioCtx = null;
-    function ensureAudio() {
-      if (!audioCtx) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) audioCtx = new AudioContext();
-      }
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    function beep(freq, duration, type, volume) {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(volume, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(.0001, audioCtx.currentTime + duration);
-      osc.connect(gain).connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + duration);
-    }
-
-    function frameLoop(now) {
-      const dt = Math.min(.033, (now - (state.lastTime || now)) / 1000);
-      state.lastTime = now;
-      update(dt, now);
-      draw();
-      requestAnimationFrame(frameLoop);
-    }
-
-    function setKey(code, down) {
-      if (code === 'ArrowLeft' || code === 'KeyA') input.left = down;
-      if (code === 'ArrowRight' || code === 'KeyD') input.right = down;
-      if (code === 'Space') input.fire = down;
-    }
-
-    addEventListener('keydown', e => {
-      if (['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD', 'Space', 'KeyP', 'Escape'].includes(e.code)) e.preventDefault();
-      if (e.code === 'KeyP' || e.code === 'Escape') {
-        togglePause();
-        return;
-      }
-      if (e.code === 'Space' && ['title', 'gameOver', 'waveClear', 'paused'].includes(state.mode)) {
-        handlePrimaryAction();
-        return;
-      }
-      setKey(e.code, true);
-    });
-
-    addEventListener('keyup', e => setKey(e.code, false));
-    addEventListener('blur', () => {
-      input.left = input.right = input.fire = false;
-      if (state.mode === 'playing') togglePause();
-    });
-
-    startButton.addEventListener('click', handlePrimaryAction);
-
-    bindHoldButton('leftButton', 'left');
-    bindHoldButton('rightButton', 'right');
-    bindHoldButton('fireButton', 'fire');
-
-    function bindHoldButton(id, key) {
-      const button = document.getElementById(id);
-      const on = e => {
-        e.preventDefault();
-        ensureAudio();
-        input[key] = true;
-        button.classList.add('is-held');
-      };
-      const off = e => {
-        if (e) e.preventDefault();
-        input[key] = false;
-        button.classList.remove('is-held');
-      };
-      button.addEventListener('pointerdown', on);
-      button.addEventListener('pointerup', off);
-      button.addEventListener('pointercancel', off);
-      button.addEventListener('pointerleave', off);
-    }
-
-    frame.addEventListener('pointerdown', e => {
-      if (e.pointerType === 'touch' && state.mode === 'playing') {
-        ensureAudio();
-        input.fire = true;
-      }
-    });
-    frame.addEventListener('pointerup', () => { input.fire = false; });
-    frame.addEventListener('pointercancel', () => { input.fire = false; });
-
-    initStars();
-    updateHud();
-    state.mode = 'title';
-    requestAnimationFrame(frameLoop);
-  })();
-  </script>
 </body>
 </html>
