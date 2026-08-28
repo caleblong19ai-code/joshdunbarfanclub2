@@ -1,10 +1,19 @@
 'use strict';
 
 // Final fidelity layer: cabinet-style rapid fire, boss mourning pause,
-// alternate rear-loop bombing runs, transform fallback, and challenge payouts.
+// alternate rear-loop bombing runs, transform fallback, challenge payouts,
+// and the classic hostile captured-fighter persistence edge case.
 
 state.mourningClock = 0;
+state.storedCaptured = false;
 keys.fire = false;
+images.captured = images.player;
+
+const baseStartNewGame = startNewGame;
+startNewGame = function () {
+  state.storedCaptured = false;
+  return baseStartNewGame();
+};
 
 const baseInitControls = initControls;
 initControls = function () {
@@ -51,8 +60,7 @@ hitEnemy = function (enemy) {
   const willKillBoss = enemy.type === 'boss' && enemy.hp <= 1;
   baseHitEnemy(enemy);
   if (willKillBoss && !enemy.alive) {
-    // After a Boss Galaga dies, the formation briefly stops firing while
-    // attackers already in motion continue their runs.
+    // The surviving formation briefly pauses its fire after a Boss Galaga dies.
     state.mourningClock = Math.max(state.mourningClock, 0.72);
     enemyShots.length = 0;
   }
@@ -146,6 +154,82 @@ transformInfoForStage = function (stage) {
     { kind: 'stingray', label: 'Bosconian Spy Ship', bonus: 2000 },
     { kind: 'flagship', label: 'Galaxian Flagship', bonus: 3000 }
   ][Math.floor((stage - 4) / 4) % 3];
+};
+
+// If a carrier is destroyed in formation, the red captured fighter is not
+// rescued. It makes a hostile pass, escapes, and returns with the next convoy.
+const baseReleaseRogueCapturedFighter = releaseRogueCapturedFighter;
+releaseRogueCapturedFighter = function (boss) {
+  baseReleaseRogueCapturedFighter(boss);
+  if (state.rogueCaptured) state.rogueCaptured.storeForNextStage = true;
+};
+
+const baseUpdateRogueCaptured = updateRogueCaptured;
+updateRogueCaptured = function (dt) {
+  const rogue = state.rogueCaptured;
+  const wasAlive = Boolean(rogue?.alive);
+  baseUpdateRogueCaptured(dt);
+  if (rogue?.storeForNextStage && wasAlive && !rogue.alive) {
+    state.storedCaptured = true;
+    showMessage('CAPTURED BEAN ESCAPED');
+  }
+};
+
+const baseBuildFormation = buildFormation;
+buildFormation = function () {
+  baseBuildFormation();
+  if (!state.storedCaptured) return;
+
+  state.storedCaptured = false;
+  enemies.push({
+    id: `captured-${state.stage}-${Math.random().toString(36).slice(2, 7)}`,
+    type: 'captured',
+    row: -1,
+    col: 0,
+    slotDX: 0,
+    slotY: 100,
+    x: W / 2,
+    y: -60,
+    angle: Math.PI,
+    alive: true,
+    state: 'waiting',
+    hp: 1,
+    damaged: true,
+    entryGroup: 4,
+    entryIndex: 8,
+    entryT: 0,
+    attackGroup: null,
+    attackT: 0,
+    attackDuration: 0,
+    attackRole: 'solo',
+    attackVariant: 'standard',
+    bossEscortCount: 0,
+    shotMarks: new Set(),
+    capturedFighter: false,
+    carrierState: null,
+    returnT: 0,
+    returnStartX: W / 2,
+    attackTargetX: W / 2,
+    tractor: null
+  });
+};
+
+const baseScheduleAttack = scheduleAttack;
+scheduleAttack = function () {
+  const hostile = enemies.find(e => e.alive && e.state === 'formation' && e.type === 'captured');
+  const maxGroups = state.stage < 4 ? 1 : state.stage < 12 ? 2 : 3;
+  if (hostile && state.mode === 'formation' && !player.hidden && !player.capture && state.activeAttackGroups.size < maxGroups && Math.random() < 0.22) {
+    launchSoloAttack(hostile);
+    setNextAttackClock();
+    return;
+  }
+  return baseScheduleAttack();
+};
+
+const baseScoreEnemy = scoreEnemy;
+scoreEnemy = function (enemy, airborne) {
+  if (enemy.type === 'captured') return airborne ? 1000 : 500;
+  return baseScoreEnemy(enemy, airborne);
 };
 
 // The original challenge tally awards 100 x hits for an imperfect round,
