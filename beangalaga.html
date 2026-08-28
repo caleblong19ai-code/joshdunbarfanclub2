@@ -7,14 +7,15 @@
   <title>Bean Galaga — Defender of Josh</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
-  <script src="galaga-core.js?v=7" defer></script>
-  <script src="galaga-stage.js?v=7" defer></script>
-  <script src="galaga-capture.js?v=7" defer></script>
-  <script src="galaga-combat.js?v=7" defer></script>
-  <script src="galaga-fidelity.js?v=7" defer></script>
-  <script src="galaga-rules.js?v=7" defer></script>
-  <script src="galaga-balance.js?v=7" defer></script>
-  <script src="beangalaga.js?v=7" defer></script>
+  <script src="galaga-core.js?v=8" defer></script>
+  <script src="galaga-stage.js?v=8" defer></script>
+  <script src="galaga-capture.js?v=8" defer></script>
+  <script src="galaga-combat.js?v=8" defer></script>
+  <script src="galaga-fidelity.js?v=8" defer></script>
+  <script src="galaga-rules.js?v=8" defer></script>
+  <script src="galaga-balance.js?v=8" defer></script>
+  <script src="beangalaga.js?v=8" defer></script>
+  <script src="galaga-theme.js?v=8" defer></script>
   <style>
     body.bean-galaga-page { min-height:100vh; overflow-x:hidden; background:#05070b; }
     .galaga-shell { width:min(1120px,calc(100% - 24px)); margin:26px auto 56px; }
@@ -50,7 +51,7 @@
   <main class="galaga-shell">
     <header class="galaga-heading">
       <div><p class="eyebrow">Interactive Research // Simulation BG-81</p><h1>Bean Galaga</h1></div>
-      <p>This build models the classic arcade rule set: the 40-ship formation, recurring entrance patterns, discrete bombing runs, Boss escorts, tractor-beam capture and rescue, Dual Bean, Challenging Stages, transform trios, arcade scoring, and bonus fighters.</p>
+      <p>Bean now defends Josh from organized waves of hostile squirrels, murderous rabbits, and armored woodland command units using the classic Galaga combat model.</p>
     </header>
     <section class="arcade-frame" aria-label="Bean Galaga game">
       <canvas id="beanGalaga" width="960" height="720" tabindex="0"></canvas>
@@ -60,9 +61,9 @@
     </section>
     <div class="mobile-controls" aria-label="Touch controls"><button type="button" data-control="left">◀ MOVE</button><button type="button" data-control="right">MOVE ▶</button><button type="button" data-control="fire">FIRE</button></div>
     <section class="game-notes">
-      <article><small>FIRE CONTROL</small><h2>Two-shot discipline</h2><p>Single Bean can only keep two missiles on screen. Dual Bean fires parallel missiles with a four-projectile cap; hold FIRE for cabinet-style rapid fire.</p></article>
+      <article><small>HOSTILE FAUNA</small><h2>Squirrels & rabbits</h2><p>Bee-class enemies are now rabid squirrels, Butterfly-class enemies are evil rabbits, and Boss Galagas are armored alpha squirrels.</p></article>
+      <article><small>BATTLEFIELD GEOMETRY</small><h2>Closer engagement</h2><p>The enemy formation sits lower and Bean sits slightly higher, removing the oversized dead zone while preserving the fixed-shooter layout.</p></article>
       <article><small>ATTACK CONTROL</small><h2>Overlapping bombing runs</h2><p>Enemy dives remain readable, but the next attack can begin while a survivor is escaping or rejoining formation. Threat comes from timing, not projectile spam.</p></article>
-      <article><small>CLASSIC SYSTEMS</small><h2>Capture, rescue, transforms</h2><p>Bosses take two hits, captured Bean must be rescued from a diving carrier, Dual Bean loses one half when struck, and post-Stage-3 transform trios award bonuses.</p></article>
     </section>
   </main>
 </body>
