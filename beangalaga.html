@@ -7,16 +7,16 @@
   <title>Bean Galaga — Defender of Josh</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
-  <script src="galaga-core.js?v=10" defer></script>
-  <script src="galaga-stage.js?v=10" defer></script>
-  <script src="galaga-capture.js?v=10" defer></script>
-  <script src="galaga-combat.js?v=10" defer></script>
-  <script src="galaga-fidelity.js?v=10" defer></script>
-  <script src="galaga-rules.js?v=10" defer></script>
-  <script src="galaga-balance.js?v=10" defer></script>
-  <script src="beangalaga.js?v=10" defer></script>
-  <script src="galaga-theme.js?v=10" defer></script>
-  <script src="galaga-cabinet.js?v=10" defer></script>
+  <script src="galaga-core.js?v=11" defer></script>
+  <script src="galaga-stage.js?v=11" defer></script>
+  <script src="galaga-capture.js?v=11" defer></script>
+  <script src="galaga-combat.js?v=11" defer></script>
+  <script src="galaga-fidelity.js?v=11" defer></script>
+  <script src="galaga-rules.js?v=11" defer></script>
+  <script src="galaga-balance.js?v=11" defer></script>
+  <script src="beangalaga.js?v=11" defer></script>
+  <script src="galaga-theme.js?v=11" defer></script>
+  <script src="galaga-cabinet.js?v=11" defer></script>
   <style>
     body.bean-galaga-page { min-height:100vh; overflow-x:hidden; background:#05070b; }
     .galaga-shell { width:min(1120px,calc(100% - 24px)); margin:26px auto 56px; }
@@ -52,7 +52,7 @@
   <main class="galaga-shell">
     <header class="galaga-heading">
       <div><p class="eyebrow">Interactive Research // Simulation BG-81</p><h1>Bean Galaga</h1></div>
-      <p>Bean defends Josh from organized waves of hostile squirrels, murderous rabbits, and armored woodland command units on a playfield proportioned after the original 1981 Galaga cabinet.</p>
+      <p>Bean defends Josh from organized waves of deceptively adorable black squirrels, suspiciously cute rabbits, and tiny woodland command units with glowing evil eyes.</p>
     </header>
     <section class="arcade-frame" aria-label="Bean Galaga game">
       <canvas id="beanGalaga" width="560" height="720" tabindex="0"></canvas>
@@ -62,8 +62,8 @@
     </section>
     <div class="mobile-controls" aria-label="Touch controls"><button type="button" data-control="left">◀ MOVE</button><button type="button" data-control="right">MOVE ▶</button><button type="button" data-control="fire">FIRE</button></div>
     <section class="game-notes">
-      <article><small>HOSTILE FAUNA</small><h2>Squirrels & rabbits</h2><p>Bee-class enemies are rabid squirrels, Butterfly-class enemies are evil rabbits, and Boss Galagas are armored alpha squirrels.</p></article>
-      <article><small>ARCADE GEOMETRY</small><h2>7:9 portrait field</h2><p>The playfield now uses the same portrait aspect ratio as Galaga's original 224×288 arcade raster instead of the old landscape 4:3 canvas.</p></article>
+      <article><small>HOSTILE FAUNA</small><h2>Cute, but evil</h2><p>Bee-class enemies are chibi black squirrels, Butterfly-class enemies are soft white rabbits, and both still have unmistakably evil glowing eyes.</p></article>
+      <article><small>ARCADE GEOMETRY</small><h2>7:9 portrait field</h2><p>The playfield keeps the same portrait aspect ratio as Galaga's original 224×288 arcade raster instead of the old landscape 4:3 canvas.</p></article>
       <article><small>ATTACK CONTROL</small><h2>Overlapping bombing runs</h2><p>Enemy dives remain readable, but the next attack can begin while a survivor is escaping or rejoining formation. Threat comes from timing, not projectile spam.</p></article>
     </section>
   </main>
