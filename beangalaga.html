@@ -7,16 +7,16 @@
   <title>Bean Galaga — Defender of Josh</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
-  <script src="galaga-core.js?v=12" defer></script>
-  <script src="galaga-stage.js?v=12" defer></script>
-  <script src="galaga-capture.js?v=12" defer></script>
-  <script src="galaga-combat.js?v=12" defer></script>
-  <script src="galaga-fidelity.js?v=12" defer></script>
-  <script src="galaga-rules.js?v=12" defer></script>
-  <script src="galaga-balance.js?v=12" defer></script>
-  <script src="beangalaga.js?v=12" defer></script>
-  <script src="galaga-theme.js?v=12" defer></script>
-  <script src="galaga-cabinet.js?v=12" defer></script>
+  <script src="galaga-core.js?v=13" defer></script>
+  <script src="galaga-stage.js?v=13" defer></script>
+  <script src="galaga-capture.js?v=13" defer></script>
+  <script src="galaga-combat.js?v=13" defer></script>
+  <script src="galaga-fidelity.js?v=13" defer></script>
+  <script src="galaga-rules.js?v=13" defer></script>
+  <script src="galaga-balance.js?v=13" defer></script>
+  <script src="beangalaga.js?v=13" defer></script>
+  <script src="galaga-theme.js?v=13" defer></script>
+  <script src="galaga-cabinet.js?v=13" defer></script>
   <style>
     body.bean-galaga-page { min-height:100vh; overflow-x:hidden; background:#05070b; }
     .galaga-shell { width:min(1120px,calc(100% - 24px)); margin:26px auto 56px; }
@@ -25,7 +25,7 @@
     .galaga-heading > p { max-width:470px; margin:0; opacity:.72; }
     .arcade-frame { position:relative; width:min(560px,100%); aspect-ratio:7/9; margin-inline:auto; overflow:hidden; isolation:isolate; background:#000; border:1px solid rgba(255,255,255,.16); box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.03); touch-action:none; }
     .arcade-frame::after { content:""; position:absolute; inset:0; z-index:8; pointer-events:none; opacity:.12; background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.17) 4px); mix-blend-mode:soft-light; }
-    #beanGalaga { display:block; width:100%; height:100%; image-rendering:pixelated; background:#000; }
+    #beanGalaga { display:block; width:100%; height:100%; image-rendering:auto; background:#000; }
     .game-hud { position:absolute; inset:0 0 auto; z-index:5; display:grid; grid-template-columns:1fr auto 1fr; align-items:start; gap:10px; padding:10px 14px; pointer-events:none; font:700 13px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; letter-spacing:.08em; color:#f7f8ff; text-shadow:0 2px 5px #000; }
     .game-hud > div:nth-child(2) { text-align:center; }
     .game-hud > div:last-child { text-align:right; }
@@ -52,7 +52,7 @@
   <main class="galaga-shell">
     <header class="galaga-heading">
       <div><p class="eyebrow">Interactive Research // Simulation BG-81</p><h1>Bean Galaga</h1></div>
-      <p>Bean defends Josh from organized waves of unmistakably different black squirrels and white rabbits, all of whom remain suspiciously adorable and visibly evil.</p>
+      <p>Bean defends Josh from cute black squirrels and white rabbits that have absolutely no business possessing glowing red eyes.</p>
     </header>
     <section class="arcade-frame" aria-label="Bean Galaga game">
       <canvas id="beanGalaga" width="560" height="720" tabindex="0"></canvas>
@@ -62,8 +62,8 @@
     </section>
     <div class="mobile-controls" aria-label="Touch controls"><button type="button" data-control="left">◀ MOVE</button><button type="button" data-control="right">MOVE ▶</button><button type="button" data-control="fire">FIRE</button></div>
     <section class="game-notes">
-      <article><small>HOSTILE FAUNA</small><h2>Actually distinct now</h2><p>Bee-class enemies are wide black squirrels with enormous curled tails. Butterfly-class enemies are narrow white rabbits with comically tall pink ears.</p></article>
-      <article><small>ARCADE GEOMETRY</small><h2>7:9 portrait field</h2><p>The playfield keeps the same portrait aspect ratio as Galaga's original 224×288 arcade raster instead of the old landscape 4:3 canvas.</p></article>
+      <article><small>HOSTILE FAUNA</small><h2>Actual sprite art</h2><p>Squirrels are smooth black chibi sprites with oversized fluffy tails. Rabbits are clean white sprites with long pink ears and cotton tails.</p></article>
+      <article><small>ARCADE GEOMETRY</small><h2>7:9 portrait field</h2><p>The playfield keeps the same portrait aspect ratio as Galaga's original 224×288 arcade raster.</p></article>
       <article><small>ATTACK CONTROL</small><h2>Overlapping bombing runs</h2><p>Enemy dives remain readable, but the next attack can begin while a survivor is escaping or rejoining formation. Threat comes from timing, not projectile spam.</p></article>
     </section>
   </main>
