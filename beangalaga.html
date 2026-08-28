@@ -7,12 +7,13 @@
   <title>Bean Galaga — Defender of Josh</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
-  <script src="galaga-core.js?v=5" defer></script>
-  <script src="galaga-stage.js?v=5" defer></script>
-  <script src="galaga-capture.js?v=5" defer></script>
-  <script src="galaga-combat.js?v=5" defer></script>
-  <script src="galaga-rules.js?v=5" defer></script>
-  <script src="beangalaga.js?v=5" defer></script>
+  <script src="galaga-core.js?v=6" defer></script>
+  <script src="galaga-stage.js?v=6" defer></script>
+  <script src="galaga-capture.js?v=6" defer></script>
+  <script src="galaga-combat.js?v=6" defer></script>
+  <script src="galaga-fidelity.js?v=6" defer></script>
+  <script src="galaga-rules.js?v=6" defer></script>
+  <script src="beangalaga.js?v=6" defer></script>
   <style>
     body.bean-galaga-page { min-height:100vh; overflow-x:hidden; background:#05070b; }
     .galaga-shell { width:min(1120px,calc(100% - 24px)); margin:26px auto 56px; }
@@ -54,13 +55,13 @@
       <canvas id="beanGalaga" width="960" height="720" tabindex="0"></canvas>
       <div class="game-hud" aria-hidden="true"><div>HIGH<span id="gameHigh">000000</span></div><div>STAGE<span id="gameStage">1</span></div><div>SCORE<span id="gameScore">000000</span></div></div>
       <div class="game-lives" id="gameLives">BEAN × 3</div>
-      <div class="game-center" id="gameCenter"><div class="game-center__card"><small>INSTITUTE DEFENSE SIMULATION</small><h2 id="gameCenterTitle">Bean Galaga</h2><p id="gameCenterText">Arrow keys / A-D to move. Space to fire. P or Escape pauses.</p></div></div>
+      <div class="game-center" id="gameCenter"><div class="game-center__card"><small>INSTITUTE DEFENSE SIMULATION</small><h2 id="gameCenterTitle">Bean Galaga</h2><p id="gameCenterText">Arrow keys / A-D to move left and right. Space to fire. P or Escape pauses.</p></div></div>
     </section>
     <div class="mobile-controls" aria-label="Touch controls"><button type="button" data-control="left">◀ MOVE</button><button type="button" data-control="right">MOVE ▶</button><button type="button" data-control="fire">FIRE</button></div>
     <section class="game-notes">
       <article><small>FIRE CONTROL</small><h2>Two-shot discipline</h2><p>Single Bean can only keep two missiles on screen. Dual Bean fires parallel missiles with a four-projectile cap; hold FIRE for cabinet-style rapid fire.</p></article>
-      <article><small>ATTACK CONTROL</small><h2>Discrete bombing runs</h2><p>Enemies attack in scheduled groups instead of firing independently. Early stages allow one active run and only two enemy missiles on screen.</p></article>
-      <article><small>CLASSIC SYSTEMS</small><h2>Capture, rescue, transforms</h2><p>Bosses take two hits, captured Bean must be rescued from a diving carrier, Dual Bean loses one half when struck, and post-Stage-3 transform trios award bonuses.</p></article>
+      <article><small>ARCADE MOVEMENT</small><h2>Horizontal fighter rail</h2><p>Like the 1981 cabinet, Bean moves laterally along the bottom of the playfield. There is intentionally no vertical fighter movement.</p></article>
+      <article><small>BOSS CONTROL</small><h2>Bomb first, beam later</h2><p>Bosses begin with normal bombing runs. Tractor-beam attempts are delayed until mid-battle, use a fixed attack lane, and provide a visible dodge window.</p></article>
     </section>
   </main>
 </body>
