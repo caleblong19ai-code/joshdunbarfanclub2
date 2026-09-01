@@ -28,6 +28,9 @@
   const GRAVITY = 1800;
   const JUMP_VELOCITY = -650;
   const INTRO_DURATION = 1.7;
+  const INITIAL_POWER_DISTANCE = 850;
+  const POWER_COOLDOWN_MIN = 2300;
+  const POWER_COOLDOWN_MAX = 3100;
   const PLAYER_STAND = { w: 58, h: 58 };
   const PLAYER_DUCK = { w: 62, h: 38 };
 
@@ -60,7 +63,7 @@
     speed: THREAT_LEVELS[0].speed,
     threatIndex: 0,
     nextObstacleDistance: 100,
-    nextPowerDistance: 900,
+    nextPowerDistance: INITIAL_POWER_DISTANCE,
     lightningReady: false,
     dodged: 0,
     destroyed: 0,
@@ -131,7 +134,9 @@
     state.worldTravel += travel;
     state.distance += travel / 17;
     state.nextObstacleDistance -= travel;
-    state.nextPowerDistance -= travel;
+    if (!state.lightningReady && pickups.length === 0) {
+      state.nextPowerDistance -= travel;
+    }
 
     updatePlayer(dt);
 
@@ -142,7 +147,7 @@
 
     if (state.nextPowerDistance <= 0 && !state.lightningReady && pickups.length === 0) {
       spawnPowerup();
-      state.nextPowerDistance = random(1250, 1850);
+      state.nextPowerDistance = nextPowerCooldown();
     }
 
     updatePickups(travel);
@@ -206,7 +211,7 @@
       if (intersects(playerBox(), insetBox(pickup, 5))) {
         pickups.splice(index, 1);
         state.lightningReady = true;
-        state.nextPowerDistance = random(1200, 1800);
+        state.nextPowerDistance = nextPowerCooldown();
         updateHud();
         showToast('BEAN LIGHTNING ACQUIRED', 1500);
         announce('Lightning acquired. Strike is ready.');
@@ -333,7 +338,7 @@
     state.speed = THREAT_LEVELS[0].speed;
     state.threatIndex = 0;
     state.nextObstacleDistance = 100;
-    state.nextPowerDistance = 850;
+    state.nextPowerDistance = INITIAL_POWER_DISTANCE;
     state.lightningReady = false;
     state.dodged = 0;
     state.destroyed = 0;
@@ -483,6 +488,10 @@
       h: 32,
       rotation: 0
     });
+  }
+
+  function nextPowerCooldown() {
+    return random(POWER_COOLDOWN_MIN, POWER_COOLDOWN_MAX);
   }
 
   function nearestTarget() {
