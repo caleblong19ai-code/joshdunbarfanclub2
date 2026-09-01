@@ -13,6 +13,7 @@ Maintain and refine the V2 redesign, Bean Run, and Bean Galaga in this staging r
 - The site is static HTML/CSS/JavaScript.
 - Bean Run has been migrated into V2 as one responsive implementation in `game.html` with game logic in `bean-run.js`.
 - Bean Run now uses shared desktop/mobile physics, distance-based obstacle spacing, five explicit threat tiers, touch and keyboard controls, persistent local high scores, automatic visibility pausing, tactical lightning, synthesized sound, and smaller collision boxes than the visible sprites.
+- Bean remains visually stable while running; the earlier oscillating bob/rotation was removed. A held charge now produces a light crackling aura, and fired lightning uses a jagged multi-layer core with branching secondary arcs.
 - `game-mobile.html` is now a compatibility redirect to `game.html`; it is not a second game implementation.
 - Bean Galaga is playable and has been iteratively rebuilt toward Galaga-style formation entry, dive paths, bombing cadence, capture/rescue, dual-fighter behavior, challenging stages, portrait playfield geometry, and themed fauna.
 - Latest verified game milestone in commit history: **V12 sprite renderer** at commit `7f08a76f7803676bcd0c86fd0b7aa1859758e8fd`.

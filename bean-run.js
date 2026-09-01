@@ -369,7 +369,8 @@
       y: player.y + player.h * 0.35,
       speed: 920,
       target,
-      history: []
+      history: [],
+      seed: Math.random() * 10000
     });
     updateHud();
     burst(player.x + player.w * 0.8, player.y + player.h * 0.35, '#dff8ff', 12);
@@ -438,7 +439,7 @@
     for (const pickup of pickups) drawPowerup(pickup, now);
     for (const obstacle of obstacles) drawObstacle(obstacle);
     drawPlayer(now);
-    drawBolts();
+    drawBolts(now);
     drawParticles();
 
     if (state.flash > 0) {
@@ -496,8 +497,55 @@
   function drawPlayer(now) {
     const ducking = player.onGround && player.duckHeld;
     const image = ducking ? images.beanDuck : images.beanRun;
-    const runBob = player.onGround && state.mode !== 'paused' ? Math.sin(now * 0.02) * 1.6 : 0;
-    drawSprite(image, player.x, player.y + runBob, player.w, player.h, ducking ? 0 : Math.sin(now * 0.014) * 0.018, '#d6b178', 'B');
+    if (state.lightningReady) drawChargeAura(now);
+    drawSprite(image, player.x, player.y, player.w, player.h, 0, '#d6b178', 'B');
+    if (state.lightningReady) drawChargeSparks(now);
+  }
+
+  function drawChargeAura(now) {
+    const centerX = player.x + player.w / 2;
+    const centerY = player.y + player.h / 2;
+    const frame = Math.floor(now / 70);
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let arc = 0; arc < 3; arc += 1) {
+      const start = -Math.PI * 0.72 + arc * Math.PI * 0.67 + Math.sin(now * 0.0018 + arc) * 0.12;
+      const points = [];
+      for (let step = 0; step <= 6; step += 1) {
+        const progress = step / 6;
+        const angle = start + progress * 1.22;
+        const radiusNoise = (electricNoise(frame * 41 + arc * 17 + step * 7) - 0.5) * 7;
+        points.push({
+          x: centerX + Math.cos(angle) * (player.w * 0.61 + radiusNoise),
+          y: centerY + Math.sin(angle) * (player.h * 0.62 + radiusNoise * 0.55)
+        });
+      }
+      strokeElectricPath(points, 'rgba(91,126,255,.16)', 5.5, '#688cff', 10);
+      strokeElectricPath(points, 'rgba(101,213,255,.72)', 1.45, '#63d7ff', 5);
+      strokeElectricPath(points, 'rgba(247,253,255,.72)', 0.55);
+    }
+    ctx.restore();
+  }
+
+  function drawChargeSparks(now) {
+    const centerX = player.x + player.w / 2;
+    const centerY = player.y + player.h / 2;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let spark = 0; spark < 7; spark += 1) {
+      const angle = now * 0.0011 * (spark % 2 ? 1 : -1) + spark * 2.17;
+      const radiusX = player.w * (0.52 + electricNoise(spark * 91) * 0.18);
+      const radiusY = player.h * (0.48 + electricNoise(spark * 53) * 0.16);
+      const alpha = 0.35 + Math.sin(now * 0.014 + spark * 1.9) * 0.22;
+      const x = centerX + Math.cos(angle) * radiusX;
+      const y = centerY + Math.sin(angle) * radiusY;
+      ctx.fillStyle = `rgba(226,250,255,${Math.max(0.12, alpha)})`;
+      ctx.shadowColor = '#74ddff';
+      ctx.shadowBlur = 7;
+      ctx.fillRect(x - 1, y - 1, 2, 2);
+    }
+    ctx.restore();
   }
 
   function drawObstacle(obstacle) {
@@ -534,33 +582,117 @@
     ctx.stroke();
     ctx.fill();
     ctx.restore();
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let spark = 0; spark < 5; spark += 1) {
+      const angle = now * 0.0025 + spark * Math.PI * 0.4;
+      const radius = 20 + Math.sin(now * 0.009 + spark) * 3;
+      const x = cx + Math.cos(angle) * radius;
+      const y = cy + Math.sin(angle) * radius;
+      ctx.fillStyle = spark % 2 ? 'rgba(255,246,167,.85)' : 'rgba(174,232,255,.9)';
+      ctx.shadowColor = '#78dfff';
+      ctx.shadowBlur = 7;
+      ctx.fillRect(x - 1, y - 1, 2, 2);
+    }
+    ctx.restore();
   }
 
-  function drawBolts() {
+  function drawBolts(now) {
     for (const bolt of bolts) {
-      for (let index = 1; index < bolt.history.length; index += 1) {
-        const from = bolt.history[index - 1];
-        const to = bolt.history[index];
-        const alpha = index / bolt.history.length;
-        ctx.save();
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = `rgba(128,218,255,${alpha * 0.75})`;
-        ctx.lineWidth = 2 + alpha * 3;
-        ctx.beginPath();
-        ctx.moveTo(from.x, from.y);
-        ctx.lineTo(to.x, to.y);
-        ctx.stroke();
-        ctx.restore();
+      const origin = {
+        x: player.x + player.w * 0.76,
+        y: player.y + player.h * 0.36
+      };
+      const anchors = [origin, ...bolt.history];
+      if (anchors.length === 1 || anchors[anchors.length - 1].x !== bolt.x || anchors[anchors.length - 1].y !== bolt.y) {
+        anchors.push({ x: bolt.x, y: bolt.y });
       }
-      ctx.fillStyle = '#f5feff';
-      ctx.shadowColor = '#75dcff';
-      ctx.shadowBlur = 12;
+
+      const mainPath = buildJaggedPath(anchors, bolt.seed, now, 9);
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      strokeElectricPath(mainPath, 'rgba(92,70,255,.2)', 13, '#765cff', 18);
+      strokeElectricPath(mainPath, 'rgba(67,190,255,.82)', 5, '#55cfff', 11);
+      strokeElectricPath(mainPath, 'rgba(249,254,255,.98)', 1.45, '#eafcff', 4);
+
+      for (let index = 4; index < mainPath.length - 2; index += 5) {
+        const point = mainPath[index];
+        const previous = mainPath[index - 1];
+        const dx = point.x - previous.x;
+        const dy = point.y - previous.y;
+        const length = Math.hypot(dx, dy) || 1;
+        const direction = electricNoise(bolt.seed + index * 33 + Math.floor(now / 65)) > 0.5 ? 1 : -1;
+        const branchLength = 12 + electricNoise(bolt.seed + index * 71) * 18;
+        const perpendicularX = (-dy / length) * direction;
+        const perpendicularY = (dx / length) * direction;
+        const branch = [
+          point,
+          {
+            x: point.x + perpendicularX * branchLength * 0.55 + dx / length * 4,
+            y: point.y + perpendicularY * branchLength * 0.55 + dy / length * 4
+          },
+          {
+            x: point.x + perpendicularX * branchLength + dx / length * 8,
+            y: point.y + perpendicularY * branchLength + dy / length * 8
+          }
+        ];
+        strokeElectricPath(branch, 'rgba(81,196,255,.5)', 3, '#61d4ff', 8);
+        strokeElectricPath(branch, 'rgba(250,254,255,.82)', 0.8);
+      }
+
+      const headGlow = ctx.createRadialGradient(bolt.x, bolt.y, 0, bolt.x, bolt.y, 15);
+      headGlow.addColorStop(0, 'rgba(255,255,255,1)');
+      headGlow.addColorStop(0.22, 'rgba(164,233,255,.95)');
+      headGlow.addColorStop(1, 'rgba(92,101,255,0)');
+      ctx.fillStyle = headGlow;
       ctx.beginPath();
-      ctx.arc(bolt.x, bolt.y, 4, 0, Math.PI * 2);
+      ctx.arc(bolt.x, bolt.y, 15, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowBlur = 0;
+      ctx.restore();
     }
+  }
+
+  function buildJaggedPath(anchors, seed, now, jitter) {
+    const points = [anchors[0]];
+    const frame = Math.floor(now / 48);
+    for (let index = 1; index < anchors.length; index += 1) {
+      const from = anchors[index - 1];
+      const to = anchors[index];
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const length = Math.hypot(dx, dy) || 1;
+      const perpendicularX = -dy / length;
+      const perpendicularY = dx / length;
+      const offset = (electricNoise(seed + frame * 97 + index * 43) - 0.5) * jitter * 2;
+      points.push({
+        x: (from.x + to.x) / 2 + perpendicularX * offset,
+        y: (from.y + to.y) / 2 + perpendicularY * offset
+      });
+      points.push(to);
+    }
+    return points;
+  }
+
+  function strokeElectricPath(points, color, lineWidth, shadowColor, shadowBlur) {
+    if (points.length < 2) return;
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    if (shadowColor) ctx.shadowColor = shadowColor;
+    if (shadowBlur) ctx.shadowBlur = shadowBlur;
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let index = 1; index < points.length; index += 1) ctx.lineTo(points[index].x, points[index].y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function electricNoise(seed) {
+    const value = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+    return value - Math.floor(value);
   }
 
   function drawParticles() {
