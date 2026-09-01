@@ -8,7 +8,7 @@
   <title>Bean Run — Hostile Fauna Field Trial</title>
   <link rel="stylesheet" href="style.css" />
   <script src="site.js" defer></script>
-  <script src="bean-run.js?v=4" defer></script>
+  <script src="bean-run.js?v=5" defer></script>
   <style>
     body.bean-run-page { min-height:100vh; background:#07100b; }
     .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
@@ -17,14 +17,14 @@
     .runner-heading h1 { margin:4px 0 0; color:#f5f1e7; font-family:var(--serif); font-size:clamp(2.8rem,7vw,6.2rem); font-weight:400; line-height:.86; letter-spacing:-.055em; }
     .runner-heading > p { max-width:475px; margin:0; color:#aeb9ae; }
     .runner-frame { position:relative; width:100%; aspect-ratio:8/3; overflow:hidden; isolation:isolate; border:1px solid rgba(224,194,124,.3); background:#a7d0df; box-shadow:0 30px 90px rgba(0,0,0,.56),inset 0 0 0 1px rgba(255,255,255,.04); touch-action:none; }
-    .runner-frame::after { content:""; position:absolute; inset:0; z-index:7; pointer-events:none; opacity:.09; background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.23) 4px); mix-blend-mode:soft-light; }
+    .runner-frame::after { content:""; position:absolute; inset:0; z-index:7; pointer-events:none; opacity:.07; background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.16) 4px); }
     #beanRun { display:block; width:100%; height:100%; background:#a7d0df; image-rendering:pixelated; }
     .runner-hud { position:absolute; top:0; left:0; z-index:5; display:grid; grid-template-columns:repeat(4,max-content); gap:20px; padding:12px 14px; pointer-events:none; color:#f8f7ef; font:700 11px/1.15 var(--mono); letter-spacing:.08em; text-shadow:0 2px 5px #000; }
     .runner-hud span { display:block; margin-top:3px; font-size:1rem; }
     .runner-hud__lightning span { color:#9ee5ff; }
     .runner-hud__lightning[data-ready="true"] span { color:#fff7a8; text-shadow:0 0 10px #82dfff,0 2px 5px #000; }
     .runner-tools { position:absolute; top:10px; right:10px; z-index:9; display:flex; gap:6px; }
-    .runner-tools button { min-width:38px; min-height:34px; padding:0 9px; border:1px solid rgba(255,255,255,.28); background:rgba(5,15,10,.68); color:#f8f7ef; font:800 10px var(--mono); letter-spacing:.06em; cursor:pointer; backdrop-filter:blur(5px); }
+    .runner-tools button { min-width:38px; min-height:34px; padding:0 9px; border:1px solid rgba(255,255,255,.28); background:rgba(5,15,10,.88); color:#f8f7ef; font:800 10px var(--mono); letter-spacing:.06em; cursor:pointer; }
     .runner-tools button:hover,.runner-tools button:focus-visible { border-color:#e0c27c; color:#fff7c8; outline:none; }
     .runner-center { position:absolute; inset:0; z-index:6; display:grid; place-items:center; padding:24px; pointer-events:none; background:linear-gradient(rgba(2,10,6,.08),rgba(2,10,6,.34)); }
     .runner-center[hidden] { display:none; }

@@ -12,7 +12,7 @@ Maintain and refine the V2 redesign, Bean Run, and Bean Galaga in this staging r
 - The production source remains `Big-JoshD/joshdunbarfanclub` according to the repository README.
 - The site is static HTML/CSS/JavaScript.
 - Bean Run has been migrated into V2 as one responsive implementation in `game.html` with game logic in `bean-run.js`.
-- Bean Run now uses shared desktop/mobile physics, distance-based obstacle spacing, five explicit threat tiers, touch and keyboard controls, persistent local high scores, automatic visibility pausing, tactical lightning, synthesized sound, and smaller collision boxes than the visible sprites.
+- Bean Run now uses shared desktop/mobile physics, distance-based obstacle spacing, five explicit threat tiers, touch and keyboard controls, persistent local high scores, automatic visibility pausing, tactical lightning, synthesized sound, smaller collision boxes than the visible sprites, and cached parallax layers to reduce mobile render work.
 - Bean remains visually stable while running; the earlier oscillating bob/rotation was removed. A held charge now uses independently timed, persistent sparks without a shield perimeter or synchronized redraw, while fired lightning uses a jagged multi-layer core with branching secondary arcs.
 - Each deployment begins with a short, non-interactive chase shot: Bean and three armed squirrels enter at speed, the camera settles continuously onto Bean's normal position, and control returns before the first obstacle can spawn.
 - `game-mobile.html` is now a compatibility redirect to `game.html`; it is not a second game implementation.

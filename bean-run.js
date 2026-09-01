@@ -10,6 +10,7 @@
   const scoreEl = document.getElementById('runnerScore');
   const threatEl = document.getElementById('runnerThreat');
   const lightningEl = document.getElementById('runnerLightning');
+  const lightningValueEl = lightningEl.querySelector('span');
   const centerEl = document.getElementById('runnerCenter');
   const centerLabelEl = document.getElementById('runnerCenterLabel');
   const centerTitleEl = document.getElementById('runnerCenterTitle');
@@ -86,6 +87,7 @@
   const particles = [];
   const chargeParticles = [];
   const forest = createForest();
+  let backgroundCache = null;
 
   bindInputs();
   resizeCanvas();
@@ -94,7 +96,7 @@
   rafId = requestAnimationFrame(loop);
 
   function loop(now) {
-    const dt = Math.min(0.033, Math.max(0, (now - state.lastTime) / 1000));
+    const dt = Math.min(0.05, Math.max(0, (now - state.lastTime) / 1000));
     state.lastTime = now;
 
     if (state.mode === 'playing') {
@@ -520,12 +522,8 @@
   }
 
   function drawBackground() {
-    const sky = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-    sky.addColorStop(0, '#a9d5e8');
-    sky.addColorStop(0.55, '#c9e2d5');
-    sky.addColorStop(1, '#d9d4ab');
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, width, HEIGHT);
+    if (!backgroundCache) rebuildBackgroundCache();
+    ctx.drawImage(backgroundCache.sky, 0, 0);
 
     ctx.fillStyle = 'rgba(70,105,83,.28)';
     ctx.beginPath();
@@ -539,19 +537,13 @@
     ctx.closePath();
     ctx.fill();
 
-    for (const layer of forest) {
-      for (const tree of layer.trees) {
-        const span = width + 180;
-        const x = modulo(tree.x - state.worldTravel * layer.parallax, span) - 90;
-        drawPine(x, GROUND_Y + tree.offsetY, tree.height, layer.leaf, layer.trunk);
-      }
+    for (const layer of backgroundCache.forest) {
+      const offset = -modulo(state.worldTravel * layer.parallax, layer.span);
+      ctx.drawImage(layer.canvas, offset, 0);
+      ctx.drawImage(layer.canvas, offset + layer.span, 0);
     }
 
-    const haze = ctx.createLinearGradient(0, 175, 0, GROUND_Y);
-    haze.addColorStop(0, 'rgba(214,228,204,0)');
-    haze.addColorStop(1, 'rgba(214,228,204,.18)');
-    ctx.fillStyle = haze;
-    ctx.fillRect(0, 170, width, GROUND_Y - 170);
+    ctx.drawImage(backgroundCache.haze, 0, 0);
   }
 
   function drawGround() {
@@ -615,7 +607,7 @@
       const stride = Math.abs(Math.sin(now * 0.017 + index * 1.8)) * 3;
       const x = player.x - gap - retreat;
       const y = GROUND_Y - 47 - stride;
-      drawSprite(images.swordSquirrel, x, y, 47, 47, 0, '#151515', '⚔');
+      drawSprite(images.swordSquirrel, x, y, 47, 47, 0, '#151515', '⚔', true);
     }
   }
 
@@ -775,10 +767,11 @@
     ctx.globalAlpha = 1;
   }
 
-  function drawSprite(image, x, y, w, h, rotation, fallbackColor, fallbackLabel) {
+  function drawSprite(image, x, y, w, h, rotation, fallbackColor, fallbackLabel, flipX) {
     ctx.save();
     ctx.translate(x + w / 2, y + h / 2);
     ctx.rotate(rotation || 0);
+    if (flipX) ctx.scale(-1, 1);
     ctx.imageSmoothingEnabled = false;
     if (image.complete && image.naturalWidth > 0) {
       ctx.drawImage(image, -w / 2, -h / 2, w, h);
@@ -794,21 +787,62 @@
     ctx.restore();
   }
 
-  function drawPine(x, baseY, height, leafColor, trunkColor) {
+  function drawPine(target, x, baseY, height, leafColor, trunkColor) {
     const widthAtBase = height * 0.42;
-    ctx.fillStyle = trunkColor;
-    ctx.fillRect(x - 3, baseY - height * 0.22, 6, height * 0.22);
-    ctx.fillStyle = leafColor;
+    target.fillStyle = trunkColor;
+    target.fillRect(x - 3, baseY - height * 0.22, 6, height * 0.22);
+    target.fillStyle = leafColor;
     for (let tier = 0; tier < 3; tier += 1) {
       const top = baseY - height + tier * height * 0.2;
       const halfWidth = widthAtBase * (0.55 + tier * 0.2);
-      ctx.beginPath();
-      ctx.moveTo(x, top);
-      ctx.lineTo(x - halfWidth, top + height * 0.45);
-      ctx.lineTo(x + halfWidth, top + height * 0.45);
-      ctx.closePath();
-      ctx.fill();
+      target.beginPath();
+      target.moveTo(x, top);
+      target.lineTo(x - halfWidth, top + height * 0.45);
+      target.lineTo(x + halfWidth, top + height * 0.45);
+      target.closePath();
+      target.fill();
     }
+  }
+
+  function rebuildBackgroundCache() {
+    const sky = document.createElement('canvas');
+    sky.width = width;
+    sky.height = HEIGHT;
+    const skyContext = sky.getContext('2d');
+    const skyGradient = skyContext.createLinearGradient(0, 0, 0, GROUND_Y);
+    skyGradient.addColorStop(0, '#a9d5e8');
+    skyGradient.addColorStop(0.55, '#c9e2d5');
+    skyGradient.addColorStop(1, '#d9d4ab');
+    skyContext.fillStyle = skyGradient;
+    skyContext.fillRect(0, 0, width, HEIGHT);
+
+    const haze = document.createElement('canvas');
+    haze.width = width;
+    haze.height = HEIGHT;
+    const hazeContext = haze.getContext('2d');
+    const hazeGradient = hazeContext.createLinearGradient(0, 175, 0, GROUND_Y);
+    hazeGradient.addColorStop(0, 'rgba(214,228,204,0)');
+    hazeGradient.addColorStop(1, 'rgba(214,228,204,.18)');
+    hazeContext.fillStyle = hazeGradient;
+    hazeContext.fillRect(0, 170, width, GROUND_Y - 170);
+
+    const cachedForest = forest.map((layer) => {
+      const span = width + 180;
+      const layerCanvas = document.createElement('canvas');
+      layerCanvas.width = span;
+      layerCanvas.height = HEIGHT;
+      const layerContext = layerCanvas.getContext('2d');
+      layerContext.imageSmoothingEnabled = false;
+      for (const tree of layer.trees) {
+        const x = modulo((tree.x / 1140) * span, span);
+        for (const shift of [-span, 0, span]) {
+          drawPine(layerContext, x + shift, GROUND_Y + tree.offsetY, tree.height, layer.leaf, layer.trunk);
+        }
+      }
+      return { canvas: layerCanvas, span, parallax: layer.parallax };
+    });
+
+    backgroundCache = { sky, haze, forest: cachedForest };
   }
 
   function createForest() {
@@ -900,7 +934,7 @@
 
   function resizeCanvas() {
     const nextWidth = frame.clientWidth <= 760 ? 640 : 960;
-    if (nextWidth === width && canvas.width === nextWidth) return;
+    if (nextWidth === width && canvas.width === nextWidth && backgroundCache) return;
     const ratio = nextWidth / width;
     width = nextWidth;
     canvas.width = width;
@@ -911,17 +945,23 @@
     for (const obstacle of obstacles) obstacle.x *= ratio;
     for (const pickup of pickups) pickup.x *= ratio;
     for (const bolt of bolts) bolt.x *= ratio;
+    rebuildBackgroundCache();
     state.lastTime = performance.now();
   }
 
   function updateHud() {
-    highEl.textContent = formatScore(state.high);
-    scoreEl.textContent = `${formatScore(Math.floor(state.distance))} M`;
+    setText(highEl, formatScore(state.high));
+    setText(scoreEl, `${formatScore(Math.floor(state.distance))} M`);
     const threat = THREAT_LEVELS[state.threatIndex];
-    threatEl.textContent = `${state.threatIndex + 1} // ${threat.name}`;
-    lightningEl.dataset.ready = String(state.lightningReady);
-    lightningEl.querySelector('span').textContent = state.lightningReady ? 'READY' : 'EMPTY';
-    pauseButton.textContent = state.mode === 'paused' ? 'RESUME' : 'PAUSE';
+    setText(threatEl, `${state.threatIndex + 1} // ${threat.name}`);
+    const lightningReady = String(state.lightningReady);
+    if (lightningEl.dataset.ready !== lightningReady) lightningEl.dataset.ready = lightningReady;
+    setText(lightningValueEl, state.lightningReady ? 'READY' : 'EMPTY');
+    setText(pauseButton, state.mode === 'paused' ? 'RESUME' : 'PAUSE');
+  }
+
+  function setText(element, value) {
+    if (element.textContent !== value) element.textContent = value;
   }
 
   function playerHomeX() {
