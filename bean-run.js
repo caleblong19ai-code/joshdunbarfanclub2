@@ -26,6 +26,7 @@
   const LEGACY_KEY = 'bean_hi';
   const GRAVITY = 1800;
   const JUMP_VELOCITY = -650;
+  const INTRO_DURATION = 1.7;
   const PLAYER_STAND = { w: 58, h: 58 };
   const PLAYER_DUCK = { w: 62, h: 38 };
 
@@ -64,7 +65,9 @@
     destroyed: 0,
     sound: readSetting(SOUND_KEY, true),
     shake: 0,
-    flash: 0
+    flash: 0,
+    introElapsed: 0,
+    chargeSpawnTimer: 0
   };
 
   const player = {
@@ -81,6 +84,7 @@
   const pickups = [];
   const bolts = [];
   const particles = [];
+  const chargeParticles = [];
   const forest = createForest();
 
   bindInputs();
@@ -95,6 +99,8 @@
 
     if (state.mode === 'playing') {
       update(dt);
+    } else if (state.mode === 'intro') {
+      updateIntro(dt);
     } else if (state.mode === 'title') {
       state.worldTravel += 34 * dt;
     } else if (state.mode === 'gameover') {
@@ -141,6 +147,25 @@
     if (updateObstacles(travel)) return;
     updateBolts(dt);
     updateParticles(dt);
+    updateChargeParticles(dt);
+    updateHud();
+  }
+
+  function updateIntro(dt) {
+    state.introElapsed = Math.min(INTRO_DURATION, state.introElapsed + dt);
+    state.worldTravel += 360 * dt;
+    const progress = state.introElapsed / INTRO_DURATION;
+    player.x = introPlayerX(progress);
+    player.y = GROUND_Y - PLAYER_STAND.h;
+
+    if (progress >= 1) {
+      state.mode = 'playing';
+      player.x = playerHomeX();
+      state.nextObstacleDistance = 420;
+      showToast('ESCAPE ROUTE OPEN // CONTROL RESTORED', 1100);
+      announce('Escape route open. Bean control restored.');
+      tone(390, 0.09, 'square', 0.022, 120);
+    }
     updateHud();
   }
 
@@ -261,9 +286,47 @@
     }
   }
 
+  function updateChargeParticles(dt) {
+    state.chargeSpawnTimer -= dt;
+    if (state.lightningReady) {
+      while (state.chargeSpawnTimer <= 0 && chargeParticles.length < 12) {
+        spawnChargeParticle();
+        state.chargeSpawnTimer += random(0.035, 0.07);
+      }
+    } else {
+      state.chargeSpawnTimer = 0;
+    }
+
+    for (let index = chargeParticles.length - 1; index >= 0; index -= 1) {
+      const spark = chargeParticles[index];
+      spark.life -= dt;
+      spark.x += spark.vx * dt;
+      spark.y += spark.vy * dt;
+      spark.vx += spark.drift * dt;
+      if (spark.life <= 0) chargeParticles.splice(index, 1);
+    }
+  }
+
+  function spawnChargeParticle() {
+    const life = random(0.14, 0.3);
+    chargeParticles.push({
+      x: random(-7, player.w + 7),
+      y: random(-6, player.h + 6),
+      vx: random(-28, 28),
+      vy: random(-76, -22),
+      drift: random(-45, 45),
+      life,
+      maxLife: life,
+      size: random(1.2, 2.3),
+      warm: Math.random() < 0.2,
+      bolt: Math.random() < 0.28,
+      bend: random(-3.5, 3.5)
+    });
+  }
+
   function startGame() {
     ensureAudio();
-    state.mode = 'playing';
+    state.mode = 'intro';
     state.distance = 0;
     state.speed = THREAT_LEVELS[0].speed;
     state.threatIndex = 0;
@@ -274,12 +337,15 @@
     state.destroyed = 0;
     state.shake = 0;
     state.flash = 0;
+    state.introElapsed = 0;
+    state.chargeSpawnTimer = 0;
     obstacles.length = 0;
     pickups.length = 0;
     bolts.length = 0;
     particles.length = 0;
+    chargeParticles.length = 0;
     Object.assign(player, {
-      x: width < 900 ? 72 : 96,
+      x: introPlayerX(0),
       y: GROUND_Y - PLAYER_STAND.h,
       w: PLAYER_STAND.w,
       h: PLAYER_STAND.h,
@@ -289,9 +355,10 @@
     });
     hideCenter();
     clearToast();
+    showToast('HOSTILE PURSUIT DETECTED', 1000);
     updateHud();
     canvas.focus({ preventScroll: true });
-    announce('Bean deployed. Threat level one.');
+    announce('Bean deployed under hostile pursuit.');
     tone(220, 0.09, 'square', 0.025, 70);
   }
 
@@ -300,6 +367,8 @@
     state.shake = 0.34;
     state.flash = 0.22;
     player.duckHeld = false;
+    state.lightningReady = false;
+    chargeParticles.length = 0;
     const score = Math.floor(state.distance);
     const isRecord = score > state.high;
 
@@ -436,9 +505,10 @@
 
     drawBackground();
     drawGround();
+    if (state.mode === 'intro') drawIntroChasers(now);
     for (const pickup of pickups) drawPowerup(pickup, now);
     for (const obstacle of obstacles) drawObstacle(obstacle);
-    drawPlayer(now);
+    drawPlayer();
     drawBolts(now);
     drawParticles();
 
@@ -494,48 +564,59 @@
     for (let x = offset; x < width + 40; x += 38) ctx.fillRect(Math.floor(x), GROUND_Y + 18, 21, 4);
   }
 
-  function drawPlayer(now) {
+  function drawPlayer() {
     const ducking = player.onGround && player.duckHeld;
     const image = ducking ? images.beanDuck : images.beanRun;
     drawSprite(image, player.x, player.y, player.w, player.h, 0, '#d6b178', 'B');
-    if (state.lightningReady) drawChargeParticles(now);
+    if (chargeParticles.length > 0) drawChargeParticles();
   }
 
-  function drawChargeParticles(now) {
-    const frame = Math.floor(now / 72);
+  function drawChargeParticles() {
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    for (let spark = 0; spark < 12; spark += 1) {
-      const visibility = electricNoise(frame * 83 + spark * 37);
-      if (visibility < 0.3) continue;
+    for (const spark of chargeParticles) {
+      const age = 1 - spark.life / spark.maxLife;
+      const alpha = Math.max(0, Math.sin(age * Math.PI));
+      const x = player.x + spark.x;
+      const y = player.y + spark.y;
+      const glowSize = spark.size + 3;
 
-      const x = player.x - 10 + electricNoise(frame * 47 + spark * 71) * (player.w + 20);
-      const y = player.y - 8 + electricNoise(frame * 61 + spark * 43) * (player.h + 16);
-      const alpha = 0.35 + visibility * 0.58;
-      const size = spark % 4 === 0 ? 2.4 : 1.6;
-      ctx.fillStyle = spark % 3 === 0
-        ? `rgba(255,245,164,${alpha * 0.8})`
-        : `rgba(226,250,255,${alpha})`;
-      ctx.shadowColor = '#74ddff';
-      ctx.shadowBlur = 6;
-      ctx.fillRect(x - size / 2, y - size / 2, size, size);
+      ctx.fillStyle = `rgba(78,196,255,${alpha * 0.22})`;
+      ctx.fillRect(x - glowSize / 2, y - glowSize / 2, glowSize, glowSize);
+      ctx.fillStyle = spark.warm
+        ? `rgba(255,245,164,${alpha * 0.85})`
+        : `rgba(238,253,255,${alpha})`;
+      ctx.fillRect(x - spark.size / 2, y - spark.size / 2, spark.size, spark.size);
 
-      if (spark % 3 === 0) {
-        const angle = -Math.PI * 0.5 + (electricNoise(frame * 29 + spark * 97) - 0.5) * 2.5;
-        const length = 7 + electricNoise(frame * 31 + spark * 59) * 11;
-        const endX = x + Math.cos(angle) * length;
-        const endY = y + Math.sin(angle) * length;
-        const bend = (electricNoise(frame * 101 + spark * 23) - 0.5) * 7;
-        const microBolt = [
-          { x, y },
-          { x: (x + endX) / 2 + bend, y: (y + endY) / 2 - bend * 0.35 },
-          { x: endX, y: endY }
-        ];
-        strokeElectricPath(microBolt, `rgba(79,190,255,${alpha * 0.45})`, 3, '#58ccff', 6);
-        strokeElectricPath(microBolt, `rgba(250,254,255,${alpha * 0.9})`, 0.65);
+      if (spark.bolt) {
+        const tailX = x - spark.vx * 0.09;
+        const tailY = y - spark.vy * 0.09;
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo((tailX + x) / 2 + spark.bend, (tailY + y) / 2 - spark.bend * 0.35);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = `rgba(75,195,255,${alpha * 0.46})`;
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(250,254,255,${alpha * 0.92})`;
+        ctx.lineWidth = 0.65;
+        ctx.stroke();
       }
     }
     ctx.restore();
+  }
+
+  function drawIntroChasers(now) {
+    const progress = Math.min(1, state.introElapsed / INTRO_DURATION);
+    const retreatProgress = Math.max(0, (progress - 0.55) / 0.45);
+    const retreat = retreatProgress * retreatProgress * 120;
+    for (let index = 0; index < 3; index += 1) {
+      const gap = 62 + index * 61;
+      const stride = Math.abs(Math.sin(now * 0.017 + index * 1.8)) * 3;
+      const x = player.x - gap - retreat;
+      const y = GROUND_Y - 47 - stride;
+      drawSprite(images.swordSquirrel, x, y, 47, 47, 0, '#151515', '⚔');
+    }
   }
 
   function drawObstacle(obstacle) {
@@ -824,7 +905,9 @@
     width = nextWidth;
     canvas.width = width;
     canvas.height = HEIGHT;
-    player.x = width < 900 ? 72 : 96;
+    player.x = state.mode === 'intro'
+      ? introPlayerX(state.introElapsed / INTRO_DURATION)
+      : playerHomeX();
     for (const obstacle of obstacles) obstacle.x *= ratio;
     for (const pickup of pickups) pickup.x *= ratio;
     for (const bolt of bolts) bolt.x *= ratio;
@@ -839,6 +922,26 @@
     lightningEl.dataset.ready = String(state.lightningReady);
     lightningEl.querySelector('span').textContent = state.lightningReady ? 'READY' : 'EMPTY';
     pauseButton.textContent = state.mode === 'paused' ? 'RESUME' : 'PAUSE';
+  }
+
+  function playerHomeX() {
+    return width < 900 ? 72 : 96;
+  }
+
+  function introPlayerX(progress) {
+    const home = playerHomeX();
+    const chasePosition = Math.min(width * 0.46, home + 260);
+    const clamped = Math.min(1, Math.max(0, progress));
+    if (clamped < 0.28) {
+      const enter = clamped / 0.28;
+      const easedOut = 1 - Math.pow(1 - enter, 3);
+      return home + (chasePosition - home) * easedOut;
+    }
+    const settle = (clamped - 0.28) / 0.72;
+    const easedSettle = settle < 0.5
+      ? 4 * settle * settle * settle
+      : 1 - Math.pow(-2 * settle + 2, 3) / 2;
+    return chasePosition + (home - chasePosition) * easedSettle;
   }
 
   function showCenter(label, title, text) {
