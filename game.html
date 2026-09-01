@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Bean Run: a responsive Institute of Dunbar Studies field simulation involving Bean, hostile squirrels, and weaponized lightning." />
+  <meta name="theme-color" content="#07100b" />
+  <title>Bean Run — Hostile Fauna Field Trial</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="site.js" defer></script>
+  <script src="bean-run.js?v=1" defer></script>
+  <style>
+    body.bean-run-page { min-height:100vh; background:#07100b; }
+    .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+    .runner-shell { width:min(1160px,calc(100% - 24px)); margin:26px auto 64px; }
+    .runner-heading { display:flex; align-items:end; justify-content:space-between; gap:28px; margin-bottom:18px; }
+    .runner-heading h1 { margin:4px 0 0; color:#f5f1e7; font-family:var(--serif); font-size:clamp(2.8rem,7vw,6.2rem); font-weight:400; line-height:.86; letter-spacing:-.055em; }
+    .runner-heading > p { max-width:475px; margin:0; color:#aeb9ae; }
+    .runner-frame { position:relative; width:100%; aspect-ratio:8/3; overflow:hidden; isolation:isolate; border:1px solid rgba(224,194,124,.3); background:#a7d0df; box-shadow:0 30px 90px rgba(0,0,0,.56),inset 0 0 0 1px rgba(255,255,255,.04); touch-action:none; }
+    .runner-frame::after { content:""; position:absolute; inset:0; z-index:7; pointer-events:none; opacity:.09; background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.23) 4px); mix-blend-mode:soft-light; }
+    #beanRun { display:block; width:100%; height:100%; background:#a7d0df; image-rendering:pixelated; }
+    .runner-hud { position:absolute; top:0; left:0; z-index:5; display:grid; grid-template-columns:repeat(4,max-content); gap:20px; padding:12px 14px; pointer-events:none; color:#f8f7ef; font:700 11px/1.15 var(--mono); letter-spacing:.08em; text-shadow:0 2px 5px #000; }
+    .runner-hud span { display:block; margin-top:3px; font-size:1rem; }
+    .runner-hud__lightning span { color:#9ee5ff; }
+    .runner-hud__lightning[data-ready="true"] span { color:#fff7a8; text-shadow:0 0 10px #82dfff,0 2px 5px #000; }
+    .runner-tools { position:absolute; top:10px; right:10px; z-index:9; display:flex; gap:6px; }
+    .runner-tools button { min-width:38px; min-height:34px; padding:0 9px; border:1px solid rgba(255,255,255,.28); background:rgba(5,15,10,.68); color:#f8f7ef; font:800 10px var(--mono); letter-spacing:.06em; cursor:pointer; backdrop-filter:blur(5px); }
+    .runner-tools button:hover,.runner-tools button:focus-visible { border-color:#e0c27c; color:#fff7c8; outline:none; }
+    .runner-center { position:absolute; inset:0; z-index:6; display:grid; place-items:center; padding:24px; pointer-events:none; background:linear-gradient(rgba(2,10,6,.08),rgba(2,10,6,.34)); }
+    .runner-center[hidden] { display:none; }
+    .runner-center__card { width:min(560px,88%); padding:22px 26px; border:1px solid rgba(224,194,124,.52); background:rgba(4,13,8,.84); box-shadow:0 18px 50px rgba(0,0,0,.4); text-align:center; backdrop-filter:blur(7px); }
+    .runner-center__card small { display:block; margin-bottom:7px; color:#d7bd78; font:700 10px var(--mono); letter-spacing:.12em; }
+    .runner-center__card h2 { margin:0; color:#fffdf7; font-family:var(--serif); font-size:clamp(2rem,6vw,4rem); font-weight:400; line-height:.95; }
+    .runner-center__card p { max-width:470px; margin:12px auto 0; color:#c3cdc3; font-size:.9rem; }
+    .runner-toast { position:absolute; top:58px; left:50%; z-index:8; translate:-50% 0; padding:7px 12px; border:1px solid rgba(224,194,124,.45); background:rgba(4,13,8,.82); color:#fff4bf; font:800 10px var(--mono); letter-spacing:.11em; pointer-events:none; }
+    .runner-toast[hidden] { display:none; }
+    .runner-controls { display:none; width:100%; grid-template-columns:1fr 1fr 1.1fr; gap:8px; margin-top:9px; touch-action:none; user-select:none; }
+    .runner-controls button { min-height:62px; border:1px solid rgba(255,255,255,.18); background:#122019; color:#f8f7ef; font:800 13px var(--mono); letter-spacing:.07em; -webkit-tap-highlight-color:transparent; }
+    .runner-controls button[data-control="lightning"] { border-color:rgba(117,205,255,.35); color:#bcecff; }
+    .runner-controls button:active,.runner-controls button.is-active { translate:0 1px; background:#25382c; }
+    .runner-brief { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:18px; }
+    .runner-brief article { min-height:185px; padding:18px; border:1px solid rgba(255,255,255,.1); background:linear-gradient(150deg,#122019,#0a120d); }
+    .runner-brief small { color:#92a392; font:700 10px var(--mono); letter-spacing:.1em; }
+    .runner-brief h2 { margin:8px 0 8px; color:#f5f1e7; font-family:var(--serif); font-size:1.5rem; font-weight:400; }
+    .runner-brief p { margin:0; color:#9eaa9f; font-size:.86rem; }
+    .runner-brief kbd { padding:2px 5px; border:1px solid rgba(255,255,255,.18); background:#060b08; color:#e4dcc8; font:700 .72rem var(--mono); }
+    @media(max-width:760px){
+      .runner-shell{width:min(100% - 12px,1160px);margin-top:12px}
+      .runner-heading{display:block}.runner-heading>p{margin-top:12px}
+      .runner-frame{aspect-ratio:16/9}
+      .runner-controls{display:grid}
+      .runner-brief{grid-template-columns:1fr}
+      .runner-brief article{min-height:0}
+      .runner-hud{grid-template-columns:repeat(2,max-content);gap:7px 14px;padding:7px 8px;font-size:8px}
+      .runner-hud span{font-size:.72rem}
+      .runner-tools{top:7px;right:7px}
+      .runner-tools button{min-width:34px;min-height:30px;font-size:9px}
+      .runner-toast{top:68px;max-width:80%;text-align:center}
+      .runner-center__card{padding:16px 18px}
+      .runner-center__card p{font-size:.78rem}
+    }
+  </style>
+</head>
+<body class="bean-run-page">
+  <div data-nav-slot></div>
+  <main class="runner-shell">
+    <header class="runner-heading">
+      <div><p class="eyebrow">Interactive Research // Field Trial BR-02</p><h1>Bean Run</h1></div>
+      <p>Guide Bean through an escalating hostile-fauna incident. Jump the armed squirrels, duck the airborne squirrels, and return acquired lightning directly to sender.</p>
+    </header>
+
+    <section class="runner-frame" id="runnerFrame" aria-label="Bean Run game">
+      <canvas id="beanRun" width="960" height="360" tabindex="0" role="img" aria-label="Bean running through a forest occupied by hostile squirrels"></canvas>
+      <div class="runner-hud" aria-hidden="true">
+        <div>RECORD<span id="runnerHigh">00000</span></div>
+        <div>DISTANCE<span id="runnerScore">00000 M</span></div>
+        <div>THREAT<span id="runnerThreat">1 // WATCH</span></div>
+        <div class="runner-hud__lightning" id="runnerLightning" data-ready="false">LIGHTNING<span>EMPTY</span></div>
+      </div>
+      <div class="runner-tools">
+        <button type="button" id="runnerSound" aria-label="Mute sound" aria-pressed="false">SOUND</button>
+        <button type="button" id="runnerPause" aria-label="Pause game">PAUSE</button>
+      </div>
+      <div class="runner-toast" id="runnerToast" hidden></div>
+      <div class="runner-center" id="runnerCenter">
+        <div class="runner-center__card">
+          <small id="runnerCenterLabel">INSTITUTE MOBILITY SIMULATION</small>
+          <h2 id="runnerCenterTitle">Bean Run</h2>
+          <p id="runnerCenterText">Press Space or tap the field to deploy Bean. Arrow keys jump, duck, and discharge acquired lightning.</p>
+        </div>
+      </div>
+      <p id="runnerStatus" class="sr-only" aria-live="polite"></p>
+    </section>
+
+    <div class="runner-controls" aria-label="Touch controls">
+      <button type="button" data-control="duck">▼ DUCK</button>
+      <button type="button" data-control="jump">▲ JUMP</button>
+      <button type="button" data-control="lightning">⚡ STRIKE</button>
+    </div>
+
+    <section class="runner-brief" aria-label="Bean Run controls and rules">
+      <article><small>MOVEMENT PROTOCOL</small><h2>Two threats, two responses</h2><p><kbd>Space</kbd> or <kbd>↑</kbd> jumps armed ground squirrels. Hold <kbd>↓</kbd> to duck airborne squirrels. Touch controls use the same physics.</p></article>
+      <article><small>ACQUIRED CAPABILITY</small><h2>Lightning is tactical</h2><p>Collect a field charge, then press <kbd>→</kbd> or Strike. The charge is only consumed when a hostile target is in range.</p></article>
+      <article><small>ESCALATION MODEL</small><h2>Five explicit threat levels</h2><p>Speed, hostile type, and obstacle spacing change in controlled tiers. The simulation never creates a separate mobile ruleset.</p></article>
+    </section>
+  </main>
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Institute of Dunbar Studies // Mobility Division</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. Reverence isn't optional.</p></footer>
+</body>
+</html>
