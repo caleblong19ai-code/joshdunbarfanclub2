@@ -497,53 +497,43 @@
   function drawPlayer(now) {
     const ducking = player.onGround && player.duckHeld;
     const image = ducking ? images.beanDuck : images.beanRun;
-    if (state.lightningReady) drawChargeAura(now);
     drawSprite(image, player.x, player.y, player.w, player.h, 0, '#d6b178', 'B');
-    if (state.lightningReady) drawChargeSparks(now);
+    if (state.lightningReady) drawChargeParticles(now);
   }
 
-  function drawChargeAura(now) {
-    const centerX = player.x + player.w / 2;
-    const centerY = player.y + player.h / 2;
-    const frame = Math.floor(now / 70);
-
+  function drawChargeParticles(now) {
+    const frame = Math.floor(now / 72);
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    for (let arc = 0; arc < 3; arc += 1) {
-      const start = -Math.PI * 0.72 + arc * Math.PI * 0.67 + Math.sin(now * 0.0018 + arc) * 0.12;
-      const points = [];
-      for (let step = 0; step <= 6; step += 1) {
-        const progress = step / 6;
-        const angle = start + progress * 1.22;
-        const radiusNoise = (electricNoise(frame * 41 + arc * 17 + step * 7) - 0.5) * 7;
-        points.push({
-          x: centerX + Math.cos(angle) * (player.w * 0.61 + radiusNoise),
-          y: centerY + Math.sin(angle) * (player.h * 0.62 + radiusNoise * 0.55)
-        });
-      }
-      strokeElectricPath(points, 'rgba(91,126,255,.16)', 5.5, '#688cff', 10);
-      strokeElectricPath(points, 'rgba(101,213,255,.72)', 1.45, '#63d7ff', 5);
-      strokeElectricPath(points, 'rgba(247,253,255,.72)', 0.55);
-    }
-    ctx.restore();
-  }
+    for (let spark = 0; spark < 12; spark += 1) {
+      const visibility = electricNoise(frame * 83 + spark * 37);
+      if (visibility < 0.3) continue;
 
-  function drawChargeSparks(now) {
-    const centerX = player.x + player.w / 2;
-    const centerY = player.y + player.h / 2;
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    for (let spark = 0; spark < 7; spark += 1) {
-      const angle = now * 0.0011 * (spark % 2 ? 1 : -1) + spark * 2.17;
-      const radiusX = player.w * (0.52 + electricNoise(spark * 91) * 0.18);
-      const radiusY = player.h * (0.48 + electricNoise(spark * 53) * 0.16);
-      const alpha = 0.35 + Math.sin(now * 0.014 + spark * 1.9) * 0.22;
-      const x = centerX + Math.cos(angle) * radiusX;
-      const y = centerY + Math.sin(angle) * radiusY;
-      ctx.fillStyle = `rgba(226,250,255,${Math.max(0.12, alpha)})`;
+      const x = player.x - 10 + electricNoise(frame * 47 + spark * 71) * (player.w + 20);
+      const y = player.y - 8 + electricNoise(frame * 61 + spark * 43) * (player.h + 16);
+      const alpha = 0.35 + visibility * 0.58;
+      const size = spark % 4 === 0 ? 2.4 : 1.6;
+      ctx.fillStyle = spark % 3 === 0
+        ? `rgba(255,245,164,${alpha * 0.8})`
+        : `rgba(226,250,255,${alpha})`;
       ctx.shadowColor = '#74ddff';
-      ctx.shadowBlur = 7;
-      ctx.fillRect(x - 1, y - 1, 2, 2);
+      ctx.shadowBlur = 6;
+      ctx.fillRect(x - size / 2, y - size / 2, size, size);
+
+      if (spark % 3 === 0) {
+        const angle = -Math.PI * 0.5 + (electricNoise(frame * 29 + spark * 97) - 0.5) * 2.5;
+        const length = 7 + electricNoise(frame * 31 + spark * 59) * 11;
+        const endX = x + Math.cos(angle) * length;
+        const endY = y + Math.sin(angle) * length;
+        const bend = (electricNoise(frame * 101 + spark * 23) - 0.5) * 7;
+        const microBolt = [
+          { x, y },
+          { x: (x + endX) / 2 + bend, y: (y + endY) / 2 - bend * 0.35 },
+          { x: endX, y: endY }
+        ];
+        strokeElectricPath(microBolt, `rgba(79,190,255,${alpha * 0.45})`, 3, '#58ccff', 6);
+        strokeElectricPath(microBolt, `rgba(250,254,255,${alpha * 0.9})`, 0.65);
+      }
     }
     ctx.restore();
   }
