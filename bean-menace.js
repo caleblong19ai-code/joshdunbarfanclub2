@@ -2,8 +2,13 @@
   const layer = document.querySelector('[data-popup-container]');
   if (!layer) return;
 
+  const platinumButton = document.querySelector('[data-platinum]');
+  const connectButton = document.querySelector('[data-connect]');
+  const sequence = document.querySelector('[data-connection]');
+  const denialMessage = document.querySelector('[data-denial-message]');
   let escalationTimers = [];
   let escalationRun = 0;
+  let earlyPlatinumPending = false;
   const seen = new WeakSet();
 
   const injectStyles = () => {
@@ -136,6 +141,52 @@
     });
   };
 
+  const isUplinkActive = () => {
+    const status = sequence?.querySelector('strong');
+    return Boolean(status && status.textContent.includes('UPLINK ACTIVE'));
+  };
+
+  const routeEarlyPlatinumIntoMainFlow = () => {
+    if (!platinumButton) return;
+
+    platinumButton.disabled = false;
+    if (denialMessage && denialMessage.textContent.includes('Establish uplink')) {
+      denialMessage.textContent = 'Platinum enrollment available. Secure uplink will be verified automatically.';
+    }
+
+    platinumButton.addEventListener('click', () => {
+      if (isUplinkActive() || earlyPlatinumPending) return;
+      earlyPlatinumPending = true;
+
+      if (denialMessage) {
+        denialMessage.textContent = 'Platinum request received. Verifying sacred-stream uplink before Bean review...';
+        denialMessage.classList.add('active');
+      }
+      platinumButton.textContent = 'Verifying Platinum request...';
+      platinumButton.disabled = true;
+      connectButton?.click();
+
+      const startedAt = performance.now();
+      const waitForUplink = window.setInterval(() => {
+        if (isUplinkActive()) {
+          window.clearInterval(waitForUplink);
+          earlyPlatinumPending = false;
+          platinumButton.disabled = false;
+          window.setTimeout(() => platinumButton.click(), 120);
+          return;
+        }
+
+        if (performance.now() - startedAt > 6000) {
+          window.clearInterval(waitForUplink);
+          earlyPlatinumPending = false;
+          platinumButton.disabled = false;
+          platinumButton.textContent = 'Join Platinum Tier';
+          if (denialMessage) denialMessage.textContent = 'Uplink verification stalled. Bean remains suspicious.';
+        }
+      }, 80);
+    }, true);
+  };
+
   const observer = new MutationObserver(() => {
     rewriteAll();
     if (layer.classList.contains('is-active') && !layer.dataset.menaceActive) {
@@ -148,6 +199,7 @@
   });
 
   injectStyles();
+  routeEarlyPlatinumIntoMainFlow();
   observer.observe(layer, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
   rewriteAll();
 })();
