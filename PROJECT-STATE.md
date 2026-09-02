@@ -19,11 +19,13 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
   - `bicepsize.html` — preserved the softball / bowling ball / Vegas Sphere / singularity progression, rebuilt as an interactive normalized comparison lab rather than relying on the old Chart.js/Infinity chart behavior.
   - `beancam.html` — preserved the original Bean Tracker premise and absurd 1–2 billion kB power readings, rebuilt as a live simulated electrical telemetry console with saturation state, arc rate, field stability, threat posture, confidence, overload handling, and a rolling event log.
   - `livecam.html` — preserved the original 24/7 live-feed/Platinum-access gag, including the 275 lb bench requirement, Bean letter of intent, $1 tier, and inevitable rejection; rebuilt as a secure camera terminal with fake uplink negotiation, multiple camera channels, clearance state, and a giant fake-antivirus/scareware denial sequence. After denial, the scareware now escalates into an intentionally fictional "Bean is coming" sequence with increasingly ominous status bulletins, while never claiming to know the visitor's real IP, address, or location. The scareware is DOM-only, deliberately theatrical, and includes an emergency dismiss control rather than opening real browser windows or trapping navigation.
+  - `spicy.html` — preserves the historical "CAUGHT IN 4K / Josh notified / Bean en route" gag, rebuilt as Surveillance honeypot SP-04. The visitor is tempted into opening a restricted media vault, passes through fake decryption/dignity/watchlist checks, is confronted with the historical `caughtin4k.jpg`, then receives fake incident-response windows and the shared escalating Bean-approach sequence.
   - `archive.css` — shared presentation layer for restored archive, intelligence, and metrics pages; loaded by `site.js` only for relevant page classes.
   - `surveillance.css` — shared presentation layer for Bean telemetry and the secure camera network.
-  - `scareware.css` — dedicated giant fake-security-alert presentation for the Secure Camera rejection sequence.
-  - `bean-menace.js` — rewrites fake security alerts into escalating Bean pursuit messages and adds timed fictional approach-status windows after Platinum rejection.
-- Several navigation targets still do not exist in V2 and remain restoration candidates: poetry, fan submissions, fan fiction, spicy photos, Rocket League rank, chess metrics, merch, FAQ, and contact.
+  - `scareware.css` — dedicated giant fake-security-alert presentation for the Secure Camera and restricted-media rejection sequences.
+  - `spicy.css` — dedicated restricted-media honeypot and Caught-in-4K presentation layer.
+  - `bean-menace.js` — rewrites fake security alerts into escalating Bean pursuit messages and adds timed fictional approach-status windows after Surveillance incidents.
+- Several navigation targets still do not exist in V2 and remain restoration candidates: poetry, fan submissions, fan fiction, Rocket League rank, chess metrics, merch, FAQ, and contact.
 - Surveillance pages currently reference several archived public images from `Big-JoshD/joshdunbarfanclub` by raw GitHub URL, consistent with the existing V2 hero treatment. These can be copied into V2 later if production independence from the historical repo becomes a requirement.
 - Bean Run has been migrated into V2 as one responsive implementation in `game.html` with game logic in `bean-run.js`.
 - Bean Run now uses shared desktop/mobile physics, distance-based obstacle spacing, five explicit threat tiers, touch and keyboard controls, persistent local high scores, automatic visibility pausing, tactical lightning, synthesized sound, smaller collision boxes than the visible sprites, and cached parallax layers to reduce mobile render work.
@@ -46,6 +48,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 - When restoring a historical page, preserve recognizable canonical jokes, terminology, and comparisons unless there is a specific reason to retire them.
 - Prefer native static HTML/CSS/JavaScript over unnecessary third-party dependencies for archive pages.
 - Surveillance functionality is explicitly theatrical/simulated; do not turn the joke camera/telemetry pages into real tracking or surveillance systems.
+- The Spicy Photos tab is intentionally a honeypot joke, not an actual sexual-content gallery. Preserve the original "Caught in 4K" trap and Bean-response premise.
 - Bean Galaga should behave like a Galaga-inspired fixed shooter, not a generic bullet-hell game.
 - Avoid copying copyrighted original game art/audio; use original themed assets and mechanics-inspired behavior.
 - Bean Run must remain one responsive ruleset. Do not reintroduce separate desktop and mobile implementations.
@@ -55,7 +58,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 
 - `README.md` — staging/production boundary.
 - `PROJECT-STATE.md` — current V2 restoration/game state and locked decisions.
-- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, `surveillance.css`, `scareware.css`, and `bean-menace.js` — current V2 site system.
+- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, `surveillance.css`, `scareware.css`, `spicy.css`, and `bean-menace.js` — current V2 site system.
 - `game.html` / `bean-run.js` and Bean Galaga runtime files — current game implementations.
 - `Big-JoshD/joshdunbarfanclub` — historical content/reference source for pages not yet restored.
 - Git history for implemented mechanics and restoration sequence.
@@ -63,13 +66,12 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 
 ## Next Action
 
-1. Browser-test the newly restored Lore, Daily Intelligence, Bicep Metrics, Bean Monitor, and Secure Camera pages for desktop/mobile layout and interaction defects; tune from observed failures.
+1. Browser-test the newly restored Lore, Daily Intelligence, Bicep Metrics, Bean Monitor, Secure Camera, and Spicy Photos pages for desktop/mobile layout and interaction defects; tune from observed failures.
 2. Continue restoration in themed batches. The strongest next batch is remaining Metrics (`ranktracker.html` / `chessmetrics.html`).
 3. Rebuild Archives (`poetry.html`, `fansubmissions.html`, `fanfics.html`) using the new archival presentation after their historical content is reviewed.
-4. Decide whether historical `spicy.html` belongs in the restored Surveillance department as-is, should be reinterpreted, or should be retired.
-5. Rebuild utility/public pages (`merch.html`, `faq.html`, `contact.html`) once the main content departments are functional.
-6. Continue physical play-testing of Bean Run and Bean Galaga.
-7. Compare staging against production and promote only after explicit review.
+4. Rebuild utility/public pages (`merch.html`, `faq.html`, `contact.html`) once the main content departments are functional.
+5. Continue physical play-testing of Bean Run and Bean Galaga.
+6. Compare staging against production and promote only after explicit review.
 
 ## Open Variables
 
