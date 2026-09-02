@@ -28,6 +28,10 @@
   const GRAVITY = 1800;
   const JUMP_VELOCITY = -650;
   const INTRO_DURATION = 1.7;
+  const TARGET_FRAME_MS = 1000 / 60;
+  const FRAME_EARLY_TOLERANCE_MS = 0.75;
+  const HUD_REFRESH_SECONDS = 0.1;
+  const BOLT_HISTORY_LIMIT = 10;
   const INITIAL_POWER_DISTANCE = 850;
   const POWER_COOLDOWN_MIN = 2300;
   const POWER_COOLDOWN_MAX = 3100;
@@ -53,6 +57,8 @@
   let audioContext = null;
   let toastTimer = 0;
   let rafId = 0;
+  let lastRafTime = performance.now();
+  let frameAccumulator = 0;
 
   const state = {
     mode: 'title',
@@ -71,7 +77,8 @@
     shake: 0,
     flash: 0,
     introElapsed: 0,
-    chargeSpawnTimer: 0
+    chargeSpawnTimer: 0,
+    hudTimer: 0
   };
 
   const player = {
@@ -90,15 +97,27 @@
   const particles = [];
   const chargeParticles = [];
   const forest = createForest();
+  const effectCache = createEffectCache();
   let backgroundCache = null;
 
   bindInputs();
   resizeCanvas();
   updateSoundButton();
   updateHud();
-  rafId = requestAnimationFrame(loop);
+  scheduleFrame();
 
   function loop(now) {
+    rafId = 0;
+    const rafElapsed = Math.max(0, now - lastRafTime);
+    lastRafTime = now;
+    frameAccumulator += rafElapsed;
+    if (frameAccumulator < TARGET_FRAME_MS - FRAME_EARLY_TOLERANCE_MS) {
+      scheduleFrame();
+      return;
+    }
+    frameAccumulator = Math.max(0, frameAccumulator - TARGET_FRAME_MS);
+    if (frameAccumulator > TARGET_FRAME_MS) frameAccumulator %= TARGET_FRAME_MS;
+
     const dt = Math.min(0.05, Math.max(0, (now - state.lastTime) / 1000));
     state.lastTime = now;
 
@@ -115,7 +134,19 @@
     state.shake = Math.max(0, state.shake - dt);
     state.flash = Math.max(0, state.flash - dt);
     draw(now);
-    rafId = requestAnimationFrame(loop);
+    scheduleFrame();
+  }
+
+  function scheduleFrame() {
+    if (!rafId && !document.hidden && state.mode !== 'paused') {
+      rafId = requestAnimationFrame(loop);
+    }
+  }
+
+  function stopAnimationLoop() {
+    if (!rafId) return;
+    cancelAnimationFrame(rafId);
+    rafId = 0;
   }
 
   function update(dt) {
@@ -128,6 +159,7 @@
       showToast(`THREAT ${state.threatIndex + 1} // ${threat.name}`, 1800);
       announce(`Threat level ${state.threatIndex + 1}: ${threat.name}`);
       tone(245 + state.threatIndex * 45, 0.12, 'square', 0.025, 80);
+      updateHud();
     }
 
     const travel = state.speed * dt;
@@ -155,7 +187,7 @@
     updateBolts(dt);
     updateParticles(dt);
     updateChargeParticles(dt);
-    updateHud();
+    updateHudTimer(dt);
   }
 
   function updateIntro(dt) {
@@ -172,8 +204,8 @@
       showToast('ESCAPE ROUTE OPEN // CONTROL RESTORED', 1100);
       announce('Escape route open. Bean control restored.');
       tone(390, 0.09, 'square', 0.022, 120);
+      updateHud();
     }
-    updateHud();
   }
 
   function updatePlayer(dt) {
@@ -267,7 +299,7 @@
       bolt.x += (dx / distance) * step;
       bolt.y += (dy / distance) * step;
       bolt.history.push({ x: bolt.x, y: bolt.y });
-      if (bolt.history.length > 13) bolt.history.shift();
+      while (bolt.history.length > BOLT_HISTORY_LIMIT) bolt.history.shift();
 
       if (distance <= 18) {
         const obstacleIndex = obstacles.indexOf(bolt.target);
@@ -346,6 +378,7 @@
     state.flash = 0;
     state.introElapsed = 0;
     state.chargeSpawnTimer = 0;
+    state.hudTimer = 0;
     obstacles.length = 0;
     pickups.length = 0;
     bolts.length = 0;
@@ -364,6 +397,11 @@
     clearToast();
     showToast('HOSTILE PURSUIT DETECTED', 1000);
     updateHud();
+    const now = performance.now();
+    state.lastTime = now;
+    lastRafTime = now;
+    frameAccumulator = 0;
+    scheduleFrame();
     canvas.focus({ preventScroll: true });
     announce('Bean deployed under hostile pursuit.');
     tone(220, 0.09, 'square', 0.025, 70);
@@ -398,6 +436,7 @@
     if (state.mode !== 'playing') return;
     state.mode = 'paused';
     player.duckHeld = false;
+    stopAnimationLoop();
     showCenter('SIMULATION SUSPENDED', 'Paused', `${reason || 'Press P, Escape, or Pause to resume.'}`);
     announce('Bean Run paused.');
   }
@@ -405,8 +444,12 @@
   function resumeGame() {
     if (state.mode !== 'paused') return;
     state.mode = 'playing';
-    state.lastTime = performance.now();
+    const now = performance.now();
+    state.lastTime = now;
+    lastRafTime = now;
+    frameAccumulator = 0;
     hideCenter();
+    scheduleFrame();
     canvas.focus({ preventScroll: true });
     announce('Bean Run resumed.');
   }
@@ -549,20 +592,14 @@
     for (const layer of backgroundCache.forest) {
       const offset = -modulo(state.worldTravel * layer.parallax, layer.span);
       ctx.drawImage(layer.canvas, offset, 0);
-      ctx.drawImage(layer.canvas, offset + layer.span, 0);
     }
 
     ctx.drawImage(backgroundCache.haze, 0, 0);
   }
 
   function drawGround() {
-    ctx.fillStyle = '#263822';
-    ctx.fillRect(0, GROUND_Y - 5, width, 7);
-    ctx.fillStyle = '#352f25';
-    ctx.fillRect(0, GROUND_Y + 2, width, HEIGHT - GROUND_Y);
-    ctx.fillStyle = '#514838';
     const offset = -modulo(state.worldTravel * 0.65, 38);
-    for (let x = offset; x < width + 40; x += 38) ctx.fillRect(Math.floor(x), GROUND_Y + 18, 21, 4);
+    ctx.drawImage(backgroundCache.ground, offset, 0);
   }
 
   function drawPlayer() {
@@ -575,6 +612,8 @@
   function drawChargeParticles() {
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     for (const spark of chargeParticles) {
       const age = 1 - spark.life / spark.maxLife;
       const alpha = Math.max(0, Math.sin(age * Math.PI));
@@ -633,40 +672,20 @@
   function drawPowerup(pickup, now) {
     const cx = pickup.x + pickup.w / 2;
     const cy = pickup.y + pickup.h / 2;
-    const pulse = 0.85 + Math.sin(now * 0.012) * 0.15;
+    const pulse = 0.94 + Math.sin(now * 0.012) * 0.06;
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(pickup.rotation);
     ctx.globalCompositeOperation = 'lighter';
-    ctx.shadowColor = '#74d9ff';
-    ctx.shadowBlur = 15 * pulse;
-    ctx.fillStyle = '#eafcff';
-    ctx.strokeStyle = '#68cfff';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(-5, -14);
-    ctx.lineTo(5, -4);
-    ctx.lineTo(0, -1);
-    ctx.lineTo(8, 14);
-    ctx.lineTo(-5, 4);
-    ctx.lineTo(0, 1);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.fill();
+    const iconSize = 64 * pulse;
+    ctx.drawImage(effectCache.powerup, -iconSize / 2, -iconSize / 2, iconSize, iconSize);
     ctx.restore();
 
     ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(now * 0.0025);
     ctx.globalCompositeOperation = 'lighter';
-    for (let spark = 0; spark < 5; spark += 1) {
-      const angle = now * 0.0025 + spark * Math.PI * 0.4;
-      const radius = 20 + Math.sin(now * 0.009 + spark) * 3;
-      const x = cx + Math.cos(angle) * radius;
-      const y = cy + Math.sin(angle) * radius;
-      ctx.fillStyle = spark % 2 ? 'rgba(255,246,167,.85)' : 'rgba(174,232,255,.9)';
-      ctx.shadowColor = '#78dfff';
-      ctx.shadowBlur = 7;
-      ctx.fillRect(x - 1, y - 1, 2, 2);
-    }
+    ctx.drawImage(effectCache.powerOrbit, -32, -32, 64, 64);
     ctx.restore();
   }
 
@@ -684,9 +703,12 @@
       const mainPath = buildJaggedPath(anchors, bolt.seed, now, 9);
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      strokeElectricPath(mainPath, 'rgba(92,70,255,.2)', 13, '#765cff', 18);
-      strokeElectricPath(mainPath, 'rgba(67,190,255,.82)', 5, '#55cfff', 11);
-      strokeElectricPath(mainPath, 'rgba(249,254,255,.98)', 1.45, '#eafcff', 4);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      traceElectricPath(mainPath);
+      strokeElectricLayer('rgba(78,84,255,.14)', 17);
+      strokeElectricLayer('rgba(91,211,255,.82)', 5);
+      strokeElectricLayer('rgba(249,254,255,.98)', 1.35);
 
       for (let index = 4; index < mainPath.length - 2; index += 5) {
         const point = mainPath[index];
@@ -709,18 +731,12 @@
             y: point.y + perpendicularY * branchLength + dy / length * 8
           }
         ];
-        strokeElectricPath(branch, 'rgba(81,196,255,.5)', 3, '#61d4ff', 8);
-        strokeElectricPath(branch, 'rgba(250,254,255,.82)', 0.8);
+        traceElectricPath(branch);
+        strokeElectricLayer('rgba(81,196,255,.48)', 5);
+        strokeElectricLayer('rgba(250,254,255,.82)', 0.75);
       }
 
-      const headGlow = ctx.createRadialGradient(bolt.x, bolt.y, 0, bolt.x, bolt.y, 15);
-      headGlow.addColorStop(0, 'rgba(255,255,255,1)');
-      headGlow.addColorStop(0.22, 'rgba(164,233,255,.95)');
-      headGlow.addColorStop(1, 'rgba(92,101,255,0)');
-      ctx.fillStyle = headGlow;
-      ctx.beginPath();
-      ctx.arc(bolt.x, bolt.y, 15, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.drawImage(effectCache.boltGlow, bolt.x - 18, bolt.y - 18, 36, 36);
       ctx.restore();
     }
   }
@@ -746,20 +762,17 @@
     return points;
   }
 
-  function strokeElectricPath(points, color, lineWidth, shadowColor, shadowBlur) {
+  function traceElectricPath(points) {
     if (points.length < 2) return;
-    ctx.save();
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    if (shadowColor) ctx.shadowColor = shadowColor;
-    if (shadowBlur) ctx.shadowBlur = shadowBlur;
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let index = 1; index < points.length; index += 1) ctx.lineTo(points[index].x, points[index].y);
+  }
+
+  function strokeElectricLayer(color, lineWidth) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
     ctx.stroke();
-    ctx.restore();
   }
 
   function electricNoise(seed) {
@@ -835,23 +848,105 @@
     hazeContext.fillStyle = hazeGradient;
     hazeContext.fillRect(0, 170, width, GROUND_Y - 170);
 
+    const ground = document.createElement('canvas');
+    ground.width = width + 38;
+    ground.height = HEIGHT;
+    const groundContext = ground.getContext('2d');
+    groundContext.fillStyle = '#263822';
+    groundContext.fillRect(0, GROUND_Y - 5, ground.width, 7);
+    groundContext.fillStyle = '#352f25';
+    groundContext.fillRect(0, GROUND_Y + 2, ground.width, HEIGHT - GROUND_Y);
+    groundContext.fillStyle = '#514838';
+    for (let x = 0; x < ground.width + 38; x += 38) {
+      groundContext.fillRect(x, GROUND_Y + 18, 21, 4);
+    }
+
     const cachedForest = forest.map((layer) => {
       const span = width + 180;
       const layerCanvas = document.createElement('canvas');
-      layerCanvas.width = span;
+      layerCanvas.width = span * 2;
       layerCanvas.height = HEIGHT;
       const layerContext = layerCanvas.getContext('2d');
       layerContext.imageSmoothingEnabled = false;
       for (const tree of layer.trees) {
         const x = modulo((tree.x / 1140) * span, span);
-        for (const shift of [-span, 0, span]) {
+        for (const shift of [-span, 0, span, span * 2]) {
           drawPine(layerContext, x + shift, GROUND_Y + tree.offsetY, tree.height, layer.leaf, layer.trunk);
         }
       }
       return { canvas: layerCanvas, span, parallax: layer.parallax };
     });
 
-    backgroundCache = { sky, haze, forest: cachedForest };
+    backgroundCache = { sky, haze, ground, forest: cachedForest };
+  }
+
+  function createEffectCache() {
+    const powerup = document.createElement('canvas');
+    powerup.width = 64;
+    powerup.height = 64;
+    const powerContext = powerup.getContext('2d');
+    powerContext.save();
+    powerContext.translate(32, 32);
+    powerContext.globalCompositeOperation = 'lighter';
+    powerContext.shadowColor = '#74d9ff';
+    powerContext.shadowBlur = 15;
+    powerContext.fillStyle = '#eafcff';
+    powerContext.strokeStyle = '#68cfff';
+    powerContext.lineWidth = 3;
+    powerContext.beginPath();
+    powerContext.moveTo(-5, -14);
+    powerContext.lineTo(5, -4);
+    powerContext.lineTo(0, -1);
+    powerContext.lineTo(8, 14);
+    powerContext.lineTo(-5, 4);
+    powerContext.lineTo(0, 1);
+    powerContext.closePath();
+    powerContext.stroke();
+    powerContext.fill();
+    powerContext.restore();
+
+    const sparkBlue = createGlowSprite([
+      [0, 'rgba(238,253,255,.98)'],
+      [0.25, 'rgba(126,218,255,.82)'],
+      [1, 'rgba(65,166,255,0)']
+    ]);
+    const sparkWarm = createGlowSprite([
+      [0, 'rgba(255,253,226,.98)'],
+      [0.28, 'rgba(255,237,134,.84)'],
+      [1, 'rgba(255,209,74,0)']
+    ]);
+    const powerOrbit = document.createElement('canvas');
+    powerOrbit.width = 64;
+    powerOrbit.height = 64;
+    const orbitContext = powerOrbit.getContext('2d');
+    orbitContext.globalCompositeOperation = 'lighter';
+    for (let spark = 0; spark < 5; spark += 1) {
+      const angle = spark * Math.PI * 0.4;
+      const x = 32 + Math.cos(angle) * 21;
+      const y = 32 + Math.sin(angle) * 21;
+      const sparkImage = spark % 2 ? sparkWarm : sparkBlue;
+      orbitContext.drawImage(sparkImage, x - 5, y - 5, 10, 10);
+    }
+    const boltGlow = createGlowSprite([
+      [0, 'rgba(255,255,255,1)'],
+      [0.22, 'rgba(164,233,255,.95)'],
+      [1, 'rgba(92,101,255,0)']
+    ], 36);
+
+    return { powerup, powerOrbit, boltGlow };
+  }
+
+  function createGlowSprite(stops, size = 12) {
+    const sprite = document.createElement('canvas');
+    sprite.width = size;
+    sprite.height = size;
+    const spriteContext = sprite.getContext('2d');
+    const center = size / 2;
+    const gradient = spriteContext.createRadialGradient(center, center, 0, center, center, center);
+    for (const [offset, color] of stops) gradient.addColorStop(offset, color);
+    spriteContext.fillStyle = gradient;
+    spriteContext.fillRect(0, 0, size, size);
+    return sprite;
   }
 
   function createForest() {
@@ -897,7 +992,18 @@
 
     window.addEventListener('blur', () => setDuck(false));
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && state.mode === 'playing') pauseGame('The app lost focus. Resume when the field is clear.');
+      if (document.hidden) {
+        if (state.mode === 'playing') pauseGame('The app lost focus. Resume when the field is clear.');
+        else stopAnimationLoop();
+        return;
+      }
+      if (state.mode !== 'paused') {
+        const now = performance.now();
+        state.lastTime = now;
+        lastRafTime = now;
+        frameAccumulator = 0;
+        scheduleFrame();
+      }
     });
 
     canvas.addEventListener('pointerdown', (event) => {
@@ -936,7 +1042,7 @@
     const resizeObserver = new ResizeObserver(resizeCanvas);
     resizeObserver.observe(frame);
     window.addEventListener('beforeunload', () => {
-      cancelAnimationFrame(rafId);
+      stopAnimationLoop();
       resizeObserver.disconnect();
     });
   }
@@ -955,7 +1061,19 @@
     for (const pickup of pickups) pickup.x *= ratio;
     for (const bolt of bolts) bolt.x *= ratio;
     rebuildBackgroundCache();
-    state.lastTime = performance.now();
+    const now = performance.now();
+    state.lastTime = now;
+    lastRafTime = now;
+    frameAccumulator = 0;
+    if (state.mode === 'paused') draw(now);
+    else scheduleFrame();
+  }
+
+  function updateHudTimer(dt) {
+    state.hudTimer += dt;
+    if (state.hudTimer < HUD_REFRESH_SECONDS) return;
+    state.hudTimer %= HUD_REFRESH_SECONDS;
+    updateHud();
   }
 
   function updateHud() {

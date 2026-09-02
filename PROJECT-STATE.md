@@ -13,6 +13,8 @@ Maintain and refine the V2 redesign, Bean Run, and Bean Galaga in this staging r
 - The site is static HTML/CSS/JavaScript.
 - Bean Run has been migrated into V2 as one responsive implementation in `game.html` with game logic in `bean-run.js`.
 - Bean Run now uses shared desktop/mobile physics, distance-based obstacle spacing, five explicit threat tiers, touch and keyboard controls, persistent local high scores, automatic visibility pausing, tactical lightning, synthesized sound, smaller collision boxes than the visible sprites, and cached parallax layers to reduce mobile render work.
+- The Bean Run renderer is capped at 60 updates per second on high-refresh displays and stops its animation loop while paused or hidden. Each forest layer and the moving ground are pre-rendered for one blit per frame, HUD refreshes are throttled, pickup/bolt glows are cached, and runtime lightning no longer relies on expensive canvas shadow blur.
+- An instrumented canvas-operation regression check preserved identical two-second travel distance at 30, 60, 90, 120, and 144 Hz. At 120 Hz, draw work is now equal to the 60 Hz path; a normal 60 Hz frame dropped from nine to seven image blits and removed the earlier per-frame ground rectangles. This is not a substitute for physical-device frame profiling.
 - Bean remains visually stable while running; the earlier oscillating bob/rotation was removed. A held charge now uses independently timed, persistent sparks without a shield perimeter or synchronized redraw, while fired lightning uses a jagged multi-layer core with branching secondary arcs.
 - Lightning economy is intentionally scarce after the tutorial charge: replacement cooldown is 2,300–3,100 world units and pauses while a charge is held or a pickup is already on screen.
 - Each deployment begins with a short, non-interactive chase shot: Bean and three armed squirrels enter at speed, the camera settles continuously onto Bean's normal position, and control returns before the first obstacle can spawn.
@@ -40,7 +42,7 @@ Maintain and refine the V2 redesign, Bean Run, and Bean Galaga in this staging r
 
 ## Next Action
 
-1. Manually play-test Bean Run on physical desktop and mobile browsers, focusing on jump/duck timing, pickup height, touch ergonomics, audio, and threat-tier transitions.
+1. Manually play-test Bean Run on physical desktop and mobile browsers, focusing on frame pacing, parallax seams, lightning appearance, jump/duck timing, pickup height, touch ergonomics, audio, and threat-tier transitions.
 2. Tune Bean Run only from observed failures; do not split the implementation by device.
 3. Play-test Bean Galaga on desktop and mobile for input, difficulty, collision, formation, capture/rescue, and performance regressions.
 4. Review public assets/content and accessibility.
