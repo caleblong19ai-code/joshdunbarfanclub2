@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Institute of Dunbar Studies daily intelligence brief: one rotating Josh Dunbar fact, archival status, and related field notes." />
+  <meta name="theme-color" content="#0b0b0b" />
+  <title>Daily Josh Intelligence | Institute of Dunbar Studies</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="site.js" defer></script>
+</head>
+<body class="daily-page">
+  <div id="site-nav" data-nav-slot></div>
+  <main class="daily-main">
+    <header class="daily-hero">
+      <div>
+        <p class="eyebrow">Intelligence division // daily release</p>
+        <h1>Today's Josh<br>Intelligence Brief</h1>
+        <p class="daily-hero__lede">One item from the archive is declassified each day. Verification standards remain aggressively flexible.</p>
+      </div>
+      <aside class="daily-date" aria-label="Brief date"><span data-brief-weekday>---</span><strong data-brief-day>--</strong><small data-brief-month>---</small></aside>
+    </header>
+
+    <section class="brief-card" aria-live="polite">
+      <div class="brief-card__meta"><span>BRIEF ID <b data-brief-id>JD-000</b></span><span>CONFIDENCE <b data-confidence>UNKNOWN</b></span></div>
+      <p class="brief-card__label">Declassified statement</p>
+      <blockquote data-daily-fact>Loading reverence...</blockquote>
+      <div class="brief-card__footer"><span>Source: Institute archive rotation</span><button type="button" data-another-fact>Issue alternate briefing</button></div>
+    </section>
+
+    <section class="daily-grid">
+      <article><span>STATUS</span><strong>PUBLIC RELEASE</strong><p>This briefing may be distributed without prior reverence clearance.</p></article>
+      <article><span>SUBJECT</span><strong>JOSH DUNBAR</strong><p>Primary individual of interest across all Institute departments.</p></article>
+      <article><span>ANOMALY LEVEL</span><strong data-anomaly-level>MODERATE</strong><p>Calculated using methodology unavailable to conventional science.</p></article>
+    </section>
+
+    <section class="daily-context">
+      <div><p class="eyebrow">Analyst note</p><h2>Why this matters.</h2></div>
+      <p data-analyst-note>Each daily item contributes to a growing body of evidence suggesting that ordinary explanations are no longer sufficient.</p>
+    </section>
+
+    <section class="daily-actions">
+      <div><p class="eyebrow">Continue investigation</p><h2>Cross-reference the archive.</h2></div>
+      <div><a class="button button--primary" href="lore.html">Open canonical lore</a><a class="button button--ghost" href="bicepsize.html">Review divine metrics</a></div>
+    </section>
+  </main>
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Intelligence Division // Daily Release</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. Facts may exceed reality.</p></footer>
+  <script>
+    const facts = [
+      ['Josh once lifted a barbell so quickly that the Earth\'s rotation paused.', 'COSMOLOGICAL', 'SEVERE', 'Rotational anomalies remain unexplained.'],
+      ['It is believed that Josh’s footsteps can be heard in empty gyms at 3:00 A.M.', 'PARANORMAL', 'MODERATE', 'Acoustic reports cluster around commercial gym environments.'],
+      ['His protein shake formula is encrypted in an ancient dialect known only to monks.', 'ARCHIVAL', 'ELEVATED', 'Attempts at translation have produced only macros and warnings.'],
+      ['There exists, somewhere in the Amazon, a temple dedicated to Josh.', 'GEOGRAPHIC', 'ELEVATED', 'Satellite imagery is inconclusive but respectful.'],
+      ['Josh doesn’t need pre-workout. His veins are wired to the cosmos.', 'PHYSIOLOGICAL', 'SEVERE', 'Conventional stimulant models do not account for observed output.'],
+      ['The United States has a defense protocol for if Josh goes rogue. It won\'t work.', 'STRATEGIC', 'CRITICAL', 'Contingency planning remains largely ceremonial.'],
+      ['When Josh Dunbar enters the room, dumbbells align themselves.', 'EQUIPMENT', 'MODERATE', 'Alignment behavior has not been reproduced without Josh present.'],
+      ['Legend says the first gym was built around a crater Josh left doing pushups.', 'HISTORICAL', 'SEVERE', 'Geological dating and gym records strongly disagree.'],
+      ['Mirrors in gyms reflect his form even when he’s not there.', 'OPTICAL', 'ELEVATED', 'Investigators advise against prolonged eye contact.'],
+      ['Josh once entered a gym during peak hours. Every person in the gym instantly PR\'d.', 'PERFORMANCE', 'CRITICAL', 'The Institute refers to this as the Mass Personal Record Event.'],
+      ['Legends say his rest days shake the Earth — it yearns for motion.', 'SEISMIC', 'SEVERE', 'Correlation with tectonic activity is spiritually compelling.'],
+      ['No gyms have weight heavy enough for Josh. He simply lifts there to encourage others.', 'LOAD CAPACITY', 'MODERATE', 'Existing equipment should be interpreted as morale support.'],
+      ['When Josh drops the bar, tectonic plates whisper of alignment.', 'SEISMIC', 'SEVERE', 'Subduction zones remain under observation.'],
+      ['Josh doesn’t spot — he blesses.', 'DOCTRINAL', 'CRITICAL', 'This remains the foundational principle of Institute spotting doctrine.'],
+      ['The first creatine crystal formed on his palm.', 'CHEMICAL', 'ELEVATED', 'Supplement history prior to this event is considered pre-canonical.'],
+      ['Josh’s warm-up is the peak of another man’s decade.', 'PERFORMANCE', 'CRITICAL', 'Comparative lifting data has been emotionally damaging to analysts.'],
+      ['Josh doesn\'t take a break from the weights. The weights get a break from him.', 'DOCTRINAL', 'MODERATE', 'Rest periods must be interpreted from the equipment perspective.'],
+      ['The chalk on his hands binds myth to muscle.', 'MATERIAL', 'ELEVATED', 'Samples have not been made available to the public.'],
+      ['A sculptor once tried to recreate Josh in marble — and he became blind.', 'ARTISTIC', 'SEVERE', 'The Institute recommends abstraction over direct representation.'],
+      ['Josh’s heart rate is a metronome of conquest.', 'PHYSIOLOGICAL', 'MODERATE', 'No standard wearable supports the required display mode.'],
+      ['One day while Josh was playing Rocket League, the ball hovered midair, waiting for Josh to finish a set.', 'ESPORTS', 'ELEVATED', 'Match replay evidence is said to have corrupted itself.'],
+      ['When Josh queues for Rocket League, the MMR rebalances out of fear.', 'ESPORTS', 'CRITICAL', 'Ranking systems exhibit defensive behavior under Josh load.'],
+      ['Controllers vibrate in reverence when Josh touches the analog stick.', 'HARDWARE', 'MODERATE', 'Manufacturers continue to call this “haptics.”'],
+      ['Josh’s kickoff is studied by physicists and ignored by time.', 'ESPORTS', 'SEVERE', 'Frame-by-frame review introduces more questions than answers.'],
+      ['Every save he makes is felt in the spirit realm.', 'ESPORTS', 'ELEVATED', 'No terrestrial telemetry captures the full event.'],
+      ['A rival once tried to match Josh’s curl — he now teaches yoga in exile.', 'RIVALRY', 'MODERATE', 'The exile appears self-imposed but permanent.'],
+      ['The sun rises not for time, but for Josh’s morning lifts.', 'ASTRONOMICAL', 'SEVERE', 'Heliocentric models remain operational but less satisfying.'],
+      ['Gravity lowers slightly to assist him, then resumes with apology.', 'PHYSICS', 'CRITICAL', 'Local gravitational politeness is under active study.'],
+      ['He once flexed at dawn and turned night to flame.', 'OPTICAL', 'SEVERE', 'Sunrise records from the date in question are suspiciously normal.']
+    ];
+
+    const now = new Date();
+    const dayOfYear = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(now.getFullYear(), 0, 0)) / 86400000);
+    let index = dayOfYear % facts.length;
+    const factEl = document.querySelector('[data-daily-fact]');
+    const confidenceEl = document.querySelector('[data-confidence]');
+    const anomalyEl = document.querySelector('[data-anomaly-level]');
+    const noteEl = document.querySelector('[data-analyst-note]');
+    const idEl = document.querySelector('[data-brief-id]');
+
+    function renderFact(nextIndex) {
+      index = (nextIndex + facts.length) % facts.length;
+      const [fact, category, anomaly, note] = facts[index];
+      factEl.textContent = fact;
+      confidenceEl.textContent = category;
+      anomalyEl.textContent = anomaly;
+      noteEl.textContent = note;
+      idEl.textContent = `JD-${String(index + 1).padStart(3, '0')}`;
+    }
+
+    renderFact(index);
+    document.querySelector('[data-another-fact]').addEventListener('click', () => renderFact(index + 1));
+    document.querySelector('[data-brief-weekday]').textContent = now.toLocaleDateString(undefined, { weekday: 'short' }).toUpperCase();
+    document.querySelector('[data-brief-day]').textContent = String(now.getDate()).padStart(2, '0');
+    document.querySelector('[data-brief-month]').textContent = now.toLocaleDateString(undefined, { month: 'short', year: 'numeric' }).toUpperCase();
+  </script>
+</body>
+</html>
