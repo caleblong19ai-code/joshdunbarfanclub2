@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Institute of Dunbar Studies restricted-media honeypot. Nice try." />
+  <meta name="theme-color" content="#070909" />
+  <title>Spicy Photos | Institute of Dunbar Studies</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="surveillance.css" />
+  <link rel="stylesheet" href="scareware.css" />
+  <link rel="stylesheet" href="spicy.css" />
+  <script src="site.js" defer></script>
+  <script src="bean-menace.js" defer></script>
+</head>
+<body class="spicy-page">
+  <div id="site-nav" data-nav-slot></div>
+
+  <main class="spicy-main">
+    <header class="spicy-hero">
+      <div>
+        <p class="eyebrow">Surveillance division // restricted media intake SP-04</p>
+        <h1>Spicy Photo<br>Archive</h1>
+        <p class="spicy-hero__lede">A restricted Institute repository allegedly containing visual material judged too powerful for general circulation. Access attempts are logged for entirely normal archival reasons.</p>
+      </div>
+      <aside class="honeypot-badge"><span>Archive status</span><strong>Temptingly restricted</strong><small>Viewer discretion aggressively advised</small></aside>
+    </header>
+
+    <section class="vault-layout" aria-label="Restricted media vault">
+      <article class="vault-terminal">
+        <div class="vault-head"><span>Vault SP-04 // visual archive</span><span>Restricted</span></div>
+        <div class="vault-screen">
+          <div class="vault-gate" data-vault-gate>
+            <div class="vault-lock" aria-hidden="true">SP</div>
+            <p class="eyebrow">Classified media repository</p>
+            <h2>Restricted archive detected.</h2>
+            <p>The Institute cannot confirm or deny the existence of photographs described internally as “spicy.” Curiosity is not recognized as clearance.</p>
+            <button class="vault-button" type="button" data-open-vault>Open Restricted Archive</button>
+          </div>
+
+          <div class="vault-sequence" data-vault-sequence aria-live="polite">
+            <strong>RESTRICTED MEDIA DECRYPTION // SP-04</strong>
+            <ul>
+              <li data-vault-step="0">Decrypting sealed media index...</li>
+              <li data-vault-step="1">Verifying viewer discretion...</li>
+              <li data-vault-step="2">Checking dignity reserves...</li>
+              <li data-vault-step="3">Cross-referencing Surveillance watchlist...</li>
+              <li data-vault-step="4">Alerting Bean...</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <aside class="vault-rules">
+        <small>Media handling protocol</small>
+        <h2>Before proceeding</h2>
+        <p>Restricted images may only be viewed by personnel with appropriate reverence, emotional preparedness, and an airtight explanation for why they clicked this tab.</p>
+        <ul>
+          <li>Do not screenshot classified material.</li>
+          <li>Do not say “I was just curious.”</li>
+          <li>Do not assume incognito mode impresses Bean.</li>
+          <li>Do not make sudden movements if confronted.</li>
+        </ul>
+        <div class="trap-note">Notice // All suspicious enthusiasm may be retained as evidence.</div>
+      </aside>
+    </section>
+
+    <section class="incident-strip" aria-label="Restricted archive metadata">
+      <div><span>Archive classification</span><strong>Extremely spicy*</strong></div>
+      <div><span>Known viewers</span><strong>0 survivors of embarrassment</strong></div>
+      <div><span>Bean response SLA</span><strong>Immediate</strong></div>
+      <div><span>*Institutional definition</span><strong>Subject to trap conditions</strong></div>
+    </section>
+  </main>
+
+  <div class="caught-overlay" data-caught-overlay aria-hidden="true">
+    <section class="caught-card" role="dialog" aria-modal="true" aria-labelledby="caught-title">
+      <img src="https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/caughtin4k.jpg" alt="Caught in 4K cat" />
+      <h2 id="caught-title">Caught in 4K!</h2>
+      <p>Josh Dunbar has been notified.<br><strong>Bean is en route to eliminate your remaining dignity.</strong><br>Do not resist.</p>
+      <div class="caught-actions">
+        <button type="button" data-accept-fate>Okay... I'm sorry</button>
+        <button type="button" class="secondary" data-deny-evidence>This wasn't me</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="scareware-layer" data-popup-container aria-hidden="true"></div>
+
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Surveillance Division // Restricted Media Honeypot</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. All suspicious transmissions logged.</p></footer>
+
+  <script>
+    (() => {
+      const openButton = document.querySelector('[data-open-vault]');
+      const gate = document.querySelector('[data-vault-gate]');
+      const sequence = document.querySelector('[data-vault-sequence]');
+      const steps = [...document.querySelectorAll('[data-vault-step]')];
+      const caught = document.querySelector('[data-caught-overlay]');
+      const accept = document.querySelector('[data-accept-fate]');
+      const deny = document.querySelector('[data-deny-evidence]');
+      const popupLayer = document.querySelector('[data-popup-container]');
+      let sprung = false;
+      let z = 12000;
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      async function springTrap() {
+        if (sprung) return;
+        sprung = true;
+        openButton.disabled = true;
+        gate.hidden = true;
+        sequence.classList.add('is-active');
+
+        for (let i = 0; i < steps.length; i += 1) {
+          const step = steps[i];
+          step.classList.add('pending');
+          await sleep(reducedMotion() ? 130 : (i === 4 ? 700 : 430));
+          step.classList.remove('pending');
+          step.classList.add(i === 4 ? 'flagged' : 'done');
+        }
+
+        await sleep(reducedMotion() ? 100 : 220);
+        caught.classList.add('is-active');
+        caught.setAttribute('aria-hidden', 'false');
+      }
+
+      function createInitialScareware() {
+        popupLayer.replaceChildren();
+        popupLayer.classList.add('is-active');
+        popupLayer.setAttribute('aria-hidden', 'false');
+
+        const alerts = [
+          ['SURVEILLANCE INCIDENT SP-04 — CAUGHT IN 4K', 'RESTRICTED MEDIA HONEYPOT TRIGGERED', 'Your attempt to access “spicy photos” has been preserved as evidence in unnecessarily high resolution.', 'JOSH NOTIFIED // BEAN DISPATCH AUTHORIZED'],
+          ['INCIDENT REPORT AUTO-GENERATED', 'YOU CLICKED IT ANYWAY', 'The warning labels were decorative. The trap was not.', 'EXPLANATION QUALITY: POOR'],
+          ['BEAN RESPONSE QUEUE', 'DO NOT CLOSE YOUR BLINDS', 'Bean has accepted the incident for personal follow-up. Institute staff have stopped asking questions.', 'STATUS: EN ROUTE']
+        ];
+
+        alerts.forEach(([title, heading, body, status], index) => {
+          const node = document.createElement('section');
+          node.className = 'scare-window scare-window--danger';
+          node.style.left = `${Math.max(10, 30 + index * 90)}px`;
+          node.style.top = `${Math.max(12, 35 + index * 70)}px`;
+          node.style.zIndex = String(z++);
+          node.innerHTML = `<div class="scare-titlebar"><span>${title}</span><button type="button" aria-label="Close fake alert">×</button></div><div class="scare-body"><h2 class="scare-flash">${heading}</h2><p>${body}</p><p class="scare-red"><strong>${status}</strong></p><div class="scare-actions"><button class="scare-action scare-action--red" type="button" data-spawn-more>PLEASE DELETE THE EVIDENCE</button></div></div>`;
+          node.querySelector('.scare-titlebar button').addEventListener('click', () => node.remove());
+          node.querySelector('[data-spawn-more]').addEventListener('click', () => {
+            node.querySelector('[data-spawn-more]').textContent = 'REQUEST DENIED — BEAN RETAINED A COPY';
+            const clone = node.cloneNode(true);
+            clone.style.left = `${Math.max(10, Math.random() * Math.max(10, innerWidth - 500))}px`;
+            clone.style.top = `${Math.max(10, Math.random() * Math.max(10, innerHeight - 280))}px`;
+            clone.style.zIndex = String(z++);
+            clone.querySelector('.scare-titlebar span').textContent = 'EVIDENCE REDUNDANCY NOTICE';
+            clone.querySelector('h2').textContent = 'A BACKUP WAS CREATED';
+            clone.querySelector('p').textContent = 'Attempting to delete the incident has increased the incident.';
+            clone.querySelector('[data-spawn-more]').remove();
+            clone.querySelector('.scare-titlebar button').addEventListener('click', () => clone.remove());
+            popupLayer.appendChild(clone);
+          });
+          popupLayer.appendChild(node);
+        });
+
+        const dismiss = document.createElement('button');
+        dismiss.type = 'button';
+        dismiss.className = 'scare-dismiss-all';
+        dismiss.textContent = 'Emergency dismiss fake alerts';
+        dismiss.addEventListener('click', () => {
+          popupLayer.replaceChildren();
+          popupLayer.classList.remove('is-active');
+          popupLayer.setAttribute('aria-hidden', 'true');
+        });
+        popupLayer.appendChild(dismiss);
+      }
+
+      function proceedToIncident() {
+        caught.classList.remove('is-active');
+        caught.setAttribute('aria-hidden', 'true');
+        createInitialScareware();
+      }
+
+      openButton.addEventListener('click', springTrap);
+      accept.addEventListener('click', proceedToIncident);
+      deny.addEventListener('click', () => {
+        deny.textContent = 'DENIAL LOGGED AS ADDITIONAL EVIDENCE';
+        window.setTimeout(proceedToIncident, reducedMotion() ? 0 : 450);
+      });
+    })();
+  </script>
+</body>
+</html>
