@@ -4,7 +4,7 @@ Last updated: 2026-09-02
 
 ## Current Objective
 
-Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored archive content in this staging repository, then promote the reviewed result to the separate production repository that serves the public site.
+Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored historical content in this staging repository, then promote the reviewed result to the separate production repository that serves the public site.
 
 ## Current State
 
@@ -12,13 +12,17 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored archive
 - The production/historical source remains `Big-JoshD/joshdunbarfanclub` according to the repository README.
 - The site is static HTML/CSS/JavaScript.
 - The V2 home page and navigation establish the "Institute of Dunbar Studies" visual system and information architecture.
-- Archive restoration is now underway from the historical Big-JoshD source. The goal is not a verbatim port: preserve canonical jokes/content while rebuilding each feature as a stronger V2 experience.
+- Historical restoration is underway from the Big-JoshD source. The goal is not a verbatim port: preserve canonical jokes/content while rebuilding each feature as a stronger V2 experience.
 - Restored/revamped content pages as of 2026-09-02:
   - `lore.html` — recovered canonical backstory and legendary tales, expanded into an archival chronology/case-file presentation.
   - `dailyfacts.html` — preserved the historical rotating fact library, now presented as a daily intelligence brief with category, anomaly level, analyst note, deterministic daily rotation, and an alternate-brief control.
   - `bicepsize.html` — preserved the softball / bowling ball / Vegas Sphere / singularity progression, rebuilt as an interactive normalized comparison lab rather than relying on the old Chart.js/Infinity chart behavior.
+  - `beancam.html` — preserved the original Bean Tracker premise and absurd 1–2 billion kB power readings, rebuilt as a live simulated electrical telemetry console with saturation state, arc rate, field stability, threat posture, confidence, overload handling, and a rolling event log.
+  - `livecam.html` — preserved the original 24/7 live-feed/Platinum-access gag, including the 275 lb bench requirement, Bean letter of intent, $1 tier, and inevitable rejection; rebuilt as a secure camera terminal with fake uplink negotiation, multiple camera channels, clearance state, and denial overlays.
   - `archive.css` — shared presentation layer for restored archive, intelligence, and metrics pages; loaded by `site.js` only for relevant page classes.
-- Several navigation targets still do not exist in V2 and remain restoration candidates: poetry, fan submissions, fan fiction, Bean surveillance/live camera/spicy photos, Rocket League rank, chess metrics, merch, FAQ, and contact.
+  - `surveillance.css` — shared presentation layer for Bean telemetry and the secure camera network.
+- Several navigation targets still do not exist in V2 and remain restoration candidates: poetry, fan submissions, fan fiction, spicy photos, Rocket League rank, chess metrics, merch, FAQ, and contact.
+- Surveillance pages currently reference several archived public images from `Big-JoshD/joshdunbarfanclub` by raw GitHub URL, consistent with the existing V2 hero treatment. These can be copied into V2 later if production independence from the historical repo becomes a requirement.
 - Bean Run has been migrated into V2 as one responsive implementation in `game.html` with game logic in `bean-run.js`.
 - Bean Run now uses shared desktop/mobile physics, distance-based obstacle spacing, five explicit threat tiers, touch and keyboard controls, persistent local high scores, automatic visibility pausing, tactical lightning, synthesized sound, smaller collision boxes than the visible sprites, and cached parallax layers to reduce mobile render work.
 - The Bean Run renderer is capped at 60 updates per second on high-refresh displays and stops its animation loop while paused or hidden. Each forest layer and the moving ground are pre-rendered for one blit per frame, HUD refreshes are throttled, pickup/bolt glows are cached, and runtime lightning no longer relies on expensive canvas shadow blur.
@@ -39,6 +43,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored archive
 - Historical content is source material, not a requirement to reproduce old layout/implementation defects.
 - When restoring a historical page, preserve recognizable canonical jokes, terminology, and comparisons unless there is a specific reason to retire them.
 - Prefer native static HTML/CSS/JavaScript over unnecessary third-party dependencies for archive pages.
+- Surveillance functionality is explicitly theatrical/simulated; do not turn the joke camera/telemetry pages into real tracking or surveillance systems.
 - Bean Galaga should behave like a Galaga-inspired fixed shooter, not a generic bullet-hell game.
 - Avoid copying copyrighted original game art/audio; use original themed assets and mechanics-inspired behavior.
 - Bean Run must remain one responsive ruleset. Do not reintroduce separate desktop and mobile implementations.
@@ -48,7 +53,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored archive
 
 - `README.md` — staging/production boundary.
 - `PROJECT-STATE.md` — current V2 restoration/game state and locked decisions.
-- `index.html`, `navbar.html`, `style.css`, `site.js`, and `archive.css` — current V2 site system.
+- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, and `surveillance.css` — current V2 site system.
 - `game.html` / `bean-run.js` and Bean Galaga runtime files — current game implementations.
 - `Big-JoshD/joshdunbarfanclub` — historical content/reference source for pages not yet restored.
 - Git history for implemented mechanics and restoration sequence.
@@ -56,17 +61,19 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored archive
 
 ## Next Action
 
-1. Review the newly restored Lore, Daily Intelligence, and Bicep Metrics pages in a browser for responsive/layout defects and tune from observed failures.
-2. Continue restoration in themed batches rather than blindly porting every old file. Strong next candidates are Surveillance (`beancam.html` / `livecam.html`) and the remaining Metrics pages (`ranktracker.html` / `chessmetrics.html`).
+1. Browser-test the newly restored Lore, Daily Intelligence, Bicep Metrics, Bean Monitor, and Secure Camera pages for desktop/mobile layout and interaction defects; tune from observed failures.
+2. Continue restoration in themed batches. The strongest next batch is remaining Metrics (`ranktracker.html` / `chessmetrics.html`).
 3. Rebuild Archives (`poetry.html`, `fansubmissions.html`, `fanfics.html`) using the new archival presentation after their historical content is reviewed.
-4. Rebuild utility/public pages (`merch.html`, `faq.html`, `contact.html`) once the main content departments are functional.
-5. Continue physical play-testing of Bean Run and Bean Galaga.
-6. Compare staging against production and promote only after explicit review.
+4. Decide whether historical `spicy.html` belongs in the restored Surveillance department as-is, should be reinterpreted, or should be retired.
+5. Rebuild utility/public pages (`merch.html`, `faq.html`, `contact.html`) once the main content departments are functional.
+6. Continue physical play-testing of Bean Run and Bean Galaga.
+7. Compare staging against production and promote only after explicit review.
 
 ## Open Variables
 
 - Current production HEAD and whether any V2 changes were already copied there.
 - Hosting/DNS configuration and deployment workflow.
 - Browser/physical-device QA results for the restored V2 content pages.
+- Whether V2 should eventually vendor/copy the archived public surveillance image assets instead of referencing them from the historical repo.
 - Bean Run balance after physical-device play-testing.
 - Remaining Bean Galaga balance targets after V12 play-testing.
