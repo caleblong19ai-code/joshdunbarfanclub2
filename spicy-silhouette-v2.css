@@ -1,0 +1,311 @@
+/* Spicy Photos — silhouette anatomy pass.
+   Anonymous fictional physique reconstructions only; no real-person tracing. */
+
+.classified-figure{
+  width:260px;
+  height:420px;
+  bottom:-10%;
+  filter:drop-shadow(0 24px 24px rgba(0,0,0,.48));
+}
+
+.classified-figure span{background:#020202}
+
+/* Head / neck: narrower skull, stronger jaw, visible trap transition. */
+.figure-head{
+  left:105px;
+  top:10px;
+  width:50px;
+  height:66px;
+  border-radius:48% 48% 42% 42%;
+  clip-path:polygon(18% 0,82% 0,96% 21%,100% 48%,80% 93%,63% 100%,37% 100%,20% 93%,0 48%,4% 21%);
+}
+.figure-head:after{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:-5px;
+  height:10px;
+  background:#020202;
+  clip-path:polygon(0 0,100% 0,72% 100%,28% 100%);
+}
+.figure-neck{
+  left:111px;
+  top:70px;
+  width:38px;
+  height:42px;
+  border-radius:5px 5px 12px 12px;
+  clip-path:polygon(18% 0,82% 0,100% 100%,0 100%);
+}
+
+/* Torso: broad clavicles / delts, lat flare, aggressive V taper. */
+.figure-torso{
+  left:29px;
+  top:92px;
+  width:202px;
+  height:210px;
+  border-radius:18% 18% 28% 28%;
+  clip-path:polygon(
+    50% 0,
+    63% 1%,72% 5%,84% 8%,93% 15%,100% 27%,
+    95% 39%,90% 49%,87% 61%,82% 73%,75% 86%,66% 96%,58% 100%,
+    42% 100%,34% 96%,25% 86%,18% 73%,13% 61%,10% 49%,5% 39%,0 27%,
+    7% 15%,16% 8%,28% 5%,37% 1%
+  );
+}
+.figure-torso:before{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:26px;
+  height:74px;
+  border-radius:48% 48% 34% 34%;
+  background:
+    radial-gradient(ellipse at 28% 43%,rgba(255,255,255,.055) 0 28%,transparent 30%),
+    radial-gradient(ellipse at 72% 43%,rgba(255,255,255,.055) 0 28%,transparent 30%),
+    linear-gradient(90deg,transparent 49.4%,rgba(255,255,255,.045) 49.5% 50.5%,transparent 50.6%);
+}
+.figure-torso:after{
+  content:"";
+  position:absolute;
+  left:61px;
+  top:97px;
+  width:80px;
+  height:82px;
+  opacity:.8;
+  background:
+    linear-gradient(90deg,transparent 48%,rgba(255,255,255,.038) 49% 51%,transparent 52%),
+    repeating-linear-gradient(0deg,transparent 0 22px,rgba(255,255,255,.025) 23px 24px);
+  clip-path:polygon(20% 0,80% 0,100% 100%,0 100%);
+}
+
+/* Arms now taper through biceps / forearms instead of reading as capsules. */
+.figure-arm{
+  top:111px;
+  width:64px;
+  height:192px;
+  border-radius:38% 42% 28% 34%;
+  clip-path:polygon(27% 0,72% 0,95% 11%,100% 27%,88% 46%,81% 61%,69% 76%,63% 100%,37% 100%,31% 76%,19% 61%,12% 46%,0 27%,5% 11%);
+}
+.figure-arm:before{
+  content:"";
+  position:absolute;
+  left:6px;
+  right:6px;
+  top:5px;
+  height:58px;
+  background:#020202;
+  border-radius:50%;
+}
+.figure-arm:after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:-4px;
+  height:82px;
+  background:#020202;
+  border-radius:38% 38% 23% 23%;
+}
+.figure-arm--left{
+  left:-5px;
+  transform:rotate(7deg);
+  transform-origin:82% 8%;
+}
+.figure-arm--right{
+  right:-5px;
+  transform:rotate(-7deg);
+  transform-origin:18% 8%;
+}
+
+.figure-waist{
+  left:84px;
+  top:276px;
+  width:92px;
+  height:70px;
+  border-radius:0 0 30% 30%;
+  clip-path:polygon(9% 0,91% 0,77% 100%,23% 100%);
+}
+.figure-leg{
+  top:330px;
+  width:73px;
+  height:132px;
+  border-radius:46% 46% 18% 18%;
+  clip-path:polygon(18% 0,82% 0,100% 27%,86% 55%,75% 100%,25% 100%,14% 55%,0 27%);
+}
+.figure-leg:before{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:10px;
+  top:8px;
+  height:58px;
+  border-radius:50%;
+  background:rgba(255,255,255,.025);
+}
+.figure-leg--left{left:48px;transform:rotate(2deg)}
+.figure-leg--right{right:48px;transform:rotate(-2deg)}
+
+/* Double-biceps: horizontal upper arms + raised forearms. */
+.pose-flex .figure-torso{
+  left:20px;
+  width:220px;
+  clip-path:polygon(50% 0,64% 1%,76% 4%,90% 10%,100% 23%,94% 38%,89% 55%,82% 73%,72% 90%,61% 100%,39% 100%,28% 90%,18% 73%,11% 55%,6% 38%,0 23%,10% 10%,24% 4%,36% 1%);
+}
+.pose-flex .figure-arm{
+  top:124px;
+  width:96px;
+  height:58px;
+  border-radius:50%;
+  clip-path:none;
+}
+.pose-flex .figure-arm:before{
+  left:10px;
+  right:10px;
+  top:-4px;
+  height:66px;
+  border-radius:50%;
+}
+.pose-flex .figure-arm:after{
+  width:44px;
+  height:108px;
+  left:auto;
+  right:4px;
+  top:-82px;
+  bottom:auto;
+  border-radius:42% 42% 24% 24%;
+}
+.pose-flex .figure-arm--left{
+  left:-26px;
+  transform:rotate(-15deg);
+}
+.pose-flex .figure-arm--left:after{
+  right:3px;
+  transform:rotate(13deg);
+  transform-origin:50% 100%;
+}
+.pose-flex .figure-arm--right{
+  right:-26px;
+  transform:rotate(15deg);
+}
+.pose-flex .figure-arm--right:after{
+  left:3px;
+  right:auto;
+  transform:rotate(-13deg);
+  transform-origin:50% 100%;
+}
+
+/* Side pose: chest / glute / thigh mass read from profile instead of a squashed front pose. */
+.pose-side{width:225px}
+.pose-side .figure-head{left:92px;transform:rotate(-4deg)}
+.pose-side .figure-neck{left:96px;width:34px}
+.pose-side .figure-torso{
+  left:58px;
+  width:132px;
+  height:214px;
+  border-radius:35% 22% 32% 42%;
+  clip-path:polygon(31% 0,70% 2%,91% 12%,100% 29%,90% 43%,88% 58%,76% 77%,66% 100%,28% 96%,19% 80%,12% 61%,0 45%,6% 25%,15% 10%);
+}
+.pose-side .figure-arm--left{
+  left:44px;
+  top:119px;
+  width:56px;
+  transform:rotate(-14deg);
+}
+.pose-side .figure-arm--right{
+  right:15px;
+  top:111px;
+  width:60px;
+  transform:rotate(20deg);
+}
+.pose-side .figure-waist{left:76px;width:72px}
+.pose-side .figure-leg--left{left:62px;width:78px}
+.pose-side .figure-leg--right{right:22px;width:67px}
+
+/* Shaker pose: bent elbow and forearm holding the bottle up near chest height. */
+.pose-shaker .figure-arm--right{
+  right:6px;
+  top:120px;
+  width:82px;
+  height:58px;
+  clip-path:none;
+  border-radius:50%;
+  transform:rotate(-24deg);
+}
+.pose-shaker .figure-arm--right:after{
+  left:43px;
+  top:18px;
+  width:42px;
+  height:110px;
+  border-radius:40% 40% 22% 22%;
+  transform:rotate(-48deg);
+  transform-origin:50% 0;
+}
+.pose-shaker .figure-prop{
+  right:-4px;
+  top:189px;
+  width:29px;
+  height:72px;
+  border-radius:5px;
+  transform:rotate(5deg);
+}
+
+/* Belt pose: forearms angle inward toward the buckle instead of passing through the torso. */
+.pose-belt .figure-arm{
+  top:120px;
+  width:73px;
+  height:72px;
+  clip-path:none;
+  border-radius:50%;
+}
+.pose-belt .figure-arm:after{
+  width:40px;
+  height:122px;
+  top:38px;
+  bottom:auto;
+  border-radius:38% 38% 22% 22%;
+}
+.pose-belt .figure-arm--left{left:8px;transform:rotate(24deg)}
+.pose-belt .figure-arm--left:after{left:42px;transform:rotate(-32deg);transform-origin:50% 0}
+.pose-belt .figure-arm--right{right:8px;transform:rotate(-24deg)}
+.pose-belt .figure-arm--right:after{right:42px;left:auto;transform:rotate(32deg);transform-origin:50% 0}
+.pose-belt .figure-prop{left:72px;top:275px;width:116px;height:18px}
+
+/* Front pose gets a tiny asymmetry so it feels photographed rather than diagrammed. */
+.pose-front .figure-head{transform:rotate(-1.5deg)}
+.pose-front .figure-arm--left{transform:rotate(9deg)}
+.pose-front .figure-arm--right{transform:rotate(-5deg)}
+.pose-front .figure-leg--left{transform:rotate(1deg)}
+.pose-front .figure-leg--right{transform:rotate(-3deg)}
+
+/* Modal version can afford to be larger and more dramatic. */
+.case-preview .classified-figure{
+  width:292px;
+  height:470px;
+  bottom:-11%;
+  transform:translateX(-50%) scale(1.08);
+}
+
+/* Preserve the deliberately silly Bean misfile instead of applying human anatomy to him. */
+.pose-bean{
+  width:245px;
+  height:260px;
+  bottom:3%;
+}
+.pose-bean .figure-head{left:132px;top:72px;width:70px;height:68px;transform:none}
+.pose-bean .figure-torso{left:33px;top:104px;width:145px;height:85px}
+.pose-bean .figure-arm{top:168px;width:28px;height:78px;clip-path:none}
+.pose-bean .figure-arm:before,.pose-bean .figure-arm:after{display:none}
+.pose-bean .figure-arm--left{left:55px;transform:rotate(3deg)}
+.pose-bean .figure-arm--right{right:60px;transform:rotate(-3deg)}
+.pose-bean .figure-leg{top:169px;width:28px;height:82px;clip-path:none}
+.pose-bean .figure-leg:before{display:none}
+.pose-bean .figure-leg--left{left:102px;transform:rotate(3deg)}
+.pose-bean .figure-leg--right{right:20px;transform:rotate(-2deg)}
+
+@media(max-width:620px){
+  .classified-figure{transform:translateX(-50%) scale(.9);transform-origin:50% 100%}
+  .media-card:hover .classified-figure{transform:translateX(-50%) scale(.93)}
+  .case-preview .classified-figure{transform:translateX(-50%) scale(.95)}
+}
