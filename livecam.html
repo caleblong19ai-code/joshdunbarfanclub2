@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Institute of Dunbar Studies secure camera terminal. Attempt Platinum-tier access to the classified Josh Dunbar live feed." />
+  <meta name="theme-color" content="#070909" />
+  <title>Secure Camera Network | Institute of Dunbar Studies</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="surveillance.css" />
+  <script src="site.js" defer></script>
+</head>
+<body class="surveillance-page">
+  <div id="site-nav" data-nav-slot></div>
+  <main class="surveillance-main">
+    <header class="ops-hero">
+      <div>
+        <p class="eyebrow">Surveillance division // secure visual network SCN-01</p>
+        <h1>Classified Josh<br>Camera Network</h1>
+        <p class="ops-hero__lede">The historical “24/7 live camera feed” has been restored as a secure Institute terminal. The feed remains simulated. The access requirements remain very, very real to the bureaucracy.</p>
+      </div>
+      <aside class="ops-badge"><span>Security state</span><strong>Perimeter nominal</strong><small>Platinum clearance required</small></aside>
+    </header>
+
+    <section class="camera-layout" aria-label="Secure camera terminal">
+      <article class="secure-terminal">
+        <div class="panel-head"><span>CAM 01 // Gym floor</span><span class="live-indicator">Signal acquired</span></div>
+        <div class="secure-screen">
+          <div class="secure-screen__gate" data-stream-gate>
+            <div class="lock-mark" aria-hidden="true">JD</div>
+            <p class="eyebrow">Encrypted transmission</p>
+            <h2>Live feed available.</h2>
+            <p>Establish a secure Institute uplink to request viewing authorization.</p>
+            <button type="button" data-connect>Attempt secure uplink</button>
+          </div>
+
+          <div class="connection-sequence" data-connection aria-hidden="true" aria-live="polite">
+            <strong>SECURE UPLINK NEGOTIATION // SCN-01</strong>
+            <ol>
+              <li data-step="0">Contacting Institute relay...</li>
+              <li data-step="1">Authenticating viewer identity...</li>
+              <li data-step="2">Checking Platinum clearance...</li>
+              <li data-step="3">Consulting Bean...</li>
+            </ol>
+          </div>
+        </div>
+      </article>
+
+      <aside class="clearance-panel" data-clearance-panel>
+        <small>Viewer authorization</small>
+        <h2>Platinum Access</h2>
+        <p>You have attempted to view a sacred stream. Historical policy remains in effect.</p>
+        <ul class="requirements">
+          <li>Verified video of you benching 275 lb.</li>
+          <li>Certified letter of intent personally approved by Bean.</li>
+          <li>Platinum-tier membership in good spiritual standing.</li>
+        </ul>
+        <div class="clearance-price"><div><span>Administrative tribute</span><strong>$1</strong></div><small>NONREFUNDABLE<br>PROBABLY</small></div>
+        <button type="button" class="clearance-button" data-platinum disabled>Join Platinum Tier</button>
+        <div class="denial-message" data-denial-message>Establish uplink before requesting clearance.</div>
+      </aside>
+    </section>
+
+    <section class="camera-grid" aria-label="Additional simulated camera channels">
+      <article class="camera-card"><div class="camera-card__visual" aria-hidden="true"></div><div class="camera-card__meta"><span>CAM 01 // Primary</span><strong>Gym floor // encrypted</strong></div></article>
+      <article class="camera-card"><div class="camera-card__visual" aria-hidden="true"></div><div class="camera-card__meta"><span>CAM 02 // Bean</span><strong>Electrical perimeter // online</strong></div></article>
+      <article class="camera-card"><div class="camera-card__visual" aria-hidden="true"></div><div class="camera-card__meta"><span>CAM 03 // Archive</span><strong>Restricted stacks // quiet</strong></div></article>
+      <article class="camera-card"><div class="camera-card__visual" aria-hidden="true"></div><div class="camera-card__meta"><span>CAM 04 // Exterior</span><strong>Bean meadow // no threats</strong></div></article>
+    </section>
+
+    <section class="ops-grid" aria-label="Related surveillance systems">
+      <article class="ops-card"><small>System 01 // telemetry</small><h2>Bean Power Monitor</h2><p>Review Bean's live simulated electrical output before requesting any in-person field operation.</p><a href="beancam.html">Open telemetry →</a></article>
+      <article class="ops-card"><small>System 02 // intelligence</small><h2>Daily Briefing</h2><p>Read today's declassified anomaly from the broader Dunbar intelligence archive.</p><a href="dailyfacts.html">Read briefing →</a></article>
+      <article class="ops-card"><small>System 03 // archive</small><h2>Canonical Lore</h2><p>Review the historical events that made Platinum-tier surveillance clearance necessary in the first place.</p><a href="lore.html">Open archive →</a></article>
+    </section>
+  </main>
+
+  <div data-popup-container aria-hidden="true"></div>
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Surveillance Division // Secure Camera Network</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. You were not cleared for this transmission.</p></footer>
+
+  <script>
+    (() => {
+      const connectButton = document.querySelector('[data-connect]');
+      const gate = document.querySelector('[data-stream-gate]');
+      const sequence = document.querySelector('[data-connection]');
+      const steps = [...sequence.querySelectorAll('li')];
+      const platinumButton = document.querySelector('[data-platinum]');
+      const denialMessage = document.querySelector('[data-denial-message]');
+      const popupContainer = document.querySelector('[data-popup-container]');
+      let connected = false;
+      let attempting = false;
+
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      async function establishConnection() {
+        if (attempting || connected) return;
+        attempting = true;
+        connectButton.disabled = true;
+        gate.hidden = true;
+        sequence.setAttribute('aria-hidden', 'false');
+
+        for (let index = 0; index < steps.length; index += 1) {
+          const step = steps[index];
+          step.classList.add('pending');
+          await sleep(index === 3 ? 800 : 520);
+          step.classList.remove('pending');
+          step.classList.add('done');
+        }
+
+        connected = true;
+        attempting = false;
+        platinumButton.disabled = false;
+        denialMessage.textContent = 'Uplink established. Platinum credential check failed.';
+        denialMessage.classList.add('active');
+        sequence.querySelector('strong').textContent = 'UPLINK ACTIVE // VIEWER NOT AUTHORIZED';
+      }
+
+      function spawnDenial(index) {
+        const stamp = document.createElement('div');
+        stamp.className = 'denied-stamp';
+        stamp.textContent = index % 2 ? 'ACCESS DENIED // BEAN OBJECTS' : 'PLATINUM CLEARANCE REJECTED';
+        const maxX = Math.max(20, window.innerWidth - 320);
+        const maxY = Math.max(20, window.innerHeight - 150);
+        stamp.style.left = `${20 + Math.random() * Math.max(0, maxX - 20)}px`;
+        stamp.style.top = `${20 + Math.random() * Math.max(0, maxY - 20)}px`;
+        stamp.style.transform = `rotate(${(-4 + Math.random() * 8).toFixed(1)}deg)`;
+        popupContainer.appendChild(stamp);
+        window.setTimeout(() => stamp.remove(), 2600 + index * 120);
+      }
+
+      function denyPlatinum() {
+        if (!connected) return;
+        denialMessage.textContent = 'Access denied. Bean has detected you are not worthy.';
+        denialMessage.classList.add('active');
+        platinumButton.textContent = 'Clearance denied — retry appeal';
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const count = reducedMotion ? 1 : 6;
+        for (let i = 0; i < count; i += 1) window.setTimeout(() => spawnDenial(i), i * 110);
+      }
+
+      connectButton.addEventListener('click', establishConnection);
+      platinumButton.addEventListener('click', denyPlatinum);
+    })();
+  </script>
+</body>
+</html>
