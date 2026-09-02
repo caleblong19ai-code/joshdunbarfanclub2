@@ -6,6 +6,13 @@
     document.head.appendChild(pageStyles);
   }
 
+  if (document.body.matches('.spicy-page')) {
+    const silhouetteStyles = document.createElement('link');
+    silhouetteStyles.rel = 'stylesheet';
+    silhouetteStyles.href = 'spicy-silhouette-v2.css';
+    document.head.appendChild(silhouetteStyles);
+  }
+
   const navSlot = document.querySelector('[data-nav-slot]');
   if (navSlot) {
     fetch('navbar.html')
