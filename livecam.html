@@ -8,6 +8,7 @@
   <title>Secure Camera Network | Institute of Dunbar Studies</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="surveillance.css" />
+  <link rel="stylesheet" href="scareware.css" />
   <script src="site.js" defer></script>
 </head>
 <body class="surveillance-page">
@@ -75,7 +76,7 @@
     </section>
   </main>
 
-  <div data-popup-container aria-hidden="true"></div>
+  <div class="scareware-layer" data-popup-container aria-hidden="true"></div>
   <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Surveillance Division // Secure Camera Network</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. You were not cleared for this transmission.</p></footer>
 
   <script>
@@ -89,8 +90,11 @@
       const popupContainer = document.querySelector('[data-popup-container]');
       let connected = false;
       let attempting = false;
+      let threatCount = 47;
+      let zIndex = 12010;
 
       const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       async function establishConnection() {
         if (attempting || connected) return;
@@ -115,17 +119,139 @@
         sequence.querySelector('strong').textContent = 'UPLINK ACTIVE // VIEWER NOT AUTHORIZED';
       }
 
-      function spawnDenial(index) {
-        const stamp = document.createElement('div');
-        stamp.className = 'denied-stamp';
-        stamp.textContent = index % 2 ? 'ACCESS DENIED // BEAN OBJECTS' : 'PLATINUM CLEARANCE REJECTED';
-        const maxX = Math.max(20, window.innerWidth - 320);
-        const maxY = Math.max(20, window.innerHeight - 150);
-        stamp.style.left = `${20 + Math.random() * Math.max(0, maxX - 20)}px`;
-        stamp.style.top = `${20 + Math.random() * Math.max(0, maxY - 20)}px`;
-        stamp.style.transform = `rotate(${(-4 + Math.random() * 8).toFixed(1)}deg)`;
-        popupContainer.appendChild(stamp);
-        window.setTimeout(() => stamp.remove(), 2600 + index * 120);
+      function positionWindow(node, mode = 'random') {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        if (mode === 'hero') {
+          node.style.left = `${Math.max(10, (vw - Math.min(920, vw - 20)) / 2)}px`;
+          node.style.top = `${Math.max(12, vh * .08)}px`;
+          return;
+        }
+        const width = Math.min(node.classList.contains('scare-window--small') ? 520 : 720, vw - 28);
+        const leftMax = Math.max(8, vw - width - 8);
+        const topMax = Math.max(8, vh - 330);
+        node.style.left = `${8 + Math.random() * Math.max(0, leftMax - 8)}px`;
+        node.style.top = `${18 + Math.random() * Math.max(0, topMax - 18)}px`;
+      }
+
+      function wireWindow(node) {
+        node.style.zIndex = String(zIndex++);
+        node.addEventListener('pointerdown', () => { node.style.zIndex = String(zIndex++); });
+        const close = node.querySelector('[data-scare-close]');
+        if (close) close.addEventListener('click', () => {
+          node.remove();
+          if (!popupContainer.querySelector('.scare-window')) clearScareware();
+        });
+        node.querySelectorAll('[data-spawn-more]').forEach((button) => {
+          button.addEventListener('click', () => {
+            threatCount += 23;
+            spawnSecondary();
+            window.setTimeout(spawnSecondary, reducedMotion() ? 0 : 100);
+            button.textContent = `FAILED — ${threatCount} THREATS REMAIN`;
+          });
+        });
+      }
+
+      function startFakeScan(node) {
+        const bar = node.querySelector('[data-scan-bar]');
+        const percent = node.querySelector('[data-scan-percent]');
+        const threats = node.querySelector('[data-threat-count]');
+        if (!bar || !percent) return;
+        let value = 6;
+        const tick = () => {
+          if (!node.isConnected) return;
+          value += 3 + Math.floor(Math.random() * 9);
+          if (value > 99) value = 17 + Math.floor(Math.random() * 50);
+          bar.style.width = `${value}%`;
+          percent.textContent = `${value}%`;
+          if (threats && Math.random() > .55) {
+            threatCount += 1 + Math.floor(Math.random() * 4);
+            threats.textContent = String(threatCount);
+          }
+          window.setTimeout(tick, reducedMotion() ? 900 : 180 + Math.random() * 240);
+        };
+        tick();
+      }
+
+      function createWindow({ classes = '', title, body, mode = 'random' }) {
+        const node = document.createElement('section');
+        node.className = `scare-window ${classes}`.trim();
+        node.innerHTML = `<div class="scare-titlebar"><span>${title}</span><button type="button" aria-label="Close fake alert" data-scare-close>×</button></div>${body}`;
+        popupContainer.appendChild(node);
+        positionWindow(node, mode);
+        wireWindow(node);
+        startFakeScan(node);
+        return node;
+      }
+
+      function spawnHero() {
+        return createWindow({
+          classes: 'scare-window--hero scare-window--danger',
+          title: 'BEAN DEFENDER SECURITY CENTER — CRITICAL WARNING',
+          mode: 'hero',
+          body: `<div class="scare-body"><div class="scare-alert-row"><div class="scare-icon scare-flash">!</div><div><h2>Your clearance is critically compromised!</h2><p><strong>Bean Defender™</strong> intercepted an unauthorized attempt to view the sacred Josh Dunbar camera network.</p><p class="scare-red"><strong>IMMEDIATE ACTION REQUIRED:</strong> Platinum credentials could not be verified.</p></div></div><div class="fake-scan"><div class="fake-scan__label"><span>Deep scanning spiritual authorization...</span><span data-scan-percent>6%</span></div><div class="fake-progress"><span data-scan-bar></span></div></div><ul class="scare-list"><li><span>PLATINUM MEMBERSHIP</span><b>NOT FOUND</b></li><li><span>275 LB BENCH VIDEO</span><b>MISSING</b></li><li><span>CERTIFIED LETTER FROM BEAN</span><b>REJECTED</b></li><li><span>ACTIVE BEAN THREATS</span><b><span data-threat-count>${threatCount}</span> DETECTED</b></li></ul><div class="scare-actions"><button class="scare-action scare-action--safe" type="button" data-spawn-more>Remind me later</button><button class="scare-action scare-action--panic" type="button" data-spawn-more>REMOVE THREATS NOW</button><button class="scare-action scare-action--red" type="button" data-spawn-more>CALL BEAN SUPPORT</button></div></div><div class="scare-ticker">WARNING: CLOSING THIS WINDOW MAY NOT IMPROVE YOUR WORTHINESS</div>`
+        });
+      }
+
+      function spawnSecondary() {
+        const templates = [
+          {
+            classes: 'scare-window--blue scare-window--small',
+            title: 'Windows Bean Security Alert',
+            body: `<div class="scare-body"><div class="scare-alert-row"><div class="scare-icon">!</div><div><h3>Suspicious lack of Platinum detected</h3><p>Your viewer profile failed <strong>3 of 3</strong> sacred-stream requirements.</p><p class="scare-red"><strong>Risk level: EXTREMELY UNWORTHY</strong></p></div></div><div class="scare-actions"><button class="scare-action scare-action--panic" type="button" data-spawn-more>FIX ALL ISSUES</button></div></div>`
+          },
+          {
+            classes: 'scare-window--danger',
+            title: 'CRITICAL SYSTEM MESSAGE — BEAN HAS BEEN NOTIFIED',
+            body: `<div class="scare-body"><h2 class="scare-flash">ACCESS ATTEMPT BLOCKED</h2><p>Bean has personally reviewed your request and selected <strong>DENY</strong>.</p><ul class="scare-list"><li><span>Viewer reputation</span><b>0%</b></li><li><span>Bench credibility</span><b>UNVERIFIED</b></li><li><span>Bean approval</span><b>ABSOLUTELY NOT</b></li></ul><div class="scare-actions"><button class="scare-action scare-action--red" type="button" data-spawn-more>APPEAL TO BEAN</button></div></div>`
+          },
+          {
+            classes: 'scare-window--danger scare-window--small',
+            title: 'PLATINUM LICENSE EXPIRED',
+            body: `<div class="scare-body"><h3>Your Platinum license expired 0 days ago.</h3><p>Renewal cannot continue because no prior Platinum license has ever existed.</p><p class="scare-red"><strong>PAYMENT DUE: $1 + PROOF OF 275 BENCH</strong></p><div class="scare-actions"><button class="scare-action scare-action--panic" type="button" data-spawn-more>RENEW NOW</button></div></div>`
+          },
+          {
+            classes: 'scare-window--blue',
+            title: 'Bean Defender™ Full System Scan',
+            body: `<div class="scare-body"><h3>Scanning for reverence deficiencies...</h3><div class="fake-scan"><div class="fake-scan__label"><span>Objects scanned: 8,442,901</span><span data-scan-percent>11%</span></div><div class="fake-progress"><span data-scan-bar></span></div></div><p><strong><span data-threat-count>${threatCount}</span> threats detected.</strong> Most are related to insufficient Josh clearance.</p><div class="scare-actions"><button class="scare-action scare-action--panic" type="button" data-spawn-more>QUARANTINE UNWORTHINESS</button></div></div>`
+          },
+          {
+            classes: 'scare-window--danger scare-window--small',
+            title: 'URGENT: JOSH CAMERA NETWORK AT RISK',
+            body: `<div class="scare-body"><h2>DO NOT IGNORE!</h2><p>Your computer may be suffering from <strong>Low Platinum Syndrome</strong>.</p><p>Symptoms include camera denial, weak bench documentation, and Bean distrust.</p><div class="scare-actions"><button class="scare-action scare-action--red" type="button" data-spawn-more>DIAGNOSE NOW</button></div></div>`
+          }
+        ];
+        const template = templates[Math.floor(Math.random() * templates.length)];
+        return createWindow(template);
+      }
+
+      function addDismissControl() {
+        if (popupContainer.querySelector('[data-dismiss-all]')) return;
+        const dismiss = document.createElement('button');
+        dismiss.type = 'button';
+        dismiss.className = 'scare-dismiss-all';
+        dismiss.dataset.dismissAll = '';
+        dismiss.textContent = 'Emergency dismiss fake alerts';
+        dismiss.addEventListener('click', clearScareware);
+        popupContainer.appendChild(dismiss);
+      }
+
+      function clearScareware() {
+        popupContainer.replaceChildren();
+        popupContainer.classList.remove('is-active');
+        popupContainer.setAttribute('aria-hidden', 'true');
+      }
+
+      function launchScareware() {
+        clearScareware();
+        popupContainer.classList.add('is-active');
+        popupContainer.setAttribute('aria-hidden', 'false');
+        spawnHero();
+        addDismissControl();
+        const initialCount = reducedMotion() ? 1 : 4;
+        for (let i = 0; i < initialCount; i += 1) {
+          window.setTimeout(spawnSecondary, reducedMotion() ? 0 : 180 + i * 170);
+        }
       }
 
       function denyPlatinum() {
@@ -133,9 +259,7 @@
         denialMessage.textContent = 'Access denied. Bean has detected you are not worthy.';
         denialMessage.classList.add('active');
         platinumButton.textContent = 'Clearance denied — retry appeal';
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const count = reducedMotion ? 1 : 6;
-        for (let i = 0; i < count; i += 1) window.setTimeout(() => spawnDenial(i), i * 110);
+        launchScareware();
       }
 
       connectButton.addEventListener('click', establishConnection);
