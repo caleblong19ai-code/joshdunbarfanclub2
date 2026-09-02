@@ -32,6 +32,10 @@
 
   if ((window.location.pathname.split('/').pop() || 'index.html') === 'livecam.html') {
     enhanceLivecamPlatinumHandoff();
+    const menaceScript = document.createElement('script');
+    menaceScript.src = 'bean-menace.js';
+    menaceScript.defer = true;
+    document.head.appendChild(menaceScript);
   }
 
   function enhanceLivecamPlatinumHandoff() {
