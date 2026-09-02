@@ -1,4 +1,11 @@
 (function () {
+  if (document.body.matches('.archive-page, .daily-page, .metrics-page')) {
+    const pageStyles = document.createElement('link');
+    pageStyles.rel = 'stylesheet';
+    pageStyles.href = 'archive.css';
+    document.head.appendChild(pageStyles);
+  }
+
   const navSlot = document.querySelector('[data-nav-slot]');
   if (navSlot) {
     fetch('navbar.html')
