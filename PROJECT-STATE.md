@@ -18,9 +18,10 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
   - `dailyfacts.html` — preserved the historical rotating fact library, now presented as a daily intelligence brief with category, anomaly level, analyst note, deterministic daily rotation, and an alternate-brief control.
   - `bicepsize.html` — preserved the softball / bowling ball / Vegas Sphere / singularity progression, rebuilt as an interactive normalized comparison lab rather than relying on the old Chart.js/Infinity chart behavior.
   - `beancam.html` — preserved the original Bean Tracker premise and absurd 1–2 billion kB power readings, rebuilt as a live simulated electrical telemetry console with saturation state, arc rate, field stability, threat posture, confidence, overload handling, and a rolling event log.
-  - `livecam.html` — preserved the original 24/7 live-feed/Platinum-access gag, including the 275 lb bench requirement, Bean letter of intent, $1 tier, and inevitable rejection; rebuilt as a secure camera terminal with fake uplink negotiation, multiple camera channels, clearance state, and denial overlays.
+  - `livecam.html` — preserved the original 24/7 live-feed/Platinum-access gag, including the 275 lb bench requirement, Bean letter of intent, $1 tier, and inevitable rejection; rebuilt as a secure camera terminal with fake uplink negotiation, multiple camera channels, clearance state, and a giant fake-antivirus/scareware denial sequence. The scareware is DOM-only, deliberately theatrical, and includes an emergency dismiss control rather than opening real browser windows or trapping navigation.
   - `archive.css` — shared presentation layer for restored archive, intelligence, and metrics pages; loaded by `site.js` only for relevant page classes.
   - `surveillance.css` — shared presentation layer for Bean telemetry and the secure camera network.
+  - `scareware.css` — dedicated giant fake-security-alert presentation for the Secure Camera rejection sequence.
 - Several navigation targets still do not exist in V2 and remain restoration candidates: poetry, fan submissions, fan fiction, spicy photos, Rocket League rank, chess metrics, merch, FAQ, and contact.
 - Surveillance pages currently reference several archived public images from `Big-JoshD/joshdunbarfanclub` by raw GitHub URL, consistent with the existing V2 hero treatment. These can be copied into V2 later if production independence from the historical repo becomes a requirement.
 - Bean Run has been migrated into V2 as one responsive implementation in `game.html` with game logic in `bean-run.js`.
@@ -53,7 +54,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 
 - `README.md` — staging/production boundary.
 - `PROJECT-STATE.md` — current V2 restoration/game state and locked decisions.
-- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, and `surveillance.css` — current V2 site system.
+- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, `surveillance.css`, and `scareware.css` — current V2 site system.
 - `game.html` / `bean-run.js` and Bean Galaga runtime files — current game implementations.
 - `Big-JoshD/joshdunbarfanclub` — historical content/reference source for pages not yet restored.
 - Git history for implemented mechanics and restoration sequence.
