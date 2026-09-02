@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bean Surveillance Operations electrical telemetry console: live simulated monitoring of Bean power output, arc activity, and anomaly state." />
+  <meta name="theme-color" content="#070909" />
+  <title>Bean Surveillance Operations | Institute of Dunbar Studies</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="surveillance.css" />
+  <script src="site.js" defer></script>
+</head>
+<body class="surveillance-page">
+  <div id="site-nav" data-nav-slot></div>
+  <main class="surveillance-main">
+    <header class="ops-hero">
+      <div>
+        <p class="eyebrow">Surveillance division // electrical telemetry BEM-01</p>
+        <h1>Bean Power<br>Monitoring Station</h1>
+        <p class="ops-hero__lede">Continuous simulated telemetry from the Institute's least understood electrical asset. Original sensor specification: “make the number extremely large and become concerned when the bar turns red.”</p>
+      </div>
+      <aside class="ops-badge"><span>Network status</span><strong>Telemetry online</strong><small>Local simulation // no external tracking</small></aside>
+    </header>
+
+    <section class="ops-console" aria-label="Bean telemetry console">
+      <article class="monitor-panel">
+        <div class="panel-head"><span>Optical feed // BEM-01-A</span><span class="live-indicator">Live simulated</span></div>
+        <div class="bean-visual">
+          <img src="https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/lightningbean.png" alt="Bean surrounded by electrical energy" />
+          <div class="reticle" aria-hidden="true"></div>
+        </div>
+        <div class="monitor-caption"><span>Subject lock: BEAN</span><span>Signal source: archived Institute imagery</span><span data-frame-time>FRAME 000000</span></div>
+      </article>
+
+      <aside class="telemetry-panel" data-telemetry-panel data-state="nominal">
+        <div class="panel-head"><span>Electrical telemetry</span><span data-update-age>UPDATED 0.0s AGO</span></div>
+        <div class="telemetry-primary">
+          <span>Estimated Bean output</span>
+          <div class="power-readout"><b data-power-value>1,500,000,000</b> <small>kB</small></div>
+          <div class="power-meter" role="meter" aria-label="Bean power saturation" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><div class="power-fill" data-power-bar></div></div>
+          <div class="power-status"><span>Saturation <b data-power-percent>50%</b></span><strong data-power-status>NOMINAL</strong></div>
+        </div>
+        <div class="telemetry-grid">
+          <div><span>Arc events / min</span><strong data-arcs>42</strong></div>
+          <div><span>Field stability</span><strong data-stability>93.4%</strong></div>
+          <div><span>Threat posture</span><strong data-threat>WATCHFUL</strong></div>
+          <div><span>Sensor confidence</span><strong data-confidence>QUESTIONABLE</strong></div>
+        </div>
+        <div class="event-log">
+          <div class="event-log__head"><span>Recent telemetry events</span><span data-event-count>0004 EVENTS</span></div>
+          <ul data-event-log aria-live="polite"></ul>
+        </div>
+        <div class="overload-banner" role="alert">Bean overload detected // conventional meters no longer trusted</div>
+      </aside>
+    </section>
+
+    <section class="ops-grid" aria-label="Surveillance operations links">
+      <article class="ops-card"><small>System 01 // active</small><h2>Secure Camera Network</h2><p>Attempt access to the classified Josh live feed and discover whether Platinum clearance has improved since the historical archive.</p><a href="livecam.html">Open secure terminal →</a></article>
+      <article class="ops-card"><small>System 02 // combat data</small><h2>Bean Research Lab</h2><p>Telemetry suggests Bean remains suitable for forest mobility trials and orbital-defense simulations.</p><a href="game.html">Launch Bean Run →</a></article>
+      <article class="ops-card"><small>System 03 // doctrine</small><h2>Historical Record</h2><p>Cross-reference electrical anomalies against the broader Josh and Bean canon maintained by the Archive Division.</p><a href="lore.html">Open archive →</a></article>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Surveillance Division // Bean Electrical Monitoring</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. Bean's voltage remains immeasurable.</p></footer>
+
+  <script>
+    (() => {
+      const panel = document.querySelector('[data-telemetry-panel]');
+      const powerValue = document.querySelector('[data-power-value]');
+      const powerBar = document.querySelector('[data-power-bar]');
+      const powerPercent = document.querySelector('[data-power-percent]');
+      const powerStatus = document.querySelector('[data-power-status]');
+      const arcs = document.querySelector('[data-arcs]');
+      const stability = document.querySelector('[data-stability]');
+      const threat = document.querySelector('[data-threat]');
+      const confidence = document.querySelector('[data-confidence]');
+      const log = document.querySelector('[data-event-log]');
+      const eventCount = document.querySelector('[data-event-count]');
+      const updateAge = document.querySelector('[data-update-age]');
+      const meter = document.querySelector('.power-meter');
+      const frame = document.querySelector('[data-frame-time]');
+      const threatStates = ['WATCHFUL', 'SQUIRREL AWARE', 'CALM', 'TACTICAL', 'LISTENING'];
+      const confidenceStates = ['QUESTIONABLE', 'SPIRITUALLY HIGH', 'UNREVIEWED', 'ADEQUATE-ISH'];
+      let lastUpdate = performance.now();
+      let intervalId = null;
+      let eventSerial = 4;
+      let frameCounter = 0;
+
+      const initialEvents = [
+        'Baseline established at unreasonable magnitude.',
+        'Optical lock confirmed on Bean.',
+        'Arc detector reports activity within expected chaos.',
+        'Institute telemetry link authenticated.'
+      ];
+
+      function timestamp() {
+        return new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+
+      function addEvent(message) {
+        const item = document.createElement('li');
+        const time = document.createElement('span');
+        const text = document.createElement('div');
+        time.textContent = timestamp();
+        text.textContent = message;
+        item.append(time, text);
+        log.prepend(item);
+        while (log.children.length > 5) log.lastElementChild.remove();
+        eventSerial += 1;
+        eventCount.textContent = `${String(eventSerial).padStart(4, '0')} EVENTS`;
+      }
+
+      initialEvents.slice().reverse().forEach((message) => {
+        const item = document.createElement('li');
+        item.innerHTML = `<span>BOOT</span><div>${message}</div>`;
+        log.prepend(item);
+      });
+
+      function sampleTelemetry() {
+        const percent = Math.floor(Math.random() * 101);
+        const output = Math.floor(1_000_000_000 + Math.random() * 1_000_000_001);
+        const arcRate = Math.floor(18 + percent * .92 + Math.random() * 16);
+        const fieldStability = Math.max(42, 99.2 - percent * .38 - Math.random() * 3.5);
+        const state = percent >= 90 ? 'overload' : percent >= 72 ? 'elevated' : 'nominal';
+        const label = state === 'overload' ? 'OVERLOAD' : state === 'elevated' ? 'ELEVATED' : 'NOMINAL';
+
+        panel.dataset.state = state;
+        powerValue.textContent = output.toLocaleString();
+        powerBar.style.width = `${percent}%`;
+        powerPercent.textContent = `${percent}%`;
+        powerStatus.textContent = label;
+        meter.setAttribute('aria-valuenow', String(percent));
+        arcs.textContent = String(arcRate);
+        stability.textContent = `${fieldStability.toFixed(1)}%`;
+        threat.textContent = state === 'overload' ? 'DO NOT APPROACH' : threatStates[Math.floor(Math.random() * threatStates.length)];
+        confidence.textContent = confidenceStates[Math.floor(Math.random() * confidenceStates.length)];
+        lastUpdate = performance.now();
+
+        if (state === 'overload') addEvent(`OVERLOAD: saturation reached ${percent}%. Sensor readings spiritually invalid.`);
+        else if (state === 'elevated' && Math.random() > .45) addEvent(`Elevated field detected at ${percent}% saturation.`);
+        else if (Math.random() > .72) addEvent(`Routine sample: ${output.toLocaleString()} kB. Bean remains operational.`);
+      }
+
+      function startSampling() {
+        if (intervalId) return;
+        sampleTelemetry();
+        intervalId = window.setInterval(sampleTelemetry, 1200);
+      }
+
+      function stopSampling() {
+        if (!intervalId) return;
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+
+      document.addEventListener('visibilitychange', () => document.hidden ? stopSampling() : startSampling());
+      window.setInterval(() => {
+        const age = Math.max(0, (performance.now() - lastUpdate) / 1000);
+        updateAge.textContent = `UPDATED ${age.toFixed(1)}s AGO`;
+        frameCounter = (frameCounter + 1) % 1_000_000;
+        frame.textContent = `FRAME ${String(frameCounter).padStart(6, '0')}`;
+      }, 250);
+
+      startSampling();
+    })();
+  </script>
+</body>
+</html>
