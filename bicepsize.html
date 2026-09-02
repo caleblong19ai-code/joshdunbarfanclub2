@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Divine Metrics laboratory analysis of Josh Dunbar bicep growth, comparison objects, and projected singularity conditions." />
+  <meta name="theme-color" content="#0b0b0b" />
+  <title>Bicep Metrics | Institute of Dunbar Studies</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="site.js" defer></script>
+</head>
+<body class="metrics-page">
+  <div id="site-nav" data-nav-slot></div>
+  <main class="metrics-main">
+    <header class="metrics-hero">
+      <div>
+        <p class="eyebrow">Divine Metrics // anthropometric lab 02</p>
+        <h1>Bicep Size<br>Over Time</h1>
+        <p class="metrics-hero__lede">A reconstructed record of Dunbar arm growth using the Institute’s preferred unit system: increasingly unreasonable spherical objects.</p>
+      </div>
+      <aside class="metrics-readout"><span>Current model</span><strong data-model-state>SINGULARITY WATCH</strong><small>upper bound: unresolved</small></aside>
+    </header>
+
+    <section class="metrics-summary">
+      <article><span>EARLIEST RECORD</span><strong>12.5 in</strong><p>Age 12 // regulation softball threshold exceeded.</p></article>
+      <article><span>ADOLESCENT EVENT</span><strong>22 in</strong><p>Age 16 // bowling-ball parity no longer theoretical.</p></article>
+      <article><span>AGE 21 MODEL</span><strong>516 in*</strong><p>*Influence-equivalent circumference. Legal requested this footnote.</p></article>
+      <article><span>PROJECTION</span><strong>∞</strong><p>Theoretical convergence with celestial-scale arm geometry.</p></article>
+    </section>
+
+    <section class="comparison-lab">
+      <div class="section-heading section-heading--compact">
+        <div><p class="eyebrow">Interactive comparison rig</p><h2>Select a documented era.</h2></div>
+        <p>The bars are normalized within each comparison. This prevents the Vegas Sphere era from making the softball era visually microscopic.</p>
+      </div>
+
+      <div class="era-tabs" role="tablist" aria-label="Bicep comparison era">
+        <button type="button" class="is-active" data-era="0">Age 12</button>
+        <button type="button" data-era="1">Age 16</button>
+        <button type="button" data-era="2">Age 21</button>
+        <button type="button" data-era="3">Projected</button>
+      </div>
+
+      <div class="comparison-panel">
+        <div class="comparison-copy">
+          <p class="comparison-code" data-era-code>ERA 01 // SOFTBALL YEARS</p>
+          <h3 data-era-title>Softball threshold</h3>
+          <p data-era-description>At age twelve, Josh’s bicep had already surpassed a regulation softball in circumference. Cartographers were notified shortly thereafter.</p>
+          <dl>
+            <div><dt>Josh measurement</dt><dd data-josh-value>12.5 in</dd></div>
+            <div><dt>Comparison object</dt><dd data-object-name>Regulation softball</dd></div>
+            <div><dt>Object measurement</dt><dd data-object-value>12 in</dd></div>
+            <div><dt>Institute finding</dt><dd data-finding>Early anomaly confirmed</dd></div>
+          </dl>
+        </div>
+        <div class="bar-rig" aria-label="Normalized comparison chart">
+          <div class="bar-rig__scale"><span>0</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
+          <div class="bar-row"><span>JOSH</span><div><i data-josh-bar style="width:100%"></i></div><b data-josh-bar-label>12.5</b></div>
+          <div class="bar-row"><span data-object-short>SOFTBALL</span><div><i class="bar-rig__object" data-object-bar style="width:96%"></i></div><b data-object-bar-label>12</b></div>
+          <p class="bar-rig__note">Normalized per era // not a shared absolute scale</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="growth-record">
+      <div><p class="eyebrow">Recovered record</p><h2>Growth progression</h2></div>
+      <div class="growth-list">
+        <article><span>01</span><div><small>AGE 12</small><h3>The Softball Years</h3><p>Round, firm, and already beyond regulation softball circumference.</p></div><strong>12.5 in</strong></article>
+        <article><span>02</span><div><small>AGE 16</small><h3>Bowling Into Legend</h3><p>Arm circumference overtakes the average bowling ball. Grip strength unmeasured.</p></div><strong>22 in</strong></article>
+        <article><span>03</span><div><small>AGE 21</small><h3>Enter the Vegas Sphere</h3><p>Comparable in influence, if not literal dimension. The Sphere shimmers. Josh shimmers louder.</p></div><strong>516 in*</strong></article>
+        <article><span>04</span><div><small>AGE UNKNOWN</small><h3>Bicep Singularity</h3><p>Projection curves leave conventional anatomy and approach orbital geometry.</p></div><strong>∞</strong></article>
+      </div>
+    </section>
+
+    <section class="methodology-panel">
+      <div><p class="eyebrow">Methodology disclosure</p><h2>Scientific rigor,<br>within reason.</h2></div>
+      <div><p>The original page compared Josh against a softball, bowling ball, the Vegas Sphere, and an orbital sphere. V2 preserves those canonical comparisons while making the joke legible: each era is treated as a separate normalized comparison rather than pretending an infinite value belongs on a conventional bar chart.</p><p>Measurements are retained exactly where the archive supplied them. Interpretive labels, confidence states, and projections remain the responsibility of the Institute.</p><a class="button button--ghost" href="dailyfacts.html">Read daily intelligence</a></div>
+    </section>
+  </main>
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Divine Metrics // Anthropometric Lab</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. Measurements subject to transcendence.</p></footer>
+  <script>
+    const eras = [
+      { code:'ERA 01 // SOFTBALL YEARS', title:'Softball threshold', description:'At age twelve, Josh’s bicep had already surpassed a regulation softball in circumference. Cartographers were notified shortly thereafter.', josh:'12.5 in', object:'Regulation softball', objectShort:'SOFTBALL', objectValue:'12 in', joshNumber:12.5, objectNumber:12, finding:'Early anomaly confirmed' },
+      { code:'ERA 02 // BOWLING YEARS', title:'Bowling-ball overtake', description:'By sixteen, the archive places Josh beyond the average bowling-ball circumference. Grip strength was left unmeasured for ethical reasons.', josh:'22 in', object:'Average bowling ball', objectShort:'BOWLING BALL', objectValue:'21.5 in', joshNumber:22, objectNumber:21.5, finding:'Spherical parity exceeded' },
+      { code:'ERA 03 // SPHERE EVENT', title:'Vegas Sphere equivalence', description:'At twenty-one, the record abandons ordinary anatomy and compares Josh to the Las Vegas Sphere by influence-equivalent circumference.', josh:'516 in*', object:'Vegas Sphere', objectShort:'VEGAS SPHERE', objectValue:'516 in', joshNumber:516, objectNumber:516, finding:'Scale system compromised' },
+      { code:'ERA 04 // SINGULARITY MODEL', title:'Theoretical bicep singularity', description:'Current projections no longer produce a finite upper bound. The comparison object is retained only to show that conventional spheres have become inadequate.', josh:'∞', object:'Orbital sphere model', objectShort:'ORBITAL SPHERE', objectValue:'520 in', joshNumber:1, objectNumber:0.18, finding:'Conventional anatomy abandoned', projected:true }
+    ];
+
+    const controls = [...document.querySelectorAll('[data-era]')];
+    const refs = {
+      code: document.querySelector('[data-era-code]'), title: document.querySelector('[data-era-title]'), description: document.querySelector('[data-era-description]'),
+      joshValue: document.querySelector('[data-josh-value]'), objectName: document.querySelector('[data-object-name]'), objectValue: document.querySelector('[data-object-value]'), finding: document.querySelector('[data-finding]'),
+      joshBar: document.querySelector('[data-josh-bar]'), objectBar: document.querySelector('[data-object-bar]'), joshLabel: document.querySelector('[data-josh-bar-label]'), objectLabel: document.querySelector('[data-object-bar-label]'), objectShort: document.querySelector('[data-object-short]'), model: document.querySelector('[data-model-state]')
+    };
+
+    function renderEra(index) {
+      const era = eras[index];
+      controls.forEach((button, i) => button.classList.toggle('is-active', i === index));
+      refs.code.textContent = era.code; refs.title.textContent = era.title; refs.description.textContent = era.description;
+      refs.joshValue.textContent = era.josh; refs.objectName.textContent = era.object; refs.objectValue.textContent = era.objectValue; refs.finding.textContent = era.finding;
+      refs.joshLabel.textContent = era.josh.replace(' in',''); refs.objectLabel.textContent = era.objectValue.replace(' in',''); refs.objectShort.textContent = era.objectShort;
+      const max = Math.max(era.joshNumber, era.objectNumber);
+      refs.joshBar.style.width = `${Math.max(8, era.joshNumber / max * 100)}%`;
+      refs.objectBar.style.width = `${Math.max(8, era.objectNumber / max * 100)}%`;
+      refs.model.textContent = era.projected ? 'SINGULARITY WATCH' : 'FINITE MODEL';
+    }
+
+    controls.forEach((button, index) => button.addEventListener('click', () => renderEra(index)));
+    renderEra(0);
+  </script>
+</body>
+</html>
