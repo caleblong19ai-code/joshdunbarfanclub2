@@ -19,11 +19,12 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
   - `bicepsize.html` — preserved the softball / bowling ball / Vegas Sphere / singularity progression, rebuilt as an interactive normalized comparison lab rather than relying on the old Chart.js/Infinity chart behavior.
   - `beancam.html` — preserved the original Bean Tracker premise and absurd 1–2 billion kB power readings, rebuilt as a live simulated electrical telemetry console with saturation state, arc rate, field stability, threat posture, confidence, overload handling, and a rolling event log.
   - `livecam.html` — preserved the original 24/7 live-feed/Platinum-access gag, including the 275 lb bench requirement, Bean letter of intent, $1 tier, and inevitable rejection; rebuilt as a secure camera terminal with fake uplink negotiation, multiple camera channels, clearance state, and a giant fake-antivirus/scareware denial sequence. The Platinum button is available before uplink and routes through the same uplink/denial routine, so either interaction order reaches the same sequence. After denial, the scareware escalates into an intentionally fictional "Bean is coming" sequence with increasingly ominous status bulletins, while never claiming to know the visitor's real IP, address, or location. The scareware is DOM-only, deliberately theatrical, and includes an emergency dismiss control rather than opening real browser windows or trapping navigation.
-  - `spicy.html` — preserves the historical "Caught in 4K" bait-and-switch but now has a deliberately different comedic identity from Live Camera. It is a censored tabloid-style restricted physique archive built around anonymous CSS silhouettes, fake leak classifications, absurd case files, an `ENHANCE` control that reveals nothing, and a progressively humiliating Thirst Index / HR visibility meter. The old `caughtin4k.jpg` is reserved for the optional "Show Uncensored Originals" trap, which results in institutional shame and a personnel incident rather than another Bean-pursuit sequence.
+  - `spicy.html` — preserves the historical "Caught in 4K" bait-and-switch but now has a deliberately different comedic identity from Live Camera. It is a censored tabloid-style restricted physique archive built around a generic public-domain bodybuilder silhouette, fake leak classifications, absurd case files, an `ENHANCE` control that reveals nothing, and a progressively humiliating Thirst Index / HR visibility meter. The old `caughtin4k.jpg` is reserved for the optional "Show Uncensored Originals" trap, which results in institutional shame and a personnel incident rather than another Bean-pursuit sequence.
   - `archive.css` — shared presentation layer for restored archive, intelligence, and metrics pages; loaded by `site.js` only for relevant page classes.
   - `surveillance.css` — shared presentation layer for Bean telemetry and the secure camera network.
   - `scareware.css` — dedicated giant fake-security-alert presentation for the Secure Camera rejection sequence.
-  - `spicy.css` — dedicated censored physique gallery, CSS silhouette, case-file modal, Caught-in-4K, and Thirst Index presentation layer.
+  - `spicy.css` — dedicated censored physique gallery, case-file modal, Caught-in-4K, and Thirst Index presentation layer.
+  - `spicy-silhouette-asset.js` — replaces the old hand-built CSS human figures with the CC0/public-domain `SRD Posing Bodybuilder.svg` from OpenClipart/Wikimedia Commons, while leaving the deliberately silly Bean misfile intact.
   - `bean-menace.js` — rewrites Live Camera fake security alerts into escalating Bean pursuit messages and adds timed fictional approach-status windows after Platinum rejection.
 - Several navigation targets still do not exist in V2 and remain restoration candidates: poetry, fan submissions, fan fiction, Rocket League rank, chess metrics, merch, FAQ, and contact.
 - Surveillance pages currently reference several archived public images from `Big-JoshD/joshdunbarfanclub` by raw GitHub URL, consistent with the existing V2 hero treatment. These can be copied into V2 later if production independence from the historical repo becomes a requirement.
@@ -49,7 +50,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 - Prefer native static HTML/CSS/JavaScript over unnecessary third-party dependencies for archive pages.
 - Surveillance functionality is explicitly theatrical/simulated; do not turn the joke camera/telemetry pages into real tracking or surveillance systems.
 - Keep Live Camera and Spicy Photos comedically distinct: Live Camera is forbidden-access scareware / Bean pursuit; Spicy Photos is censored tabloid absurdity / institutional judgment and must not reuse the pursuit sequence as its main punchline.
-- Spicy Photos is not an actual sexual-content gallery. Use fictional/anonymized silhouettes and absurdly overclassified mundane physique "evidence"; do not base the silhouette art on a specific real person's image.
+- Spicy Photos is not an actual sexual-content gallery. Use generic/public-domain or fictional/anonymized silhouette art and absurdly overclassified mundane physique "evidence"; do not base silhouette art on a specific real person's image.
 - Preserve the historical `caughtin4k.jpg` reveal as an optional bait button on Spicy Photos, but use it for personnel-file embarrassment rather than location/threat claims.
 - Bean Galaga should behave like a Galaga-inspired fixed shooter, not a generic bullet-hell game.
 - Avoid copying copyrighted original game art/audio; use original themed assets and mechanics-inspired behavior.
@@ -60,7 +61,7 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 
 - `README.md` — staging/production boundary.
 - `PROJECT-STATE.md` — current V2 restoration/game state and locked decisions.
-- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, `surveillance.css`, `scareware.css`, `spicy.css`, and `bean-menace.js` — current V2 site system.
+- `index.html`, `navbar.html`, `style.css`, `site.js`, `archive.css`, `surveillance.css`, `scareware.css`, `spicy.css`, `spicy-silhouette-asset.js`, and `bean-menace.js` — current V2 site system.
 - `game.html` / `bean-run.js` and Bean Galaga runtime files — current game implementations.
 - `Big-JoshD/joshdunbarfanclub` — historical content/reference source for pages not yet restored.
 - Git history for implemented mechanics and restoration sequence.
@@ -80,6 +81,6 @@ Maintain and refine the V2 redesign, Bean Run, Bean Galaga, and restored histori
 - Current production HEAD and whether any V2 changes were already copied there.
 - Hosting/DNS configuration and deployment workflow.
 - Browser/physical-device QA results for the restored V2 content pages.
-- Whether V2 should eventually vendor/copy the archived public surveillance image assets instead of referencing them from the historical repo.
+- Whether V2 should eventually vendor/copy the archived public surveillance images and the public-domain bodybuilder silhouette locally instead of referencing remote sources.
 - Bean Run balance after physical-device play-testing.
 - Remaining Bean Galaga balance targets after V12 play-testing.
