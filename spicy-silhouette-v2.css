@@ -295,6 +295,7 @@
 }
 .pose-bean .figure-head{left:132px;top:72px;width:70px;height:68px;transform:none}
 .pose-bean .figure-torso{left:33px;top:104px;width:145px;height:85px}
+.pose-bean .figure-torso:before,.pose-bean .figure-torso:after{display:none}
 .pose-bean .figure-arm{top:168px;width:28px;height:78px;clip-path:none}
 .pose-bean .figure-arm:before,.pose-bean .figure-arm:after{display:none}
 .pose-bean .figure-arm--left{left:55px;transform:rotate(3deg)}
