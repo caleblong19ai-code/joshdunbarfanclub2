@@ -1,0 +1,69 @@
+/* Surveillance Operations — shared presentation for Bean telemetry and secure camera pages. */
+.surveillance-page{background:#070909;color:var(--paper)}
+.surveillance-page .site-header{background:rgba(7,9,9,.96)}
+.surveillance-main{width:min(calc(100% - 48px),var(--max));margin:0 auto;padding:clamp(3.5rem,7vw,6.5rem) 0 clamp(5rem,9vw,8rem)}
+.ops-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3rem;align-items:end;padding-bottom:3rem;border-bottom:1px solid var(--line)}
+.ops-hero h1{max-width:920px;margin:0;color:var(--white);font-family:var(--serif);font-size:clamp(3.5rem,7vw,7.4rem);font-weight:400;line-height:.9;letter-spacing:-.052em}
+.ops-hero__lede{max-width:720px;margin:1.6rem 0 0;color:var(--muted);font-size:1rem;line-height:1.75}
+.ops-badge{min-width:205px;display:grid;gap:7px;padding:20px;border:1px solid rgba(132,168,131,.35);background:rgba(132,168,131,.05);font-family:var(--mono);text-transform:uppercase}
+.ops-badge span,.ops-badge small{color:var(--muted);font-size:.56rem;letter-spacing:.1em}
+.ops-badge strong{color:#a8c7a7;font-size:.78rem;letter-spacing:.08em}
+.ops-badge strong:before{content:"";display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:#8dbe91;box-shadow:0 0 0 4px rgba(141,190,145,.08)}
+.ops-console{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(330px,.72fr);gap:18px;margin-top:18px}
+.monitor-panel,.telemetry-panel,.ops-card,.secure-terminal,.clearance-panel,.camera-card{border:1px solid var(--line);background:#0d1010}
+.monitor-panel{min-height:620px;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:50px;padding:10px 16px;border-bottom:1px solid var(--line);background:#0b0e0e;font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.09em}
+.panel-head>span:first-child{color:var(--muted)}
+.live-indicator{display:inline-flex;align-items:center;gap:7px;color:#9fc29f}
+.live-indicator:before{content:"";width:6px;height:6px;border-radius:50%;background:#88b68b;box-shadow:0 0 0 4px rgba(136,182,139,.08)}
+.bean-visual{position:relative;min-height:480px;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(87,121,125,.16),transparent 28%),linear-gradient(145deg,#101515,#070909 72%)}
+.bean-visual:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0,rgba(255,255,255,.022) 1px,transparent 1px,transparent 4px);pointer-events:none}
+.bean-visual:after{content:"";position:absolute;left:0;right:0;top:-20%;height:22%;background:linear-gradient(transparent,rgba(159,214,218,.08),transparent);animation:surveillanceScan 5s linear infinite;pointer-events:none}
+.bean-visual img{width:min(76%,620px);max-height:450px;object-fit:contain;filter:saturate(.8) contrast(1.08);opacity:.93}
+.reticle{position:absolute;inset:50% auto auto 50%;width:min(58vw,390px);aspect-ratio:1;transform:translate(-50%,-50%);border:1px solid rgba(195,168,106,.22);border-radius:50%;pointer-events:none}
+.reticle:before,.reticle:after{content:"";position:absolute;background:rgba(195,168,106,.18)}
+.reticle:before{left:50%;top:-12%;bottom:-12%;width:1px}
+.reticle:after{top:50%;left:-12%;right:-12%;height:1px}
+.monitor-caption{display:flex;justify-content:space-between;gap:1rem;padding:11px 16px;border-top:1px solid var(--line);color:#777e78;font-family:var(--mono);font-size:.55rem;text-transform:uppercase;letter-spacing:.07em}
+.telemetry-panel{display:flex;flex-direction:column}
+.telemetry-primary{padding:22px;border-bottom:1px solid var(--line)}
+.telemetry-primary>span{color:var(--muted);font-family:var(--mono);font-size:.57rem;text-transform:uppercase;letter-spacing:.1em}
+.power-readout{margin:8px 0 2px;color:var(--white);font-family:var(--mono);font-size:clamp(2rem,4vw,3.3rem);line-height:1;letter-spacing:-.05em}
+.power-readout small{color:var(--gold);font-size:.7rem;letter-spacing:.04em}
+.power-meter{height:13px;margin-top:20px;border:1px solid rgba(255,255,255,.12);background:#080909;overflow:hidden}
+.power-fill{height:100%;width:0;background:linear-gradient(90deg,#6f9380,#c3a86a 72%,#b96f61);transition:width .4s ease}
+.power-status{display:flex;justify-content:space-between;gap:1rem;margin-top:8px;color:var(--muted);font-family:var(--mono);font-size:.56rem;text-transform:uppercase;letter-spacing:.08em}
+.power-status strong{color:#a9b8aa}
+.telemetry-grid{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+.telemetry-grid>div{padding:17px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.telemetry-grid>div:nth-child(even){border-right:0}.telemetry-grid>div:nth-last-child(-n+2){border-bottom:0}
+.telemetry-grid span{display:block;margin-bottom:5px;color:#727972;font-family:var(--mono);font-size:.53rem;text-transform:uppercase;letter-spacing:.08em}
+.telemetry-grid strong{color:#e3dfd3;font-family:var(--mono);font-size:.78rem;font-weight:600}
+.event-log{min-height:0;display:flex;flex:1;flex-direction:column;padding:18px 20px}
+.event-log__head{display:flex;justify-content:space-between;gap:1rem;margin-bottom:12px;color:var(--muted);font-family:var(--mono);font-size:.55rem;text-transform:uppercase;letter-spacing:.08em}
+.event-log ul{min-height:156px;margin:0;padding:0;list-style:none}
+.event-log li{display:grid;grid-template-columns:58px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);color:#8c918a;font-family:var(--mono);font-size:.56rem}
+.event-log li span{color:#666d67}
+.overload-banner{display:none;margin:0 20px 18px;padding:12px;border:1px solid rgba(185,111,97,.48);background:rgba(185,111,97,.08);color:#d79386;font-family:var(--mono);font-size:.65rem;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.08em}
+.telemetry-panel[data-state="overload"] .overload-banner{display:block}.telemetry-panel[data-state="overload"] .power-status strong{color:#d79386}
+.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.ops-card{min-height:235px;display:flex;flex-direction:column;padding:24px;border-top:0;border-left:0}
+.ops-grid .ops-card{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ops-card small{color:#737a74;font-family:var(--mono);font-size:.54rem;text-transform:uppercase;letter-spacing:.08em}.ops-card h2{margin:auto 0 12px;color:var(--white);font-family:var(--serif);font-size:2rem;font-weight:400;line-height:1}.ops-card p{margin:0;color:var(--muted);font-size:.83rem}.ops-card a{margin-top:18px;color:var(--gold2);font-family:var(--mono);font-size:.61rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.08em}
+
+/* Secure camera terminal */
+.camera-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(315px,.62fr);gap:18px;margin-top:18px}
+.secure-terminal{overflow:hidden}.secure-screen{position:relative;min-height:610px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(rgba(4,7,7,.34),rgba(4,7,7,.55)),url('https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/gymbackdrop.jpg') center 42%/cover no-repeat;isolation:isolate}
+.secure-screen:before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 5px)}
+.secure-screen:after{content:"CAM 01 // GYM FLOOR // SIGNAL ACQUIRED";position:absolute;left:16px;bottom:14px;color:rgba(255,255,255,.58);font-family:var(--mono);font-size:.56rem;letter-spacing:.08em}
+.secure-screen__gate{width:min(calc(100% - 42px),520px);padding:34px;border:1px solid rgba(224,194,124,.48);background:rgba(7,9,9,.88);backdrop-filter:blur(8px);text-align:center;box-shadow:0 18px 60px rgba(0,0,0,.38)}
+.secure-screen__gate .lock-mark{width:58px;height:58px;display:grid;place-items:center;margin:0 auto 20px;border:1px solid rgba(224,194,124,.4);color:var(--gold2);font-family:var(--serif);font-size:1.5rem}
+.secure-screen__gate h2{margin-bottom:10px;color:var(--white);font-family:var(--serif);font-size:2.2rem;font-weight:400;line-height:1}.secure-screen__gate p{color:var(--muted);font-size:.85rem}.secure-screen__gate button,.clearance-button{min-height:46px;padding:0 17px;border:1px solid rgba(224,194,124,.55);background:var(--gold2);color:#080909;font-family:var(--mono);font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}
+.connection-sequence{display:none;width:min(calc(100% - 42px),520px);padding:28px;border:1px solid rgba(132,168,131,.35);background:rgba(7,9,9,.9);font-family:var(--mono)}
+.connection-sequence[aria-hidden="false"]{display:block}.connection-sequence strong{display:block;margin-bottom:18px;color:#a6c4a7;font-size:.7rem;letter-spacing:.08em}.connection-sequence ol{margin:0;padding:0;list-style:none}.connection-sequence li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);color:#777f79;font-size:.58rem}.connection-sequence li.done{color:#b5bdb4}.connection-sequence li.done:before{content:"[OK] ";color:#91b695}.connection-sequence li.pending:before{content:"[..] ";color:var(--gold)}
+.clearance-panel{padding:24px}.clearance-panel>small{color:#767d77;font-family:var(--mono);font-size:.54rem;text-transform:uppercase;letter-spacing:.09em}.clearance-panel h2{margin:10px 0 14px;color:var(--white);font-family:var(--serif);font-size:2.35rem;font-weight:400;line-height:1}.clearance-panel>p{color:var(--muted);font-size:.82rem}.requirements{margin:24px 0;padding:0;list-style:none;border-top:1px solid var(--line)}.requirements li{display:grid;grid-template-columns:28px 1fr;gap:9px;padding:12px 0;border-bottom:1px solid var(--line);color:#b4b6ae;font-size:.73rem}.requirements li:before{content:"×";color:#c67d70;font-family:var(--mono);font-weight:700}.clearance-price{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin:22px 0}.clearance-price span{color:#767c77;font-family:var(--mono);font-size:.53rem;text-transform:uppercase;letter-spacing:.08em}.clearance-price strong{color:var(--white);font-family:var(--serif);font-size:2.5rem;font-weight:400;line-height:1}.clearance-price small{color:var(--muted);font-family:var(--mono);font-size:.5rem}.clearance-button{width:100%}.denial-message{min-height:44px;margin-top:13px;padding:11px;border:1px solid transparent;color:#7e837e;font-family:var(--mono);font-size:.57rem;text-align:center;text-transform:uppercase;letter-spacing:.07em}.denial-message.active{border-color:rgba(185,111,97,.4);background:rgba(185,111,97,.07);color:#d18a7d}
+.camera-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.camera-card{position:relative;min-height:180px;overflow:hidden;background:#0a0c0c}.camera-card__visual{position:absolute;inset:0;background-position:center;background-size:cover;filter:grayscale(.72) contrast(1.1);opacity:.48;transition:.2s ease}.camera-card:hover .camera-card__visual{opacity:.63;transform:scale(1.02)}.camera-card:nth-child(1) .camera-card__visual{background-image:url('https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/gymbackdrop.jpg')}.camera-card:nth-child(2) .camera-card__visual{background-image:url('https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/lightningbean.png')}.camera-card:nth-child(3) .camera-card__visual{background-image:url('https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/librarybackdrop.jpg')}.camera-card:nth-child(4) .camera-card__visual{background-image:url('https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/meadow.jpg')}.camera-card__meta{position:absolute;inset:auto 0 0;padding:12px;background:linear-gradient(transparent,rgba(5,7,7,.95) 45%);font-family:var(--mono);text-transform:uppercase}.camera-card__meta span{display:block;color:#737b75;font-size:.5rem;letter-spacing:.07em}.camera-card__meta strong{color:#d4d3ca;font-size:.62rem;letter-spacing:.05em}.denied-stamp{position:fixed;z-index:9999;width:min(280px,78vw);padding:18px;border:2px solid #cf7569;background:rgba(15,10,10,.96);color:#df8a7e;font-family:var(--mono);font-size:.68rem;font-weight:800;text-align:center;text-transform:uppercase;letter-spacing:.08em;box-shadow:0 16px 45px rgba(0,0,0,.45);pointer-events:none;animation:deniedIn .18s ease-out both}
+@keyframes surveillanceScan{from{top:-20%}to{top:110%}}@keyframes deniedIn{from{opacity:0;transform:scale(.88) rotate(-2deg)}to{opacity:1;transform:scale(1) rotate(-2deg)}}
+@media(max-width:980px){.ops-console,.camera-layout{grid-template-columns:1fr}.monitor-panel{min-height:540px}.bean-visual,.secure-screen{min-height:460px}.ops-grid{grid-template-columns:1fr 1fr}.camera-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.surveillance-main{width:min(calc(100% - 32px),var(--max));padding-top:3rem}.ops-hero{grid-template-columns:1fr;gap:1.8rem}.ops-badge{min-width:0}.ops-console{gap:12px}.monitor-panel{min-height:0}.bean-visual{min-height:370px}.reticle{width:245px}.monitor-caption{display:grid}.ops-grid{grid-template-columns:1fr}.camera-grid{grid-template-columns:1fr}.secure-screen{min-height:470px}.secure-screen__gate{padding:26px 20px}.clearance-panel{padding:20px}.telemetry-grid{grid-template-columns:1fr}.telemetry-grid>div{border-right:0!important;border-bottom:1px solid var(--line)!important}.telemetry-grid>div:last-child{border-bottom:0!important}}
+@media(prefers-reduced-motion:reduce){.bean-visual:after{animation:none}.denied-stamp{animation:none}.power-fill,.camera-card__visual{transition:none}}
