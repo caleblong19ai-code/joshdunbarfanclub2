@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Institute of Dunbar Studies restricted-media honeypot. Nice try." />
-  <meta name="theme-color" content="#070909" />
+  <meta name="description" content="Institute of Dunbar Studies restricted physique media archive. Heavily censored. Needlessly dramatic." />
+  <meta name="theme-color" content="#090808" />
   <title>Spicy Photos | Institute of Dunbar Studies</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="surveillance.css" />
-  <link rel="stylesheet" href="scareware.css" />
   <link rel="stylesheet" href="spicy.css" />
   <script src="site.js" defer></script>
-  <script src="bean-menace.js" defer></script>
 </head>
 <body class="spicy-page">
   <div id="site-nav" data-nav-slot></div>
@@ -19,170 +16,305 @@
   <main class="spicy-main">
     <header class="spicy-hero">
       <div>
-        <p class="eyebrow">Surveillance division // restricted media intake SP-04</p>
+        <p class="eyebrow">Surveillance division // restricted physique media SP-04</p>
         <h1>Spicy Photo<br>Archive</h1>
-        <p class="spicy-hero__lede">A restricted Institute repository allegedly containing visual material judged too powerful for general circulation. Access attempts are logged for entirely normal archival reasons.</p>
+        <p class="spicy-hero__lede">The Institute has obtained several images considered too visually irresponsible for ordinary circulation. All previews have been aggressively censored by Legal, Human Resources, and one nervous intern.</p>
       </div>
-      <aside class="honeypot-badge"><span>Archive status</span><strong>Temptingly restricted</strong><small>Viewer discretion aggressively advised</small></aside>
+      <aside class="editorial-badge">
+        <span>Editorial temperature</span>
+        <strong>Irresponsible</strong>
+        <small>Nothing shown here justifies your enthusiasm</small>
+      </aside>
     </header>
 
-    <section class="vault-layout" aria-label="Restricted media vault">
-      <article class="vault-terminal">
-        <div class="vault-head"><span>Vault SP-04 // visual archive</span><span>Restricted</span></div>
-        <div class="vault-screen">
-          <div class="vault-gate" data-vault-gate>
-            <div class="vault-lock" aria-hidden="true">SP</div>
-            <p class="eyebrow">Classified media repository</p>
-            <h2>Restricted archive detected.</h2>
-            <p>The Institute cannot confirm or deny the existence of photographs described internally as “spicy.” Curiosity is not recognized as clearance.</p>
-            <button class="vault-button" type="button" data-open-vault>Open Restricted Archive</button>
-          </div>
-
-          <div class="vault-sequence" data-vault-sequence aria-live="polite">
-            <strong>RESTRICTED MEDIA DECRYPTION // SP-04</strong>
-            <ul>
-              <li data-vault-step="0">Decrypting sealed media index...</li>
-              <li data-vault-step="1">Verifying viewer discretion...</li>
-              <li data-vault-step="2">Checking dignity reserves...</li>
-              <li data-vault-step="3">Cross-referencing Surveillance watchlist...</li>
-              <li data-vault-step="4">Alerting Bean...</li>
-            </ul>
-          </div>
-        </div>
-      </article>
-
-      <aside class="vault-rules">
-        <small>Media handling protocol</small>
-        <h2>Before proceeding</h2>
-        <p>Restricted images may only be viewed by personnel with appropriate reverence, emotional preparedness, and an airtight explanation for why they clicked this tab.</p>
-        <ul>
-          <li>Do not screenshot classified material.</li>
-          <li>Do not say “I was just curious.”</li>
-          <li>Do not assume incognito mode impresses Bean.</li>
-          <li>Do not make sudden movements if confronted.</li>
-        </ul>
-        <div class="trap-note">Notice // All suspicious enthusiasm may be retained as evidence.</div>
-      </aside>
+    <section class="thirst-console" aria-label="Viewer thirst monitoring">
+      <div class="thirst-console__copy">
+        <span>Institute Viewer Conduct System // TVI-01</span>
+        <strong data-thirst-status>Professional curiosity</strong>
+        <small data-thirst-note>No intervention required. Yet.</small>
+      </div>
+      <div class="thirst-meter" role="meter" aria-label="Thirst index" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" data-thirst-meter>
+        <div class="thirst-meter__track"><span data-thirst-fill></span></div>
+        <div class="thirst-meter__scale"><span>Professional</span><span>Concerning</span><span>HR-visible</span></div>
+      </div>
+      <div class="thirst-stats">
+        <div><span>Case files opened</span><strong data-view-count>0</strong></div>
+        <div><span>HR visibility</span><strong data-hr-status>None</strong></div>
+        <button type="button" data-reset-thirst>Reset professionalism</button>
+      </div>
     </section>
 
-    <section class="incident-strip" aria-label="Restricted archive metadata">
-      <div><span>Archive classification</span><strong>Extremely spicy*</strong></div>
-      <div><span>Known viewers</span><strong>0 survivors of embarrassment</strong></div>
-      <div><span>Bean response SLA</span><strong>Immediate</strong></div>
-      <div><span>*Institutional definition</span><strong>Subject to trap conditions</strong></div>
+    <section class="media-intro">
+      <div>
+        <p class="eyebrow">Recovered material // sanitized previews</p>
+        <h2>Restricted Visual Evidence</h2>
+      </div>
+      <p>The black silhouettes are not photographs of any real person. They are Institute reconstructions of an allegedly catastrophic physique situation. Click only what you can explain later.</p>
+    </section>
+
+    <section class="spicy-gallery" aria-label="Censored spicy photo case files" data-gallery></section>
+
+    <section class="uncensored-panel">
+      <div>
+        <p class="eyebrow">Definitely not bait // absolutely trustworthy control</p>
+        <h2>Looking for the uncensored originals?</h2>
+        <p>Legal specifically asked us not to put this button here.</p>
+      </div>
+      <button type="button" data-uncensored>Show Uncensored Originals</button>
     </section>
   </main>
 
-  <div class="caught-overlay" data-caught-overlay aria-hidden="true">
-    <section class="caught-card" role="dialog" aria-modal="true" aria-labelledby="caught-title">
-      <img src="https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/caughtin4k.jpg" alt="Caught in 4K cat" />
-      <h2 id="caught-title">Caught in 4K!</h2>
-      <p>Josh Dunbar has been notified.<br><strong>Bean is en route to eliminate your remaining dignity.</strong><br>Do not resist.</p>
-      <div class="caught-actions">
-        <button type="button" data-accept-fate>Okay... I'm sorry</button>
-        <button type="button" class="secondary" data-deny-evidence>This wasn't me</button>
+  <div class="case-modal" data-case-modal aria-hidden="true">
+    <section class="case-dialog" role="dialog" aria-modal="true" aria-labelledby="case-title">
+      <button class="case-close" type="button" data-case-close aria-label="Close case file">×</button>
+      <div class="case-preview" data-modal-preview></div>
+      <div class="case-copy">
+        <p class="eyebrow" data-case-id>Case SP-000</p>
+        <h2 id="case-title" data-case-title>Restricted image</h2>
+        <p class="case-summary" data-case-summary></p>
+        <dl class="case-metadata">
+          <div><dt>Heat rating</dt><dd data-case-heat></dd></div>
+          <div><dt>Classification</dt><dd data-case-classification></dd></div>
+          <div><dt>Analyst finding</dt><dd data-case-finding></dd></div>
+          <div><dt>Legal position</dt><dd data-case-legal></dd></div>
+        </dl>
+        <div class="analyst-note"><span>Institute analyst note</span><p data-case-note></p></div>
+        <div class="case-actions">
+          <button type="button" data-enhance>ENHANCE</button>
+          <button type="button" class="secondary" data-case-close>Return to archive</button>
+        </div>
+        <p class="enhance-result" data-enhance-result aria-live="polite"></p>
       </div>
     </section>
   </div>
 
-  <div class="scareware-layer" data-popup-container aria-hidden="true"></div>
+  <div class="caught-overlay" data-caught-overlay aria-hidden="true">
+    <section class="caught-card" role="dialog" aria-modal="true" aria-labelledby="caught-title">
+      <img src="https://raw.githubusercontent.com/Big-JoshD/joshdunbarfanclub/main/img/caughtin4k.jpg" alt="Caught in 4K cat" />
+      <div class="caught-stamp">PERSONNEL INCIDENT</div>
+      <h2 id="caught-title">Caught in 4K!</h2>
+      <p>You clicked <strong>Show Uncensored Originals</strong> after six separate warnings that this archive was ridiculous.</p>
+      <div class="caught-report">
+        <div><span>Incident</span><strong>SP-04 / THIRST EVENT</strong></div>
+        <div><span>Josh notified</span><strong>Unfortunately, yes</strong></div>
+        <div><span>Bean</span><strong>CC'd for awareness</strong></div>
+        <div><span>Your explanation</span><strong>Pre-rejected</strong></div>
+      </div>
+      <p class="caught-verdict">This has been added to your permanent Institute personnel file.</p>
+      <div class="caught-actions">
+        <button type="button" data-caught-close>Return to censored archive</button>
+        <button type="button" class="secondary" data-explain>I can explain</button>
+      </div>
+      <p class="caught-explanation" data-explanation aria-live="polite"></p>
+    </section>
+  </div>
 
-  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Surveillance Division // Restricted Media Honeypot</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. All suspicious transmissions logged.</p></footer>
+  <footer class="site-footer"><div><strong>Josh Dunbar Fanclub</strong><span>Surveillance Division // Restricted Physique Media</span></div><p>&copy; <span data-current-year></span> Josh Dunbar Fanclub. Viewer judgment remains active.</p></footer>
 
   <script>
     (() => {
-      const openButton = document.querySelector('[data-open-vault]');
-      const gate = document.querySelector('[data-vault-gate]');
-      const sequence = document.querySelector('[data-vault-sequence]');
-      const steps = [...document.querySelectorAll('[data-vault-step]')];
+      const gallery = document.querySelector('[data-gallery]');
+      const modal = document.querySelector('[data-case-modal]');
+      const modalPreview = document.querySelector('[data-modal-preview]');
       const caught = document.querySelector('[data-caught-overlay]');
-      const accept = document.querySelector('[data-accept-fate]');
-      const deny = document.querySelector('[data-deny-evidence]');
-      const popupLayer = document.querySelector('[data-popup-container]');
-      let sprung = false;
-      let z = 12000;
-      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-      const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const thirstStatus = document.querySelector('[data-thirst-status]');
+      const thirstNote = document.querySelector('[data-thirst-note]');
+      const thirstFill = document.querySelector('[data-thirst-fill]');
+      const thirstMeter = document.querySelector('[data-thirst-meter]');
+      const viewCountNode = document.querySelector('[data-view-count]');
+      const hrStatus = document.querySelector('[data-hr-status]');
+      const enhanceResult = document.querySelector('[data-enhance-result]');
+      let viewCount = 0;
+      let resetAttempts = 0;
+      let activeCase = null;
 
-      async function springTrap() {
-        if (sprung) return;
-        sprung = true;
-        openButton.disabled = true;
-        gate.hidden = true;
-        sequence.classList.add('is-active');
-
-        for (let i = 0; i < steps.length; i += 1) {
-          const step = steps[i];
-          step.classList.add('pending');
-          await sleep(reducedMotion() ? 130 : (i === 4 ? 700 : 430));
-          step.classList.remove('pending');
-          step.classList.add(i === 4 ? 'flagged' : 'done');
+      const cases = [
+        {
+          id: 'SP-101', title: 'Sleeveless Incident', pose: 'front', stamp: 'CENSORED', heat: 'SEVERE', classification: 'Upper-arm exposure',
+          teaser: 'Recovered from a post-workout corridor. Institute censors debated whether the public was ready.',
+          summary: 'A sleeveless garment appears to have been worn in a location where other people could see it.',
+          finding: 'This image contains an upper arm.', legal: 'Unnecessarily cautious.',
+          note: 'We zoomed in 400%. The arm remained an arm.'
+        },
+        {
+          id: 'SP-115', title: 'Deltoid Containment Failure', pose: 'flex', stamp: 'REDACTED', heat: 'NUCLEAR', classification: 'Shoulder event',
+          teaser: 'Censors were unable to fully obscure the deltoid situation without blacking out the entire frame.',
+          summary: 'A shoulder may have exceeded the Institute\'s voluntary visual-impact guidelines.',
+          finding: 'Shoulder confirmed.', legal: 'Asked everyone to calm down.',
+          note: 'Three separate analysts independently wrote “bro” in the margins.'
+        },
+        {
+          id: 'SP-208', title: 'Protein Shaker Possession', pose: 'shaker', stamp: 'LEAKED', heat: 'UNSTABLE', classification: 'Supplement-adjacent material',
+          teaser: 'Contents unknown. Public reaction immediate. Shaker cap appears fully secured.',
+          summary: 'Subject reconstructed holding a cylindrical beverage container after an unspecified training event.',
+          finding: 'Shaker bottle present. Hand also visible.', legal: 'No actionable scandal found.',
+          note: 'Spectroscopy request denied because this is a joke website.'
+        },
+        {
+          id: 'SP-233', title: 'Forearm Exposure', pose: 'side', stamp: 'WITHHELD', heat: 'ELEVATED', classification: 'Forearm visibility',
+          teaser: 'Several interns had to be rotated off the case after approximately eleven seconds of review.',
+          summary: 'A forearm is visible in a manner Legal describes as “technically ordinary.”',
+          finding: 'Forearm confirmed.', legal: 'Deeply embarrassed by this file.',
+          note: 'Vascularity assessment classified because nobody wants this meeting on their calendar.'
+        },
+        {
+          id: 'SP-301', title: 'Belt Adjustment — Frame 12', pose: 'belt', stamp: 'RESTRICTED', heat: 'TOO HOT FOR MAIN ARCHIVE', classification: 'Equipment handling',
+          teaser: 'Too intense for the general archive, primarily because Editorial refused to stop calling it Frame 12.',
+          summary: 'A lifting belt was adjusted. Nothing else happened. Somehow this became a case file.',
+          finding: 'Belt moved approximately two inches.', legal: 'Demands a new department.',
+          note: 'Frames 1 through 11 were identical except slightly less dramatic.'
+        },
+        {
+          id: 'SP-404', title: 'Bean Misfile', pose: 'bean', stamp: 'WRONG FOLDER', heat: 'ADMINISTRATIVE', classification: 'Records-management failure',
+          teaser: 'This is not Josh. Do not mention the filing error. Especially not to Bean.',
+          summary: 'A non-human silhouette was discovered in the restricted physique archive during routine cataloging.',
+          finding: 'Bean.', legal: 'Not involved. Refuses involvement.',
+          note: 'Records Management has changed the filename to FINAL_final_REAL_v3_USETHIS.'
         }
+      ];
 
-        await sleep(reducedMotion() ? 100 : 220);
+      const thirstStates = [
+        ['Professional curiosity', 'No intervention required. Yet.', 'None'],
+        ['Professional curiosity', 'One file can happen to anyone.', 'None'],
+        ['Noticeable', 'The system has begun taking notes.', 'Low'],
+        ['Concerning', 'Repeated access no longer appears accidental.', 'Moderate'],
+        ['HR-visible', 'Human Resources can see the dashboard now.', 'Yes'],
+        ['Intervention recommended', 'Please consider going outside.', 'They are typing'],
+        ['We need to talk', 'A calendar invitation has been drafted.', 'Meeting scheduled'],
+        ['Hydration recommended', 'The Institute is offering you water.', 'Executive visibility'],
+        ['Critical thirst event', 'This is now a governance issue.', 'Board awareness']
+      ];
+
+      const figureMarkup = (pose, label) => `
+        <div class="classified-frame" aria-label="${label}">
+          <div class="classified-figure pose-${pose}" aria-hidden="true">
+            <span class="figure-head"></span><span class="figure-neck"></span><span class="figure-torso"></span>
+            <span class="figure-arm figure-arm--left"></span><span class="figure-arm figure-arm--right"></span>
+            <span class="figure-waist"></span><span class="figure-leg figure-leg--left"></span><span class="figure-leg figure-leg--right"></span>
+            <span class="figure-prop"></span>
+          </div>
+          <div class="censor-stripe">VISUAL REDACTED</div>
+          <div class="scan-lines"></div>
+        </div>`;
+
+      function renderGallery() {
+        gallery.innerHTML = cases.map((item, index) => `
+          <article class="media-card" data-card-index="${index}">
+            <button class="media-card__button" type="button" data-open-case="${index}" aria-label="Open ${item.title} case file">
+              <div class="media-card__visual">
+                ${figureMarkup(item.pose, `Censored reconstruction for ${item.title}`)}
+                <span class="leak-stamp">${item.stamp}</span>
+                <span class="case-number">${item.id}</span>
+              </div>
+              <div class="media-card__copy">
+                <div class="media-card__meta"><span>${item.classification}</span><b>${item.heat}</b></div>
+                <h3>${item.title}</h3>
+                <p>${item.teaser}</p>
+                <span class="open-file">Open censored case file →</span>
+              </div>
+            </button>
+          </article>`).join('');
+      }
+
+      function updateThirst() {
+        const level = Math.min(viewCount, thirstStates.length - 1);
+        const [status, note, hr] = thirstStates[level];
+        thirstStatus.textContent = status;
+        thirstNote.textContent = note;
+        hrStatus.textContent = hr;
+        viewCountNode.textContent = String(viewCount);
+        thirstFill.style.width = `${Math.min(100, 8 + level * 11.5)}%`;
+        thirstMeter.setAttribute('aria-valuenow', String(level));
+        document.body.dataset.thirst = String(level);
+      }
+
+      function openCase(index) {
+        activeCase = cases[index];
+        if (!activeCase) return;
+        viewCount += 1;
+        updateThirst();
+        modalPreview.innerHTML = figureMarkup(activeCase.pose, `Censored reconstruction for ${activeCase.title}`);
+        document.querySelector('[data-case-id]').textContent = `Case ${activeCase.id} // sanitized media review`;
+        document.querySelector('[data-case-title]').textContent = activeCase.title;
+        document.querySelector('[data-case-summary]').textContent = activeCase.summary;
+        document.querySelector('[data-case-heat]').textContent = activeCase.heat;
+        document.querySelector('[data-case-classification]').textContent = activeCase.classification;
+        document.querySelector('[data-case-finding]').textContent = activeCase.finding;
+        document.querySelector('[data-case-legal]').textContent = activeCase.legal;
+        document.querySelector('[data-case-note]').textContent = activeCase.note;
+        enhanceResult.textContent = '';
+        modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+      }
+
+      function closeCase() {
+        modal.classList.remove('is-active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+      }
+
+      gallery.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-open-case]');
+        if (trigger) openCase(Number(trigger.dataset.openCase));
+      });
+
+      document.querySelectorAll('[data-case-close]').forEach((button) => button.addEventListener('click', closeCase));
+      modal.addEventListener('click', (event) => { if (event.target === modal) closeCase(); });
+
+      document.querySelector('[data-enhance]').addEventListener('click', () => {
+        viewCount += 1;
+        updateThirst();
+        const messages = [
+          'ENHANCEMENT COMPLETE: 6400% more pixels. Zero additional information.',
+          'ENHANCEMENT COMPLETE: silhouette remains suspiciously silhouette-shaped.',
+          'IMAGE LAB RESPONSE: “We cannot uncensor something that was never a real photograph.”',
+          'ENHANCE REQUEST FORWARDED TO HR FOR PATTERN ANALYSIS.'
+        ];
+        enhanceResult.textContent = messages[Math.min(3, Math.max(0, viewCount - 2) % messages.length)];
+        modalPreview.classList.remove('enhance-pulse');
+        void modalPreview.offsetWidth;
+        modalPreview.classList.add('enhance-pulse');
+      });
+
+      document.querySelector('[data-reset-thirst]').addEventListener('click', (event) => {
+        resetAttempts += 1;
+        event.currentTarget.textContent = resetAttempts === 1 ? 'Reset denied — index is permanent' : 'Please stop clicking this';
+        thirstNote.textContent = resetAttempts === 1 ? 'Attempted conduct-score tampering has been noted.' : 'This is becoming part of the problem.';
+      });
+
+      document.querySelector('[data-uncensored]').addEventListener('click', () => {
+        viewCount = Math.max(viewCount + 2, 6);
+        updateThirst();
         caught.classList.add('is-active');
         caught.setAttribute('aria-hidden', 'false');
-      }
+        document.body.classList.add('modal-open');
+      });
 
-      function createInitialScareware() {
-        popupLayer.replaceChildren();
-        popupLayer.classList.add('is-active');
-        popupLayer.setAttribute('aria-hidden', 'false');
-
-        const alerts = [
-          ['SURVEILLANCE INCIDENT SP-04 — CAUGHT IN 4K', 'RESTRICTED MEDIA HONEYPOT TRIGGERED', 'Your attempt to access “spicy photos” has been preserved as evidence in unnecessarily high resolution.', 'JOSH NOTIFIED // BEAN DISPATCH AUTHORIZED'],
-          ['INCIDENT REPORT AUTO-GENERATED', 'YOU CLICKED IT ANYWAY', 'The warning labels were decorative. The trap was not.', 'EXPLANATION QUALITY: POOR'],
-          ['BEAN RESPONSE QUEUE', 'DO NOT CLOSE YOUR BLINDS', 'Bean has accepted the incident for personal follow-up. Institute staff have stopped asking questions.', 'STATUS: EN ROUTE']
-        ];
-
-        alerts.forEach(([title, heading, body, status], index) => {
-          const node = document.createElement('section');
-          node.className = 'scare-window scare-window--danger';
-          node.style.left = `${Math.max(10, 30 + index * 90)}px`;
-          node.style.top = `${Math.max(12, 35 + index * 70)}px`;
-          node.style.zIndex = String(z++);
-          node.innerHTML = `<div class="scare-titlebar"><span>${title}</span><button type="button" aria-label="Close fake alert">×</button></div><div class="scare-body"><h2 class="scare-flash">${heading}</h2><p>${body}</p><p class="scare-red"><strong>${status}</strong></p><div class="scare-actions"><button class="scare-action scare-action--red" type="button" data-spawn-more>PLEASE DELETE THE EVIDENCE</button></div></div>`;
-          node.querySelector('.scare-titlebar button').addEventListener('click', () => node.remove());
-          node.querySelector('[data-spawn-more]').addEventListener('click', () => {
-            node.querySelector('[data-spawn-more]').textContent = 'REQUEST DENIED — BEAN RETAINED A COPY';
-            const clone = node.cloneNode(true);
-            clone.style.left = `${Math.max(10, Math.random() * Math.max(10, innerWidth - 500))}px`;
-            clone.style.top = `${Math.max(10, Math.random() * Math.max(10, innerHeight - 280))}px`;
-            clone.style.zIndex = String(z++);
-            clone.querySelector('.scare-titlebar span').textContent = 'EVIDENCE REDUNDANCY NOTICE';
-            clone.querySelector('h2').textContent = 'A BACKUP WAS CREATED';
-            clone.querySelector('p').textContent = 'Attempting to delete the incident has increased the incident.';
-            clone.querySelector('[data-spawn-more]').remove();
-            clone.querySelector('.scare-titlebar button').addEventListener('click', () => clone.remove());
-            popupLayer.appendChild(clone);
-          });
-          popupLayer.appendChild(node);
-        });
-
-        const dismiss = document.createElement('button');
-        dismiss.type = 'button';
-        dismiss.className = 'scare-dismiss-all';
-        dismiss.textContent = 'Emergency dismiss fake alerts';
-        dismiss.addEventListener('click', () => {
-          popupLayer.replaceChildren();
-          popupLayer.classList.remove('is-active');
-          popupLayer.setAttribute('aria-hidden', 'true');
-        });
-        popupLayer.appendChild(dismiss);
-      }
-
-      function proceedToIncident() {
+      document.querySelector('[data-caught-close]').addEventListener('click', () => {
         caught.classList.remove('is-active');
         caught.setAttribute('aria-hidden', 'true');
-        createInitialScareware();
-      }
-
-      openButton.addEventListener('click', springTrap);
-      accept.addEventListener('click', proceedToIncident);
-      deny.addEventListener('click', () => {
-        deny.textContent = 'DENIAL LOGGED AS ADDITIONAL EVIDENCE';
-        window.setTimeout(proceedToIncident, reducedMotion() ? 0 : 450);
+        document.body.classList.remove('modal-open');
       });
+
+      document.querySelector('[data-explain]').addEventListener('click', (event) => {
+        event.currentTarget.disabled = true;
+        event.currentTarget.textContent = 'Statement rejected';
+        document.querySelector('[data-explanation]').textContent = 'The Institute has reviewed your explanation before you provided it and found it unconvincing.';
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        if (modal.classList.contains('is-active')) closeCase();
+        if (caught.classList.contains('is-active')) {
+          caught.classList.remove('is-active');
+          caught.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('modal-open');
+        }
+      });
+
+      renderGallery();
+      updateThirst();
     })();
   </script>
 </body>
